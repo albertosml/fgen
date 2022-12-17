@@ -1,6 +1,7 @@
 package customer.application.utils;
 
 import customer.application.Customer;
+import shared.application.utils.NameValidator;
 
 /**
  * Validates the customer.
@@ -16,23 +17,23 @@ public class CustomerValidator {
      * @return true if the customer is valid, otherwise false.
      */
     public static boolean isValid(Customer customer) {
-        if (!NameValidator.isValid(customer.getName())) {
+        boolean isValidName = NameValidator.isValid(customer.getName());
+        if (!isValidName) {
             return false;
         }
 
-        if (!TinValidator.isValid(customer.getTin())) {
+        boolean isValidTin = TinValidator.isValid(customer.getTin());
+        if (!isValidTin) {
             return false;
         }
 
-        if (!ZipCodeValidator.isValid(customer.getZipCode())) {
+        String customerZipCode = customer.getZipCode();
+        if (!(customerZipCode == null || ZipCodeValidator.isValid(customerZipCode))) {
             return false;
         }
 
-        if (!IbanValidator.isValid(customer.getIban())) {
-            return false;
-        }
-
-        return true;
+        String customerIban = customer.getIban();
+        return customerIban == null || IbanValidator.isValid(customerIban);
     }
 
 }

@@ -44,7 +44,7 @@ public class Customer {
      *
      * Only Spanish ZIP codes will be valid.
      */
-    private int zipcode;
+    private String zipcode;
 
     /**
      * Customer IBAN.
@@ -71,7 +71,7 @@ public class Customer {
      * @param iban Customer IBAN.
      * @param isDeleted Whether the customer is deleted or not.
      */
-    private Customer(int code, String name, String tin, String address, String city, String province, int zipcode, String iban, boolean isDeleted) {
+    private Customer(int code, String name, String tin, String address, String city, String province, String zipcode, String iban, boolean isDeleted) {
         this.code = code;
         this.name = name;
         this.tin = tin;
@@ -106,7 +106,7 @@ public class Customer {
      *
      * @return The customer ZIP code.
      */
-    public int getZipCode() {
+    public String getZipCode() {
         return this.zipcode;
     }
 
@@ -134,7 +134,7 @@ public class Customer {
         String address = (String) attributes.getOrDefault(CustomerAttribute.ADDRESS, null);
         String city = (String) attributes.getOrDefault(CustomerAttribute.CITY, null);
         String province = (String) attributes.getOrDefault(CustomerAttribute.PROVINCE, null);
-        int zipcode = (int) attributes.getOrDefault(CustomerAttribute.ZIPCODE, null);
+        String zipcode = (String) attributes.getOrDefault(CustomerAttribute.ZIPCODE, null);
         String iban = (String) attributes.getOrDefault(CustomerAttribute.IBAN, null);
         boolean isDeleted = (boolean) attributes.getOrDefault(CustomerAttribute.ISDELETED, false);
 
