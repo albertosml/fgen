@@ -3,7 +3,7 @@ package customer.application.utils;
 import shared.application.utils.RegexValidator;
 
 /**
- * Validates the IBAN.
+ * Validate the IBAN.
  */
 public class IbanValidator {
 

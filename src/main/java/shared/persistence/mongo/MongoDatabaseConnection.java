@@ -1,9 +1,9 @@
-package shared.dataaccess.mongo;
+package shared.persistence.mongo;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import shared.dataaccess.exceptions.NotDefinedDatabaseContextException;
+import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 
 /**
  * Manages the connection to the Mongo database.
@@ -13,7 +13,7 @@ public class MongoDatabaseConnection {
     /**
      * Mongo database instance.
      */
-    public static MongoDatabase INSTANCE = null;
+    private static MongoDatabase INSTANCE = null;
 
     /**
      * Set the Mongo database instance based on the given data.
@@ -45,4 +45,5 @@ public class MongoDatabaseConnection {
 
         return INSTANCE;
     }
+
 }

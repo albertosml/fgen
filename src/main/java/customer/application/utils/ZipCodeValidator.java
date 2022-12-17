@@ -3,7 +3,7 @@ package customer.application.utils;
 import shared.application.utils.RegexValidator;
 
 /**
- * Validates the ZIP code, which can only the Spanish format (5 numbers).
+ * Validate the ZIP code, which can only the Spanish format (5 numbers).
  */
 public class ZipCodeValidator {
 

@@ -4,7 +4,7 @@ import customer.application.Customer;
 import shared.application.utils.NameValidator;
 
 /**
- * Validates the customer.
+ * Validate the customer.
  *
  * @see Customer
  */

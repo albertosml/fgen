@@ -1,6 +1,6 @@
 package shared.application.utils;
 
-import shared.dataaccess.components.Repository;
+import shared.persistence.Repository;
 
 /**
  * It is responsible of auto generating a code based on the given repository.
@@ -18,4 +18,5 @@ public class CodeAutoGenerator {
         int itemsCount = repository.count();
         return itemsCount + 1;
     }
+
 }

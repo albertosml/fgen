@@ -1,10 +1,10 @@
 package customer.application.utils;
 
 import customer.application.Customer;
-import customer.dataaccess.components.CustomerRepository;
+import customer.persistence.CustomerRepository;
 
 /**
- * Validates the customer to register.
+ * Validate the customer to register.
  *
  * @see Customer
  */

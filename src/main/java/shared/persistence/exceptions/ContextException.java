@@ -1,4 +1,4 @@
-package shared.dataaccess.exceptions;
+package shared.persistence.exceptions;
 
 /**
  * Represents a known exception thrown inside the program context.
@@ -13,4 +13,5 @@ public class ContextException extends Exception {
     public ContextException(String message) {
         super(message);
     }
+
 }

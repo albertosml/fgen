@@ -1,19 +1,13 @@
-package customer.dataaccess.components;
+package customer.persistence;
 
 import customer.application.Customer;
 import java.util.ArrayList;
-import shared.dataaccess.components.Repository;
+import shared.persistence.Repository;
 
 /**
  * Represents the repository model for the customer entity.
  */
 public interface CustomerRepository extends Repository {
-    /**
-     * Register the given customer.
-     *
-     * @param customer The customer to register.
-     */
-    public void register(Customer customer);
 
     /**
      * Get the TIN from all non-removed customers from the repository.
@@ -21,4 +15,12 @@ public interface CustomerRepository extends Repository {
      * @return A list with all the retrieved TINs.
      */
     public ArrayList<String> getTinList();
+
+    /**
+     * Register the given customer.
+     *
+     * @param customer The customer to register.
+     */
+    public void register(Customer customer);
+
 }

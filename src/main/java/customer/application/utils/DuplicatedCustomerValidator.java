@@ -1,7 +1,7 @@
 package customer.application.utils;
 
 import customer.application.Customer;
-import customer.dataaccess.components.CustomerRepository;
+import customer.persistence.CustomerRepository;
 
 /**
  * Validate if the customer to register already exists on the repository by
@@ -29,4 +29,5 @@ public class DuplicatedCustomerValidator {
 
         return false;
     }
+
 }

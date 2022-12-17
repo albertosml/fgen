@@ -3,7 +3,7 @@ package customer.application.utils;
 import shared.application.utils.RegexValidator;
 
 /**
- * Validates the TIN (Tax Identification Number), which can only be a Spanish
+ * Validate the TIN (Tax Identification Number), which can only be a Spanish
  * NIF, NIE or CIF.
  */
 public class TinValidator {
@@ -32,4 +32,5 @@ public class TinValidator {
 
         return RegexValidator.matches(tin, tinRegex);
     }
+
 }

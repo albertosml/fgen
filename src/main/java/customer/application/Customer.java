@@ -84,6 +84,15 @@ public class Customer {
     }
 
     /**
+     * Retrieve the customer code.
+     *
+     * @return The customer code.
+     */
+    public int getCode() {
+        return this.code;
+    }
+
+    /**
      * Retrieve the customer name.
      *
      * @return The customer name.
@@ -102,6 +111,33 @@ public class Customer {
     }
 
     /**
+     * Retrieve the customer address.
+     *
+     * @return The customer address.
+     */
+    public String getAddress() {
+        return this.address;
+    }
+
+    /**
+     * Retrieve the customer city.
+     *
+     * @return The customer city.
+     */
+    public String getCity() {
+        return this.city;
+    }
+
+    /**
+     * Retrieve the customer province.
+     *
+     * @return The customer province.
+     */
+    public Object getProvince() {
+        return this.province;
+    }
+
+    /**
      * Retrieve the customer ZIP code.
      *
      * @return The customer ZIP code.
@@ -117,6 +153,15 @@ public class Customer {
      */
     public String getIban() {
         return this.iban;
+    }
+
+    /**
+     * Whether the customer is deleted from the system or not.
+     *
+     * @return true if the customer is removed, otherwise false.
+     */
+    public boolean isDeleted() {
+        return this.isDeleted;
     }
 
     /**
@@ -140,4 +185,5 @@ public class Customer {
 
         return new Customer(code, name, tin, address, city, province, zipcode, iban, isDeleted);
     }
+
 }
