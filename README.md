@@ -41,6 +41,42 @@ use to fill the invoice.
 Finally, the generated invoice can be saved in your local computer 
 in Excel (XLSX) or PDF format.
 
+## Architecture & Technologies
+
+In the first phase of the project, a monolithic architecture which
+will be composed by the next three layers:
+
+- **Presentation**: It will responsible of showing the system
+information to the user. In other words, it will contain all the UI.
+- **Application**: It will contain all the business logic with all
+the use cases.
+- **Persistence**: This layer will be responsible of accessing to the
+data. It will interact with the database.
+
+Then, each entity will be distinguished in a separate folder, so it is
+independent from the others. This will facilitate a future transition
+to isolated microservices. Note that common resources for all entities
+will be set in a shared folder.
+
+This architecture has been chosen because it will facilitate the
+development and the product testing during this first project phase,
+as it is preferred to set more focus on the logic at this moment. Then,
+improvements could be made based on this first version.
+
+Respect to the technology stack, Java will be used as the programming
+language because with the help of the Netbeans IDE, it will accelerate
+the UI development, so we can set a better focus to the logic and the
+system functionality, as mentioned before. The chosen programming
+language also has an easy learning curve and its generated applications
+can be executed easily on any operating system after installing Java.
+Besides, the Mongo database has been chosen due to its installation
+facility on any place (locally and cloud), scability and flexibility
+on the data structure. Keep in mind that there are some entities like
+the customer which will have optional data. Finally, the conversion
+from Excel to PDF will be done thanks to the [Gembox](https://www.gemboxsoftware.com/)
+library, which offers a free license to process 150 rows per sheet and
+a maximum of 5 sheets per file.
+
 ## License
 
 A GNU General Public License v3.0 license (GNU GPLv3) has been chosen because it lets people to do whatever they want with the project, except distributing closed source versions.
