@@ -40,3 +40,9 @@ use to fill the invoice.
 
 Finally, the generated invoice can be saved in your local computer 
 in Excel (XLSX) or PDF format.
+
+## License
+
+A GNU General Public License v3.0 license (GNU GPLv3) has been chosen because it lets people to do whatever they want with the project, except distributing closed source versions.
+
+Source: [https://choosealicense.com/](https://choosealicense.com/)
