@@ -11,7 +11,7 @@ public class ApplicationConfiguration {
     /**
      * Contains all the values for the system configuration variables.
      */
-    private static Map<ConfigurationVariable, Object> variables = new HashMap<>();
+    private static final Map<ConfigurationVariable, Object> variables = new HashMap<>();
 
     /**
      * Add a configuration variable to the system.

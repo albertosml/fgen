@@ -11,7 +11,7 @@ public abstract class Dictionary {
     /**
      * Store all the translations for a concrete language.
      */
-    private HashMap<LocalizationKey, String> translations;
+    private final HashMap<LocalizationKey, String> translations;
 
     /**
      * Constructor.

@@ -35,7 +35,7 @@ public class Main {
         // Set the database to connect.
         // MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.0.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.0.1");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
 

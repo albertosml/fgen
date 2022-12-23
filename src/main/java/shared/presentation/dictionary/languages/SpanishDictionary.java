@@ -17,4 +17,5 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.VERSION, "Versión");
         super.setTranslation(LocalizationKey.PROJECT_DETAILS, "Más detalles sobre el proyecto");
     }
+
 }
