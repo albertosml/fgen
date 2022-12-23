@@ -13,3 +13,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add a modal to show the information about the project.
 - Configured the main project frame.
+- Add localization to the user interface to support different languages.
+- Set up the application configuration (version, application name and project URL).

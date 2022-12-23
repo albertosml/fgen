@@ -23,7 +23,7 @@ public abstract class Dictionary {
     /**
      * Set the translation for a given localization key.
      *
-     * @param key Localization key.
+     * @param key The localization key.
      * @param value The value to set for the localization value.
      */
     protected void setTranslation(LocalizationKey key, String value) {
@@ -33,7 +33,7 @@ public abstract class Dictionary {
     /**
      * Get the translation for a concrete localization key.
      *
-     * @param key Localization key.
+     * @param key The localization key.
      * @return The value associated to the localization key for the dictionary.
      */
     public String getTranslation(LocalizationKey key) {

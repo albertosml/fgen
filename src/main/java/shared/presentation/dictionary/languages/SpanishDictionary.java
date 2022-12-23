@@ -4,7 +4,7 @@ import shared.presentation.dictionary.Dictionary;
 import shared.presentation.localization.LocalizationKey;
 
 /**
- * Dictionary wit all the translations for the Spanish language.
+ * Dictionary with all the translations for the Spanish language.
  */
 public class SpanishDictionary extends Dictionary {
 
