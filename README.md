@@ -154,6 +154,48 @@ be added in whatever expression.
     - [VAR-4](https://github.com/albertosml/fgen/issues/42): Remove variable
     - [VAR-5](https://github.com/albertosml/fgen/issues/43): Restore variable
 
+## Localization
+
+The application user interface supports localization on different languages. So,
+the user can change the content of the interface easily.
+
+To do that, you need to execute the next steps:
+
+1. Create a new dictionary class in the `shared.presentation.dictionary.languages`
+package. In that class, you will define the translations for each localization key.
+Example:
+
+    ```
+    package shared.presentation.dictionary.languages;
+
+    import shared.presentation.dictionary.Dictionary;
+    import shared.presentation.localization.LocalizationKey;
+
+    /**
+     * Dictionary with all the translations for the English language.
+     */
+    public class EnglishDictionary extends Dictionary {
+
+        /**
+         * Constructor.
+         */
+        public EnglishDictionary() {
+            super.setTranslation(LocalizationKey.PROGRAM_NAME, "Program name");
+            super.setTranslation(LocalizationKey.ABOUT, "About");
+            // Add more...
+        }
+
+    }
+    ```
+
+2. Load the dictionary on the localization class. That can be done on the main
+class, which is located on the `shared.presentation` package by replacing the
+localization loading with this statement:
+
+    ```
+    Localization.load(new EnglishDictionary());
+    ```
+
 ## License
 
 A GNU General Public License v3.0 license (GNU GPLv3) has been chosen
