@@ -1,0 +1,5 @@
+# Ignore target files.
+/target/
+
+# Ignore Netbeans actions file.
+nbactions.xml
