@@ -3,6 +3,7 @@ package shared.presentation;
 import javax.swing.JFrame;
 import shared.application.configuration.ApplicationConfiguration;
 import shared.application.configuration.ConfigurationVariable;
+import shared.persistence.mongo.MongoDatabaseConnection;
 import shared.presentation.dictionary.languages.SpanishDictionary;
 import shared.presentation.exceptions.MissingSystemArgumentsContextException;
 import shared.presentation.localization.Localization;
@@ -33,10 +34,10 @@ public class Main {
         Localization.load(new SpanishDictionary());
 
         // Set the database to connect.
-        // MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
+        MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.1.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.2.0");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
 

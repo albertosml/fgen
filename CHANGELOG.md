@@ -15,3 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configured the main project frame.
 - Add localization to the user interface to support different languages.
 - Set up the application configuration (version, application name and project URL).
+
+## [0.2.0] - 2022-12-25
+
+### Added
+
+- Added feature to register a customer.
