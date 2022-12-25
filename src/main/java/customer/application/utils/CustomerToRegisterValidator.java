@@ -15,11 +15,11 @@ public class CustomerToRegisterValidator {
      *
      * @param customer The customer to validate.
      * @param customerRepository The customer repository.
-     * @return true if the customer can be registered, otherwise false.
+     * @return The validation state for the customer.
      */
-    public static boolean canBeRegistered(Customer customer, CustomerRepository customerRepository) {
-        if (!DuplicatedCustomerValidator.isDuplicated(customer, customerRepository)) {
-            return false;
+    public static CustomerValidationState isValidForRegistration(Customer customer, CustomerRepository customerRepository) {
+        if (DuplicatedCustomerValidator.isDuplicated(customer, customerRepository)) {
+            return CustomerValidationState.DUPLICATED;
         }
 
         return CustomerValidator.isValid(customer);

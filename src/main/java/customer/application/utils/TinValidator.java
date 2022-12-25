@@ -28,7 +28,7 @@ public class TinValidator {
         // Example valid CIF: A58228501.
         String cifRegex = "^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$";
 
-        String tinRegex = String.format("{%s}|{%s}|{%s}", nifRegex, nieRegex, cifRegex);
+        String tinRegex = String.format("%s|%s|%s", nifRegex, nieRegex, cifRegex);
 
         return RegexValidator.matches(tin, tinRegex);
     }

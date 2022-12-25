@@ -27,7 +27,7 @@ public class IbanValidator {
         // Example valid IBAN (third format): ES2203023202203223022392
         String thirdIbanRegex = "^[A-Z]{2}[0-9]{22}$";
 
-        String ibanRegex = String.format("{%s}|{%s}|{%s}", firstIbanRegex, secondIbanRegex, thirdIbanRegex);
+        String ibanRegex = String.format("%s|%s|%s", firstIbanRegex, secondIbanRegex, thirdIbanRegex);
 
         return RegexValidator.matches(iban, ibanRegex);
     }

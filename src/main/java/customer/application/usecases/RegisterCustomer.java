@@ -3,6 +3,7 @@ package customer.application.usecases;
 import customer.application.Customer;
 import customer.application.CustomerAttribute;
 import customer.application.utils.CustomerToRegisterValidator;
+import customer.application.utils.CustomerValidationState;
 import customer.persistence.CustomerRepository;
 import java.util.Map;
 import shared.application.utils.CodeAutoGenerator;
@@ -35,9 +36,9 @@ public class RegisterCustomer {
      * Keep in mind that the customer is validated before the registration.
      *
      * @param newCustomerAttributes The attributes for the customer to register.
-     * @return Whether the customer has been registered successfully or not.
+     * @return The validation state for the customer to register.
      */
-    public boolean execute(Map<CustomerAttribute, Object> newCustomerAttributes) {
+    public CustomerValidationState execute(Map<CustomerAttribute, Object> newCustomerAttributes) {
         boolean isCodeManuallyAdded = newCustomerAttributes.containsKey(CustomerAttribute.CODE);
         if (!isCodeManuallyAdded) {
             int generatedCustomerCode = CodeAutoGenerator.generate(customerRepository);
@@ -46,12 +47,12 @@ public class RegisterCustomer {
 
         Customer customer = Customer.from(newCustomerAttributes);
 
-        boolean isValidCustomer = CustomerToRegisterValidator.canBeRegistered(customer, customerRepository);
-        if (isValidCustomer) {
+        CustomerValidationState customerValidationState = CustomerToRegisterValidator.isValidForRegistration(customer, customerRepository);
+        if (customerValidationState == CustomerValidationState.VALID) {
             customerRepository.register(customer);
         }
 
-        return isValidCustomer;
+        return customerValidationState;
     }
 
 }

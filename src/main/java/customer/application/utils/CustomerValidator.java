@@ -14,26 +14,32 @@ public class CustomerValidator {
      * Check whether a customer is valid or not.
      *
      * @param customer The customer to validate.
-     * @return true if the customer is valid, otherwise false.
+     * @return The validation state for the customer.
      */
-    public static boolean isValid(Customer customer) {
+    public static CustomerValidationState isValid(Customer customer) {
         boolean isValidName = NameValidator.isValid(customer.getName());
         if (!isValidName) {
-            return false;
+            return CustomerValidationState.INVALID_NAME;
         }
 
         boolean isValidTin = TinValidator.isValid(customer.getTin());
         if (!isValidTin) {
-            return false;
+            return CustomerValidationState.INVALID_TIN;
         }
 
         String customerZipCode = customer.getZipCode();
-        if (!(customerZipCode == null || ZipCodeValidator.isValid(customerZipCode))) {
-            return false;
+        boolean isEmptyZipCode = customerZipCode == null || customerZipCode.isBlank();
+        if (!(isEmptyZipCode || ZipCodeValidator.isValid(customerZipCode))) {
+            return CustomerValidationState.INVALID_ZIPCODE;
         }
 
         String customerIban = customer.getIban();
-        return customerIban == null || IbanValidator.isValid(customerIban);
+        boolean isEmptyIban = customerIban == null || customerIban.isBlank();
+        if (!(isEmptyIban || IbanValidator.isValid(customerIban))) {
+            return CustomerValidationState.INVALID_IBAN;
+        }
+
+        return CustomerValidationState.VALID;
     }
 
 }
