@@ -79,5 +79,33 @@ public enum LocalizationKey {
     /**
      * Duplicated customer message.
      */
-    DUPLICATED_CUSTOMER_MESSAGE
+    DUPLICATED_CUSTOMER_MESSAGE,
+    /**
+     * List.
+     */
+    LIST,
+    /**
+     * Customers
+     */
+    CUSTOMERS,
+    /**
+     * Code.
+     */
+    CODE,
+    /**
+     * Data.
+     */
+    DATA,
+    /**
+     * Remove.
+     */
+    REMOVE,
+    /**
+     * Restore.
+     */
+    RESTORE,
+    /**
+     * Show.
+     */
+    SHOW
 }

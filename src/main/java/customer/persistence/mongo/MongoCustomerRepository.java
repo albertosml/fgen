@@ -2,8 +2,11 @@ package customer.persistence.mongo;
 
 import com.mongodb.client.model.Filters;
 import customer.application.Customer;
+import customer.application.CustomerAttribute;
 import customer.persistence.CustomerRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
@@ -47,6 +50,28 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     }
 
     /**
+     * It creates a customer a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A customer object based on the data obtained from the given
+     * document.
+     */
+    private Customer createCustomerFrom(Document document) {
+        Map<CustomerAttribute, Object> attributes = new HashMap<>();
+        attributes.put(CustomerAttribute.CODE, document.get("code"));
+        attributes.put(CustomerAttribute.NAME, document.get("name"));
+        attributes.put(CustomerAttribute.TIN, document.get("tin"));
+        attributes.put(CustomerAttribute.ADDRESS, document.get("address"));
+        attributes.put(CustomerAttribute.CITY, document.get("city"));
+        attributes.put(CustomerAttribute.PROVINCE, document.get("province"));
+        attributes.put(CustomerAttribute.ZIPCODE, document.get("zipcode"));
+        attributes.put(CustomerAttribute.IBAN, document.get("iban"));
+        attributes.put(CustomerAttribute.ISDELETED, document.get("isDeleted"));
+
+        return Customer.from(attributes);
+    }
+
+    /**
      * Obtain the filter to get all the customers which are not deleted.
      *
      * @return A filter indicating that the query must only obtain non-removed
@@ -62,6 +87,21 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Customer> get() {
+        ArrayList<Document> foundDocuments = super.find();
+
+        ArrayList<Customer> customers = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            customers.add(this.createCustomerFrom(document));
+        }
+
+        return customers;
     }
 
     /**

@@ -1,6 +1,7 @@
 package shared.persistence.mongo;
 
 import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
@@ -53,6 +54,16 @@ public abstract class MongoRepository {
     protected <TResult extends Object> ArrayList<TResult> distinct(String field, Bson filters, Class<TResult> type) {
         DistinctIterable<TResult> distinctIterator = collection.distinct(field, filters, type);
         return distinctIterator.into(new ArrayList<>());
+    }
+
+    /**
+     * Find all the documents on the collection.
+     *
+     * @return A list with all found documents on the collection.
+     */
+    protected ArrayList<Document> find() {
+        FindIterable<Document> findIterator = collection.find();
+        return findIterator.into(new ArrayList<>());
     }
 
     /**
