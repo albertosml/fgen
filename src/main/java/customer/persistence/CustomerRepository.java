@@ -23,4 +23,12 @@ public interface CustomerRepository extends Repository {
      */
     public void register(Customer customer);
 
+    /**
+     * Obtain all the customers registered on the system, even if they have been
+     * removed after.
+     *
+     * @return A list with all customers.
+     */
+    public ArrayList<Customer> get();
+
 }

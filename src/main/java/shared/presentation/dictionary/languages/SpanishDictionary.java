@@ -31,6 +31,13 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_ZIPCODE_MESSAGE, "Código postal inválido (solo debe contener números)");
         super.setTranslation(LocalizationKey.INVALID_IBAN_MESSAGE, "IBAN inválido");
         super.setTranslation(LocalizationKey.DUPLICATED_CUSTOMER_MESSAGE, "El cliente a registrar tiene un DNI, NIE o CIF de un cliente ya existente en el sistema.");
+        super.setTranslation(LocalizationKey.LIST, "Listar");
+        super.setTranslation(LocalizationKey.CUSTOMERS, "Clientes");
+        super.setTranslation(LocalizationKey.CODE, "Código");
+        super.setTranslation(LocalizationKey.DATA, "Datos");
+        super.setTranslation(LocalizationKey.REMOVE, "Eliminar");
+        super.setTranslation(LocalizationKey.RESTORE, "Restaurar");
+        super.setTranslation(LocalizationKey.SHOW, "Mostrar");
     }
 
 }
