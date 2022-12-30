@@ -2,6 +2,7 @@ package shared.presentation;
 
 import customer.presentation.panels.ListCustomersPanel;
 import customer.presentation.panels.RegisterCustomerPanel;
+import customer.presentation.panels.ShowCustomerPanel;
 import java.awt.Container;
 import javax.swing.JPanel;
 import shared.application.configuration.ApplicationConfiguration;
@@ -101,9 +102,21 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
+     * Redirect to the show customer panel.
+     *
+     * @param customerCode The customer code.
+     */
+    public void redirectToShowCustomer(int customerCode) {
+        String showName = Localization.getLocalization(LocalizationKey.SHOW);
+        String customerName = Localization.getLocalization(LocalizationKey.CUSTOMER);
+        String panelTitle = String.format("%s %s", showName, customerName);
+        this.redirectTo(new ShowCustomerPanel(customerCode), panelTitle);
+    }
+
+    /**
      * Redirect to the list customers panel.
      */
-    private void redirectToListCustomers() {
+    public void redirectToListCustomers() {
         String listName = Localization.getLocalization(LocalizationKey.LIST);
         String customersName = Localization.getLocalization(LocalizationKey.CUSTOMERS);
         String panelTitle = String.format("%s %s", listName, customersName);

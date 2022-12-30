@@ -93,6 +93,24 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
      * {@inheritDoc}
      */
     @Override
+    public Customer find(int code) {
+        Bson customerCodeFilter = Filters.eq("code", code);
+        Bson queryFilters = Filters.and(this.isNotDeletedFilter(), customerCodeFilter);
+
+        ArrayList<Document> foundCustomerDocuments = super.find(queryFilters);
+
+        if (foundCustomerDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundCustomerDocument = foundCustomerDocuments.get(0);
+            return this.createCustomerFrom(foundCustomerDocument);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<Customer> get() {
         ArrayList<Document> foundDocuments = super.find();
 

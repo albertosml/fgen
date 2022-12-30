@@ -133,7 +133,7 @@ public class Customer {
      *
      * @return The customer province.
      */
-    public Object getProvince() {
+    public String getProvince() {
         return this.province;
     }
 

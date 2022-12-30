@@ -38,6 +38,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.REMOVE, "Eliminar");
         super.setTranslation(LocalizationKey.RESTORE, "Restaurar");
         super.setTranslation(LocalizationKey.SHOW, "Mostrar");
+        super.setTranslation(LocalizationKey.UPDATE, "Actualizar");
+        super.setTranslation(LocalizationKey.IS_DELETED, "¿Está eliminado?");
     }
 
 }

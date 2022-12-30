@@ -31,4 +31,12 @@ public interface CustomerRepository extends Repository {
      */
     public ArrayList<Customer> get();
 
+    /**
+     * Find the customer which matches with the given code.
+     *
+     * @param code The code of the customer to find.
+     * @return The found customer, otherwise null.
+     */
+    public Customer find(int code);
+
 }
