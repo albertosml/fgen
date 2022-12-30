@@ -95,9 +95,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     @Override
     public Customer find(int code) {
         Bson customerCodeFilter = Filters.eq("code", code);
-        Bson queryFilters = Filters.and(this.isNotDeletedFilter(), customerCodeFilter);
-
-        ArrayList<Document> foundCustomerDocuments = super.find(queryFilters);
+        ArrayList<Document> foundCustomerDocuments = super.find(customerCodeFilter);
 
         if (foundCustomerDocuments.isEmpty()) {
             return null;
