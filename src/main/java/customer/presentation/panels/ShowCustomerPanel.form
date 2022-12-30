@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="addressLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="nameLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="tinLabel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="cityLabel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="provinceLabel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="zipcodeLabel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="ibanLabel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="codeLabel" max="32767" attributes="0"/>
+                  <Component id="isDeletedLabel" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="codeInput" max="32767" attributes="0"/>
+                          <Component id="tinInput" max="32767" attributes="0"/>
+                          <Component id="addressInput" max="32767" attributes="0"/>
+                          <Component id="cityInput" max="32767" attributes="0"/>
+                          <Component id="provinceInput" alignment="0" max="32767" attributes="0"/>
+                          <Component id="zipcodeInput" max="32767" attributes="0"/>
+                          <Component id="updateButton" alignment="0" pref="232" max="32767" attributes="0"/>
+                          <Component id="ibanInput" alignment="1" max="32767" attributes="0"/>
+                          <Component id="nameInput" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="isDeletedCheckbox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="codeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="codeInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="nameInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tinLabel" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                  <Component id="tinInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="addressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addressInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="cityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cityInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="provinceLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="provinceInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="zipcodeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="zipcodeInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ibanLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ibanInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="isDeletedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="isDeletedCheckbox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="updateButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="24" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="nameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${NAME}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="nameInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="tinLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${TIN}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tinInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="addressLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${ADDRESS}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="addressInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="cityLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${CITY}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="cityInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="provinceLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${PROVINCE}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="provinceInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="zipcodeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${ZIP_CODE}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="zipcodeInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="ibanLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${IBAN}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="ibanInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="codeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${CODE}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="updateButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${UPDATE}"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="codeInput">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="isDeletedLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${IS_DELETED}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="isDeletedCheckbox">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

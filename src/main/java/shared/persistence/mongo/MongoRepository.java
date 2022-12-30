@@ -67,6 +67,17 @@ public abstract class MongoRepository {
     }
 
     /**
+     * Find all the documents on the collection which match the given filters.
+     *
+     * @param filters The query filters.
+     * @return A list with all found documents on the collection.
+     */
+    protected ArrayList<Document> find(Bson filters) {
+        FindIterable<Document> findIterator = collection.find(filters);
+        return findIterator.into(new ArrayList<>());
+    }
+
+    /**
      * Insert the given document to the associated Mongo collection.
      *
      * @param document The document to insert.

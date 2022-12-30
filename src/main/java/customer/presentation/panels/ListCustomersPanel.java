@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
+import shared.presentation.MainFrame;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import shared.presentation.utils.ButtonRenderer;
@@ -140,7 +142,10 @@ public class ListCustomersPanel extends javax.swing.JPanel {
                         // the chosen customer defined by the clicked row.
                         int row = table.rowAtPoint(evt.getPoint());
                         int chosenCustomerCode = row + 1;
-                        System.out.println(String.format("Show customer %d", chosenCustomerCode));
+
+                        // Go to the show customer panel.
+                        MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(table.getParent());
+                        mainFrame.redirectToShowCustomer(chosenCustomerCode);
                     }
                 }
             });
