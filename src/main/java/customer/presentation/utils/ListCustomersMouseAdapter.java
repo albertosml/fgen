@@ -1,8 +1,9 @@
 package customer.presentation.utils;
 
 import customer.application.usecases.RemoveCustomer;
+import customer.application.usecases.RestoreCustomer;
 import customer.persistence.mongo.MongoCustomerRepository;
-import customer.presentation.panels.RegisterCustomerPanel;
+import customer.presentation.panels.ListCustomersPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
@@ -47,8 +48,28 @@ public class ListCustomersMouseAdapter extends MouseAdapter {
             RemoveCustomer removeCustomer = new RemoveCustomer(customerRepository);
             return removeCustomer.execute(code);
         } catch (NotDefinedDatabaseContextException ex) {
-            String className = RegisterCustomerPanel.class.getName();
+            String className = ListCustomersPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Customer not removed because the database has not been found", ex);
+        }
+
+        return false;
+    }
+
+    /**
+     * Execute the restore customer use case.
+     *
+     * @param code The code of the customer to restore.
+     * @return Whether the customer with the given code has been restored or
+     * not.
+     */
+    private boolean restoreCustomer(int code) {
+        try {
+            MongoCustomerRepository customerRepository = new MongoCustomerRepository();
+            RestoreCustomer restoreCustomer = new RestoreCustomer(customerRepository);
+            return restoreCustomer.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListCustomersPanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Customer not restored because the database has not been found", ex);
         }
 
         return false;
@@ -76,6 +97,13 @@ public class ListCustomersMouseAdapter extends MouseAdapter {
             if (isCustomerRemoved) {
                 // Button state needs to be updated as the customer state has changed.
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
+            }
+        } else {
+            boolean isCustomerRestored = this.restoreCustomer(chosenCustomerCode);
+
+            if (isCustomerRestored) {
+                // Button state needs to be updated as the customer state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
             }
         }
     }
