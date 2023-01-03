@@ -82,6 +82,17 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     }
 
     /**
+     * Obtain the filter for the customer code.
+     *
+     * @param code The customer code.
+     * @return A filter indicating that the query must only obtain the customer
+     * which contains the given customer code.
+     */
+    private Bson getCustomerCodeFilter(int code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -94,7 +105,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
      */
     @Override
     public Customer find(int code) {
-        Bson customerCodeFilter = Filters.eq("code", code);
+        Bson customerCodeFilter = this.getCustomerCodeFilter(code);
         ArrayList<Document> foundCustomerDocuments = super.find(customerCodeFilter);
 
         if (foundCustomerDocuments.isEmpty()) {
@@ -135,6 +146,15 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     public void register(Customer customer) {
         Document document = this.createDocumentFrom(customer);
         super.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Customer customer) {
+        Bson customerCodeFilter = this.getCustomerCodeFilter(customer.getCode());
+        return super.replaceOne(customerCodeFilter, this.createDocumentFrom(customer));
     }
 
 }

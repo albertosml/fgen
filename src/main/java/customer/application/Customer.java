@@ -165,6 +165,15 @@ public class Customer {
     }
 
     /**
+     * Update the deletion state for the customer.
+     *
+     * @param isDeleted Whether the customer is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Create a customer given its attribute values.
      *
      * @param attributes Map containing the value for each customer attribute.
