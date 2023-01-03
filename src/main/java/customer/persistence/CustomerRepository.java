@@ -39,4 +39,12 @@ public interface CustomerRepository extends Repository {
      */
     public Customer find(int code);
 
+    /**
+     * Update the given customer with its associated data.
+     *
+     * @param customer The customer to update.
+     * @return Whether the customer has been updated or not.
+     */
+    public boolean update(Customer customer);
+
 }

@@ -3,17 +3,15 @@ package customer.presentation.panels;
 import customer.application.Customer;
 import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
-import java.awt.event.MouseAdapter;
+import customer.presentation.utils.ListCustomersMouseAdapter;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
-import shared.presentation.MainFrame;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import shared.presentation.utils.ButtonRenderer;
@@ -126,29 +124,7 @@ public class ListCustomersPanel extends javax.swing.JPanel {
 
             table.setModel(dataModel);
 
-            table.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    int column = table.columnAtPoint(evt.getPoint());
-
-                    if (column == 2) {
-                        // In column 2, there is a button to restore or remove
-                        // the chosen customer defined by the clicked row.
-                        int row = table.rowAtPoint(evt.getPoint());
-                        int chosenCustomerCode = row + 1;
-                        System.out.println(String.format("Remove/restore customer %d", chosenCustomerCode));
-                    } else if (column == 3) {
-                        // In column 3, there is a button to show the details of
-                        // the chosen customer defined by the clicked row.
-                        int row = table.rowAtPoint(evt.getPoint());
-                        int chosenCustomerCode = row + 1;
-
-                        // Go to the show customer panel.
-                        MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(table.getParent());
-                        mainFrame.redirectToShowCustomer(chosenCustomerCode);
-                    }
-                }
-            });
+            table.addMouseListener(new ListCustomersMouseAdapter(table));
 
             // Set a button renderer for the action buttons.
             TableColumn removeRestoreCustomerColumn = table.getColumn(columnNames.get(2));

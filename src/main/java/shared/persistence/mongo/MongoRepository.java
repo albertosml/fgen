@@ -4,6 +4,7 @@ import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -84,6 +85,18 @@ public abstract class MongoRepository {
      */
     protected void insertOne(Document document) {
         collection.insertOne(document);
+    }
+
+    /**
+     * Replaces the document which matches the filters.
+     *
+     * @param filters The query filters.
+     * @param document The document to update.
+     * @return Whether the document has been updated or not.
+     */
+    protected boolean replaceOne(Bson filters, Document document) {
+        UpdateResult updateResult = collection.replaceOne(filters, document);
+        return updateResult.getModifiedCount() == 1;
     }
 
 }
