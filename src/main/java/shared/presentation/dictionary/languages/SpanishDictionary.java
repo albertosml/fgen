@@ -40,6 +40,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.SHOW, "Mostrar");
         super.setTranslation(LocalizationKey.UPDATE, "Actualizar");
         super.setTranslation(LocalizationKey.IS_DELETED, "¿Está eliminado?");
+        super.setTranslation(LocalizationKey.UPDATED_CUSTOMER_MESSAGE, "El cliente ha sido actualizado con éxito");
+        super.setTranslation(LocalizationKey.NOT_UPDATED_CUSTOMER_MESSAGE, "Ha habido un problema al actualizar los datos del cliente");
     }
 
 }

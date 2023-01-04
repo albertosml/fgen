@@ -1,12 +1,18 @@
 package customer.presentation.panels;
 
 import customer.application.Customer;
+import customer.application.CustomerAttribute;
 import customer.application.usecases.ShowCustomer;
+import customer.application.usecases.UpdateCustomer;
+import customer.application.utils.CustomerValidationState;
 import customer.persistence.mongo.MongoCustomerRepository;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.MainFrame;
@@ -17,6 +23,11 @@ import shared.presentation.localization.LocalizationKey;
  * Panel which shows the form with the customer details.
  */
 public class ShowCustomerPanel extends javax.swing.JPanel {
+
+    /**
+     * Initial TIN.
+     */
+    private String initialTin;
 
     /**
      * Constructor.
@@ -88,6 +99,43 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
     }
 
     /**
+     * Fill the inputs with the customer data.
+     *
+     * @param customer The customer.
+     */
+    private void fillCustomerData(Customer customer) {
+        this.codeInput.setText(Integer.toString(customer.getCode()));
+        this.nameInput.setText(customer.getName());
+        this.tinInput.setText(customer.getTin());
+        this.addressInput.setText(customer.getAddress());
+        this.cityInput.setText(customer.getCity());
+        this.provinceInput.setText(customer.getProvince());
+        this.zipcodeInput.setText(customer.getZipCode());
+        this.ibanInput.setText(customer.getIban());
+        this.isDeletedCheckbox.setSelected(customer.isDeleted());
+    }
+
+    /**
+     * Disable inputs so they cannot be edited.
+     */
+    private void disableInputs() {
+        this.nameInput.setEditable(false);
+        this.tinInput.setEditable(false);
+        this.addressInput.setEditable(false);
+        this.cityInput.setEditable(false);
+        this.provinceInput.setEditable(false);
+        this.zipcodeInput.setEditable(false);
+        this.ibanInput.setEditable(false);
+    }
+
+    /**
+     * Disable the update button.
+     */
+    private void disableButton() {
+        this.updateButton.setEnabled(false);
+    }
+
+    /**
      * Initialize form inputs.
      *
      * @param customerCode The customer code.
@@ -99,15 +147,54 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
             MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
             mainFrame.redirectToListCustomers();
         } else {
-            this.codeInput.setText(Integer.toString(customerCode));
-            this.nameInput.setText(customer.getName());
-            this.tinInput.setText(customer.getTin());
-            this.addressInput.setText(customer.getAddress());
-            this.cityInput.setText(customer.getCity());
-            this.provinceInput.setText(customer.getProvince());
-            this.zipcodeInput.setText(customer.getZipCode());
-            this.ibanInput.setText(customer.getIban());
-            this.isDeletedCheckbox.setSelected(customer.isDeleted());
+            this.initialTin = customer.getTin();
+            this.fillCustomerData(customer);
+
+            if (customer.isDeleted()) {
+                this.disableInputs();
+                this.disableButton();
+            }
+        }
+    }
+
+    /**
+     * Show the information message after the update process.
+     *
+     * @param state The customer validation state.
+     */
+    private void showInfoMessage(CustomerValidationState state) {
+        Map<CustomerValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
+        localizationKeysByState.put(CustomerValidationState.VALID, LocalizationKey.UPDATED_CUSTOMER_MESSAGE);
+        localizationKeysByState.put(CustomerValidationState.INVALID_NAME, LocalizationKey.INVALID_NAME_MESSAGE);
+        localizationKeysByState.put(CustomerValidationState.INVALID_TIN, LocalizationKey.INVALID_TIN_MESSAGE);
+        localizationKeysByState.put(CustomerValidationState.INVALID_ZIPCODE, LocalizationKey.INVALID_ZIPCODE_MESSAGE);
+        localizationKeysByState.put(CustomerValidationState.INVALID_IBAN, LocalizationKey.INVALID_IBAN_MESSAGE);
+        localizationKeysByState.put(CustomerValidationState.DUPLICATED, LocalizationKey.DUPLICATED_CUSTOMER_MESSAGE);
+
+        LocalizationKey key = localizationKeysByState.getOrDefault(state, LocalizationKey.NOT_UPDATED_CUSTOMER_MESSAGE);
+        String infoMessage = Localization.getLocalization(key);
+        JOptionPane.showMessageDialog(this, infoMessage);
+    }
+
+    /**
+     * Execute the update customer use case.
+     *
+     * @param customerAttributes The customer attributes.
+     */
+    private void updateCustomer(Map<CustomerAttribute, Object> customerAttributes) {
+        try {
+            MongoCustomerRepository customerRepository = new MongoCustomerRepository();
+            UpdateCustomer updateCustomer = new UpdateCustomer(customerRepository);
+
+            String inputTin = (String) customerAttributes.get(CustomerAttribute.TIN);
+            boolean modifiedTin = !inputTin.equals(this.initialTin);
+
+            CustomerValidationState state = updateCustomer.execute(customerAttributes, modifiedTin);
+
+            this.showInfoMessage(state);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ShowCustomerPanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Customer not updated because the database has not been found", ex);
         }
     }
 
@@ -152,6 +239,11 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         codeLabel.setText("${CODE}:");
 
         updateButton.setText("${UPDATE}");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         codeInput.setEditable(false);
 
@@ -237,6 +329,21 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        Map<CustomerAttribute, Object> customerAttributes = new HashMap<>();
+        customerAttributes.put(CustomerAttribute.CODE, Integer.valueOf(this.codeInput.getText()));
+        customerAttributes.put(CustomerAttribute.NAME, this.nameInput.getText());
+        customerAttributes.put(CustomerAttribute.TIN, this.tinInput.getText());
+        customerAttributes.put(CustomerAttribute.ADDRESS, this.addressInput.getText());
+        customerAttributes.put(CustomerAttribute.PROVINCE, this.provinceInput.getText());
+        customerAttributes.put(CustomerAttribute.CITY, this.cityInput.getText());
+        customerAttributes.put(CustomerAttribute.ZIPCODE, this.zipcodeInput.getText());
+        customerAttributes.put(CustomerAttribute.IBAN, this.ibanInput.getText());
+        customerAttributes.put(CustomerAttribute.ISDELETED, this.isDeletedCheckbox.isSelected());
+
+        this.updateCustomer(customerAttributes);
+    }//GEN-LAST:event_updateButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

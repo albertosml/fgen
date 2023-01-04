@@ -115,5 +115,13 @@ public enum LocalizationKey {
     /**
      * Whether the customer is deleted or not
      */
-    IS_DELETED
+    IS_DELETED,
+    /**
+     * Updated customer message.
+     */
+    UPDATED_CUSTOMER_MESSAGE,
+    /**
+     * Not updated customer message.
+     */
+    NOT_UPDATED_CUSTOMER_MESSAGE,
 }
