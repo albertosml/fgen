@@ -2,7 +2,7 @@ package customer.application.usecases;
 
 import customer.application.Customer;
 import customer.application.CustomerAttribute;
-import customer.application.utils.CustomerToRegisterValidator;
+import customer.application.utils.CustomerValidator;
 import customer.application.utils.CustomerValidationState;
 import customer.persistence.CustomerRepository;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class RegisterCustomer {
 
         Customer customer = Customer.from(newCustomerAttributes);
 
-        CustomerValidationState customerValidationState = CustomerToRegisterValidator.isValidForRegistration(customer, customerRepository);
+        CustomerValidationState customerValidationState = CustomerValidator.isValid(customer, customerRepository);
         if (customerValidationState == CustomerValidationState.VALID) {
             customerRepository.register(customer);
         }
