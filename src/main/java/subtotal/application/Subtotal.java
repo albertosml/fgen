@@ -128,4 +128,15 @@ public class Subtotal {
         return new Subtotal(code, name, percentage, isDiscount, isDeleted);
     }
 
+    /**
+     * Calculate the subtotal for the given value.
+     *
+     * @param value The value used to calculate the subtotal.
+     * @return The result after calculating the subtotal.
+     */
+    public float calculate(float value) {
+        float percentageDecimal = this.percentage / 100;
+        float subtotalResult = value * percentageDecimal;
+        return this.isDiscount ? -subtotalResult : subtotalResult;
+    }
 }
