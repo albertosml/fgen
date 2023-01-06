@@ -42,6 +42,10 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.IS_DELETED, "¿Está eliminado?");
         super.setTranslation(LocalizationKey.UPDATED_CUSTOMER_MESSAGE, "El cliente ha sido actualizado con éxito");
         super.setTranslation(LocalizationKey.NOT_UPDATED_CUSTOMER_MESSAGE, "Ha habido un problema al actualizar los datos del cliente");
+        super.setTranslation(LocalizationKey.PERCENTAGE, "Porcentaje");
+        super.setTranslation(LocalizationKey.IS_DISCOUNT, "¿Es descuento?");
+        super.setTranslation(LocalizationKey.REGISTERED_SUBTOTAL_MESSAGE, "El subtotal ha sido registrado con éxito");
+        super.setTranslation(LocalizationKey.SUBTOTAL, "Subtotal");
     }
 
 }
