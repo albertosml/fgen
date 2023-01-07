@@ -139,5 +139,9 @@ public enum LocalizationKey {
     /**
      * Subtotal.
      */
-    SUBTOTAL
+    SUBTOTAL,
+    /**
+     * Subtotals.
+     */
+    SUBTOTALS
 }

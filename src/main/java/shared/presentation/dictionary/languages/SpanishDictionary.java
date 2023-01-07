@@ -46,6 +46,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.IS_DISCOUNT, "¿Es descuento?");
         super.setTranslation(LocalizationKey.REGISTERED_SUBTOTAL_MESSAGE, "El subtotal ha sido registrado con éxito");
         super.setTranslation(LocalizationKey.SUBTOTAL, "Subtotal");
+        super.setTranslation(LocalizationKey.SUBTOTALS, "Subtotales");
     }
 
 }
