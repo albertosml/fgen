@@ -1,9 +1,13 @@
 package subtotal.persistence.mongo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.bson.Document;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
 import subtotal.application.Subtotal;
+import subtotal.application.SubtotalAttribute;
 import subtotal.persistence.SubtotalRepository;
 
 /**
@@ -40,11 +44,44 @@ public class MongoSubtotalRepository extends MongoRepository implements Subtotal
     }
 
     /**
+     * It creates a subtotal a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A subtotal object based on the data obtained from the given
+     * document.
+     */
+    private Subtotal createSubtotalFrom(Document document) {
+        Map<SubtotalAttribute, Object> attributes = new HashMap<>();
+        attributes.put(SubtotalAttribute.CODE, document.get("code"));
+        attributes.put(SubtotalAttribute.NAME, document.get("name"));
+        attributes.put(SubtotalAttribute.PERCENTAGE, document.get("percentage"));
+        attributes.put(SubtotalAttribute.ISDISCOUNT, document.get("isDiscount"));
+        attributes.put(SubtotalAttribute.ISDELETED, document.get("isDeleted"));
+
+        return Subtotal.from(attributes);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Subtotal> get() {
+        ArrayList<Document> foundDocuments = super.find();
+
+        ArrayList<Subtotal> subtotals = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            subtotals.add(this.createSubtotalFrom(document));
+        }
+
+        return subtotals;
     }
 
     /**
