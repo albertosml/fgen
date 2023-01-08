@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -15,6 +13,7 @@ import subtotal.application.Subtotal;
 import subtotal.application.usecases.ListSubtotals;
 import subtotal.persistence.mongo.MongoSubtotalRepository;
 import subtotal.presentation.utils.ListSubtotalsMouseAdapter;
+import subtotal.presentation.utils.ListSubtotalsTableModel;
 
 /**
  * Panel which lists all the subtotals.
@@ -114,24 +113,7 @@ public class ListSubtotalsPanel extends javax.swing.JPanel {
             Vector<String> columnNames = this.generateColumnNames();
             Vector<Vector<Object>> data = this.setTableData(subtotals);
 
-            TableModel dataModel = new DefaultTableModel(data, columnNames) {
-                @Override
-                public Class getColumnClass(int columnIndex) {
-                    // Checkbox will be shown for the "discount/tax" column.
-                    if (columnIndex == 3) {
-                        return Boolean.class;
-                    }
-
-                    return Object.class;
-                }
-
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
-
-            table.setModel(dataModel);
+            table.setModel(new ListSubtotalsTableModel(data, columnNames));
 
             table.addMouseListener(new ListSubtotalsMouseAdapter(table));
 

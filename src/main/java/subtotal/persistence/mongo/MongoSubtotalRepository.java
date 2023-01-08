@@ -1,9 +1,11 @@
 package subtotal.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
 import subtotal.application.Subtotal;
@@ -62,6 +64,17 @@ public class MongoSubtotalRepository extends MongoRepository implements Subtotal
     }
 
     /**
+     * Obtain the filter for the subtotal code.
+     *
+     * @param code The subtotal code.
+     * @return A filter indicating that the query must only obtain the subtotal
+     * which contains the given subtotal code.
+     */
+    private Bson getSubtotalCodeFilter(int code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -91,6 +104,15 @@ public class MongoSubtotalRepository extends MongoRepository implements Subtotal
     public void register(Subtotal subtotal) {
         Document document = this.createDocumentFrom(subtotal);
         super.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Subtotal subtotal) {
+        Bson subtotalCodeFilter = this.getSubtotalCodeFilter(subtotal.getCode());
+        return super.replaceOne(subtotalCodeFilter, this.createDocumentFrom(subtotal));
     }
 
 }

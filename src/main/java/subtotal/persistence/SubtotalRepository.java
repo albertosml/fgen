@@ -24,4 +24,12 @@ public interface SubtotalRepository extends Repository {
      */
     public ArrayList<Subtotal> get();
 
+    /**
+     * Update the given subtotal with its associated data.
+     *
+     * @param subtotal The subtotal to update.
+     * @return Whether the subtotal has been updated or not.
+     */
+    public boolean update(Subtotal subtotal);
+
 }
