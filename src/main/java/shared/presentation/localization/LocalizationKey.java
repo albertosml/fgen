@@ -113,7 +113,7 @@ public enum LocalizationKey {
      */
     UPDATE,
     /**
-     * Whether the customer is deleted or not
+     * Whether it is deleted or not.
      */
     IS_DELETED,
     /**
@@ -124,4 +124,24 @@ public enum LocalizationKey {
      * Not updated customer message.
      */
     NOT_UPDATED_CUSTOMER_MESSAGE,
+    /**
+     * Percentage.
+     */
+    PERCENTAGE,
+    /**
+     * Whether it is a discount or a tax.
+     */
+    IS_DISCOUNT,
+    /**
+     * Registered subtotal message.
+     */
+    REGISTERED_SUBTOTAL_MESSAGE,
+    /**
+     * Subtotal.
+     */
+    SUBTOTAL,
+    /**
+     * Subtotals.
+     */
+    SUBTOTALS
 }

@@ -7,11 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.8.0] - 2023-01-05
+## [0.11.0] - 2023-01-08
 
 ### Added
 
-- Added feature to add a variable.
+- Added feature to edit a subtotal.
+
+## [0.10.0] - 2023-01-08
+
+### Added
+
+- Added feature to list subtotals.
+
+## [0.9.0] - 2023-01-06
+
+### Added
+
+- Added feature to calculate a subtotal.
+
+## [0.8.0] - 2023-01-06
+
+### Added
+
+- Added feature to add a subtotal.
 
 ## [0.7.0] - 2023-01-05
 
