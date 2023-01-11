@@ -139,4 +139,12 @@ public class Subtotal {
         float subtotalResult = value * percentageDecimal;
         return this.isDiscount ? -subtotalResult : subtotalResult;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return String.format("%d - %s", this.code, this.name);
+    }
 }

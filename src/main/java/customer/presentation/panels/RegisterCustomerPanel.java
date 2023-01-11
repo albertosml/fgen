@@ -67,6 +67,8 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
 
     /**
      * Show the information message after the registration process.
+     *
+     * @param state The validation state for the customer.
      */
     private void showInfoMessage(CustomerValidationState state) {
         Map<CustomerValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
