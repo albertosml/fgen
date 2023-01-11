@@ -1,5 +1,6 @@
 package variable.persistence;
 
+import java.util.ArrayList;
 import shared.persistence.Repository;
 import variable.application.Variable;
 
@@ -14,5 +15,12 @@ public interface VariableRepository extends Repository {
      * @param variable The variable to register.
      */
     public void register(Variable variable);
+
+    /**
+     * Get the names from all variables on the repository.
+     *
+     * @return A list with all the retrieved variable names.
+     */
+    public ArrayList<String> getNamesList();
 
 }

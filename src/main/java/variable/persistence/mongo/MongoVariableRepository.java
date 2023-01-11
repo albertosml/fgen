@@ -1,8 +1,12 @@
 package variable.persistence.mongo;
 
+import java.util.ArrayList;
 import org.bson.Document;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
+import subtotal.application.Subtotal;
+import variable.application.EntityAttribute;
+import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.persistence.VariableRepository;
 
@@ -31,8 +35,17 @@ public class MongoVariableRepository extends MongoRepository implements Variable
         Document document = new Document();
 
         document.append("name", variable.getName());
+
         document.append("description", variable.getDescription());
-        document.append("attribute", variable.getAttribute());
+
+        EntityAttribute entityAttribute = variable.getAttribute();
+        document.append("attribute", entityAttribute.name());
+
+        if (variable instanceof SubtotalVariable) {
+            SubtotalVariable subtotalVariable = (SubtotalVariable) variable;
+            Subtotal subtotal = subtotalVariable.getSubtotal();
+            document.append("subtotal", subtotal.getCode());
+        }
 
         return document;
     }
@@ -43,6 +56,14 @@ public class MongoVariableRepository extends MongoRepository implements Variable
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<String> getNamesList() {
+        return super.distinct("name", null, String.class);
     }
 
     /**

@@ -1,5 +1,8 @@
 package variable.application;
 
+import shared.presentation.localization.Localization;
+import shared.presentation.localization.LocalizationKey;
+
 /**
  * Entity attributes.
  */
@@ -91,5 +94,16 @@ public enum EntityAttribute {
     /**
      * Invoice total.
      */
-    INVOICE_TOTAL,
+    INVOICE_TOTAL;
+
+    /**
+     * Gets the text to show for the corresponding enumeration value.
+     *
+     * @return The localized text for the enumeration value.
+     */
+    @Override
+    public String toString() {
+        LocalizationKey key = LocalizationKey.valueOf(super.toString());
+        return Localization.getLocalization(key);
+    }
 }

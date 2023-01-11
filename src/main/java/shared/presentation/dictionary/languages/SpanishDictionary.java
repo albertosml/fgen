@@ -47,6 +47,33 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.REGISTERED_SUBTOTAL_MESSAGE, "El subtotal ha sido registrado con éxito");
         super.setTranslation(LocalizationKey.SUBTOTAL, "Subtotal");
         super.setTranslation(LocalizationKey.SUBTOTALS, "Subtotales");
+        super.setTranslation(LocalizationKey.VARIABLE, "Variable");
+        super.setTranslation(LocalizationKey.DESCRIPTION, "Descripción");
+        super.setTranslation(LocalizationKey.ATTRIBUTE, "Atributo");
+        super.setTranslation(LocalizationKey.REGISTERED_VARIABLE_MESSAGE, "La variable ha sido registrada con éxito");
+        super.setTranslation(LocalizationKey.DUPLICATED_VARIABLE_MESSAGE, "La variable a registrar tiene un nombre de una variable ya existente en el sistema.");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_CODE, "Código del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_NAME, "Nombre del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_TIN, "DNI, NIE o CIF del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_ADDRESS, "Dirección del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_CITY, "Ciudad del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_PROVINCE, "Provincia del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_ZIPCODE, "Código postal del cliente emisor");
+        super.setTranslation(LocalizationKey.SENDER_CUSTOMER_IBAN, "IBAN del cliente emisor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_CODE, "Código del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_NAME, "Nombre del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_TIN, "DNI, NIE o CIF del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_ADDRESS, "Dirección del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_CITY, "Ciudad del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_PROVINCE, "Provincia del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_ZIPCODE, "Código postal del cliente receptor");
+        super.setTranslation(LocalizationKey.RECIPIENT_CUSTOMER_IBAN, "IBAN del cliente receptor");
+        super.setTranslation(LocalizationKey.INVOICE_CODE, "Código de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_GENERATION_DATETIME, "Hora de generación de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_ITEMS, "Elementos de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_ITEMS_TOTAL, "Total de los elementos de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_SUBTOTAL, "Subtotal de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_TOTAL, "Total de la factura");
     }
 
 }

@@ -1,6 +1,7 @@
 package variable.application;
 
 import java.util.Map;
+import subtotal.application.Subtotal;
 
 /**
  * Represents a variable associated to a subtotal.
@@ -8,16 +9,31 @@ import java.util.Map;
 public class SubtotalVariable extends Variable {
 
     /**
-     * The associated subtotal code.
+     * The associated subtotal.
      */
-    private int subtotalCode;
+    private Subtotal subtotal;
 
-    private SubtotalVariable(String name, String description, EntityAttribute attribute, boolean isDeleted) {
-        super(name, description, attribute, isDeleted)
+    /**
+     * Constructor.
+     *
+     * @param name Variable name.
+     * @param description Variable description.
+     * @param attribute Variable entity attribute.
+     * @param isDeleted Whether the variable is deleted or not.
+     * @param subtotal The associated subtotal.
+     */
+    private SubtotalVariable(String name, String description, EntityAttribute attribute, boolean isDeleted, Subtotal subtotal) {
+        super(name, description, attribute, isDeleted);
+        this.subtotal = subtotal;
     }
 
-    public int getSubtotalCode() {
-        return this.subtotalCode;
+    /**
+     * Retrieve the associated subtotal with the variable.
+     *
+     * @return A subtotal object.
+     */
+    public Subtotal getSubtotal() {
+        return this.subtotal;
     }
 
     /**
@@ -26,14 +42,18 @@ public class SubtotalVariable extends Variable {
      * @param attributes Map containing the value for each variable attribute.
      * @return The created variable.
      */
-    @Override
-    public static Variable from(Map<SubtotalVariableAttribute, Object> attributes) {
-        String name = (String) attributes.getOrDefault(SubtotalVariableAttribute.NAME, "");
-        String description = (String) attributes.getOrDefault(SubtotalVariableAttribute.DESCRIPTION, "");
-        EntityAttribute attribute = (EntityAttribute) attributes.get(SubtotalVariableAttribute.ATTRIBUTE);
-        boolean isDeleted = (boolean) attributes.getOrDefault(SubtotalVariableAttribute.ISDELETED, false);
+    public static Variable from(Map<VariableAttribute, Object> attributes) {
+        String name = (String) attributes.getOrDefault(VariableAttribute.NAME, "");
+        String description = (String) attributes.getOrDefault(VariableAttribute.DESCRIPTION, "");
+        EntityAttribute attribute = (EntityAttribute) attributes.get(VariableAttribute.ATTRIBUTE);
+        boolean isDeleted = (boolean) attributes.getOrDefault(VariableAttribute.ISDELETED, false);
+        Subtotal subtotal = (Subtotal) attributes.getOrDefault(VariableAttribute.SUBTOTAL, null);
 
-        return new SubtotalVariable(name, description, attribute, isDeleted);
+        if (subtotal == null) {
+            return new Variable(name, description, attribute, isDeleted);
+        }
+
+        return new SubtotalVariable(name, description, attribute, isDeleted, subtotal);
     }
 
 }

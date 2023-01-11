@@ -18,7 +18,7 @@ public class Variable {
     private String description;
 
     /**
-     * The entity attribute associated with this variable
+     * The entity attribute associated with this variable.
      *
      * @see EntityAttribute
      */
@@ -37,7 +37,7 @@ public class Variable {
      * @param attribute Variable entity attribute.
      * @param isDeleted Whether the variable is deleted or not.
      */
-    private Variable(String name, String description, EntityAttribute attribute, boolean isDeleted) {
+    protected Variable(String name, String description, EntityAttribute attribute, boolean isDeleted) {
         this.name = name;
         this.description = description;
         this.attribute = attribute;
