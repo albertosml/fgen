@@ -1,13 +1,20 @@
 package variable.persistence.mongo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.Document;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
 import subtotal.application.Subtotal;
+import subtotal.application.usecases.FindSubtotal;
+import subtotal.persistence.mongo.MongoSubtotalRepository;
 import variable.application.EntityAttribute;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
+import variable.application.VariableAttribute;
 import variable.persistence.VariableRepository;
 
 /**
@@ -47,7 +54,56 @@ public class MongoVariableRepository extends MongoRepository implements Variable
             document.append("subtotal", subtotal.getCode());
         }
 
+        document.append("isDeleted", variable.isDeleted());
+
         return document;
+    }
+
+    /**
+     * It creates a variable from a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A variable object based on the data obtained from the given
+     * document.
+     */
+    private Variable createVariableFrom(Document document) {
+        Map<VariableAttribute, Object> attributes = new HashMap<>();
+        attributes.put(VariableAttribute.NAME, document.get("name"));
+        attributes.put(VariableAttribute.DESCRIPTION, document.get("description"));
+        attributes.put(VariableAttribute.ISDELETED, document.get("isDeleted"));
+
+        String attribute = (String) document.get("attribute");
+        EntityAttribute entityAttribute = EntityAttribute.valueOf(attribute);
+        attributes.put(VariableAttribute.ATTRIBUTE, entityAttribute);
+
+        Integer subtotalCode = (Integer) document.get("subtotal");
+        if (subtotalCode != null) {
+            Subtotal subtotal = this.findSubtotal(subtotalCode);
+            if (subtotal != null) {
+                attributes.put(VariableAttribute.SUBTOTAL, subtotal);
+                return SubtotalVariable.from(attributes);
+            }
+        }
+
+        return Variable.from(attributes);
+    }
+
+    /**
+     * Find subtotal associated with the given code.
+     *
+     * @param code The code of the subtotal to find.
+     * @return The found subtotal, otherwise null.
+     */
+    private Subtotal findSubtotal(int code) {
+        try {
+            MongoSubtotalRepository subtotalRepository = new MongoSubtotalRepository();
+            FindSubtotal findSubtotal = new FindSubtotal(subtotalRepository);
+            return findSubtotal.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            Logger.getLogger(MongoVariableRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 
     /**
@@ -56,6 +112,21 @@ public class MongoVariableRepository extends MongoRepository implements Variable
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Variable> get() {
+        ArrayList<Document> foundDocuments = super.find();
+
+        ArrayList<Variable> variables = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            variables.add(this.createVariableFrom(document));
+        }
+
+        return variables;
     }
 
     /**

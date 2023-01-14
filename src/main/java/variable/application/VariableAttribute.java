@@ -6,7 +6,6 @@ package variable.application;
  * @see Variable
  */
 public enum VariableAttribute {
-    CODE,
     NAME,
     DESCRIPTION,
     ATTRIBUTE,

@@ -17,6 +17,14 @@ public interface VariableRepository extends Repository {
     public void register(Variable variable);
 
     /**
+     * Obtain all the variables registered on the system, even if they have been
+     * removed after.
+     *
+     * @return A list with all variables.
+     */
+    public ArrayList<Variable> get();
+
+    /**
      * Get the names from all variables on the repository.
      *
      * @return A list with all the retrieved variable names.

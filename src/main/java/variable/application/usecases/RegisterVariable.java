@@ -1,7 +1,6 @@
 package variable.application.usecases;
 
 import java.util.Map;
-import shared.application.utils.CodeAutoGenerator;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.VariableAttribute;
@@ -31,21 +30,12 @@ public class RegisterVariable {
     /**
      * Execute the variable registration.
      *
-     * Note that the variable code is automatically generated if it has not been
-     * introduced manually.
-     *
      * Keep in mind that the variable is validated before the registration.
      *
      * @param newVariableAttributes The attributes for the variable to register.
      * @return The validation state for the customer to register.
      */
     public VariableValidationState execute(Map<VariableAttribute, Object> newVariableAttributes) {
-        boolean isCodeManuallyAdded = newVariableAttributes.containsKey(VariableAttribute.CODE);
-        if (!isCodeManuallyAdded) {
-            int generatedVariableCode = CodeAutoGenerator.generate(variableRepository);
-            newVariableAttributes.put(VariableAttribute.CODE, generatedVariableCode);
-        }
-
         boolean includesSubtotal = newVariableAttributes.containsKey(VariableAttribute.SUBTOTAL);
         Variable variable = includesSubtotal
                 ? SubtotalVariable.from(newVariableAttributes)

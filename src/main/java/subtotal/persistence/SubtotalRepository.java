@@ -32,4 +32,12 @@ public interface SubtotalRepository extends Repository {
      */
     public boolean update(Subtotal subtotal);
 
+    /**
+     * Find the subtotal which matches with the given code.
+     *
+     * @param code The code of the subtotal to find.
+     * @return The found subtotal, otherwise null.
+     */
+    public Subtotal find(int code);
+
 }

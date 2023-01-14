@@ -252,4 +252,8 @@ public enum LocalizationKey {
      * Invoice total.
      */
     INVOICE_TOTAL,
+    /**
+     * Variables.
+     */
+    VARIABLES,
 }
