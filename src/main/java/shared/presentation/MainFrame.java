@@ -12,6 +12,7 @@ import shared.presentation.localization.LocalizationKey;
 import shared.presentation.panels.AboutPanel;
 import subtotal.presentation.panels.ListSubtotalsPanel;
 import subtotal.presentation.panels.RegisterSubtotalPanel;
+import variable.presentation.panels.ListVariablesPanel;
 import variable.presentation.panels.RegisterVariablePanel;
 
 /**
@@ -47,6 +48,7 @@ public class MainFrame extends javax.swing.JFrame {
         String listName = Localization.getLocalization(LocalizationKey.LIST);
         this.listCustomers.setText(listName);
         this.listSubtotals.setText(listName);
+        this.listVariables.setText(listName);
 
         String subtotalName = Localization.getLocalization(LocalizationKey.SUBTOTAL);
         this.subtotal.setText(subtotalName);
@@ -165,6 +167,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new RegisterVariablePanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the list variables panel.
+     */
+    public void redirectToListVariables() {
+        String listName = Localization.getLocalization(LocalizationKey.LIST);
+        String variablesName = Localization.getLocalization(LocalizationKey.VARIABLES);
+        String panelTitle = String.format("%s %s", listName, variablesName);
+        this.redirectTo(new ListVariablesPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -178,6 +190,7 @@ public class MainFrame extends javax.swing.JFrame {
         listSubtotals = new javax.swing.JMenuItem();
         variable = new javax.swing.JMenu();
         registerVariable = new javax.swing.JMenuItem();
+        listVariables = new javax.swing.JMenuItem();
         aboutButton = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -233,6 +246,14 @@ public class MainFrame extends javax.swing.JFrame {
         });
         variable.add(registerVariable);
 
+        listVariables.setText("${LIST}");
+        listVariables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listVariablesActionPerformed(evt);
+            }
+        });
+        variable.add(listVariables);
+
         menuBar.add(variable);
 
         aboutButton.setText("${ABOUT}");
@@ -272,11 +293,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToRegisterVariable();
     }//GEN-LAST:event_registerVariableActionPerformed
 
+    private void listVariablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listVariablesActionPerformed
+        this.redirectToListVariables();
+    }//GEN-LAST:event_listVariablesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu customer;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listSubtotals;
+    private javax.swing.JMenuItem listVariables;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem registerCustomer;
     private javax.swing.JMenuItem registerSubtotal;

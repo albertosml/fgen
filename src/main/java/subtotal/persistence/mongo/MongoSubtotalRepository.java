@@ -86,6 +86,22 @@ public class MongoSubtotalRepository extends MongoRepository implements Subtotal
      * {@inheritDoc}
      */
     @Override
+    public Subtotal find(int code) {
+        Bson subtotalCodeFilter = this.getSubtotalCodeFilter(code);
+        ArrayList<Document> foundSubtotalDocuments = super.find(subtotalCodeFilter);
+
+        if (foundSubtotalDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundSubtotalDocument = foundSubtotalDocuments.get(0);
+            return this.createSubtotalFrom(foundSubtotalDocument);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<Subtotal> get() {
         ArrayList<Document> foundDocuments = super.find();
 

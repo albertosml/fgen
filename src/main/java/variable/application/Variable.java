@@ -44,6 +44,7 @@ public class Variable {
         this.isDeleted = isDeleted;
     }
 
+
     /**
      * Retrieve the variable name.
      *

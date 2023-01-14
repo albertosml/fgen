@@ -74,6 +74,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVOICE_ITEMS_TOTAL, "Total de los elementos de la factura");
         super.setTranslation(LocalizationKey.INVOICE_SUBTOTAL, "Subtotal de la factura");
         super.setTranslation(LocalizationKey.INVOICE_TOTAL, "Total de la factura");
+        super.setTranslation(LocalizationKey.VARIABLES, "Variables");
     }
 
 }
