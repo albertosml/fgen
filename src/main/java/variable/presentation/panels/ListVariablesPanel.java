@@ -78,7 +78,8 @@ public class ListVariablesPanel extends javax.swing.JPanel {
 
             // Column 1: Variable name.
             String variableName = variable.getName();
-            rowData.add(variableName);
+            String variableFormat = String.format("${%s}", variableName);
+            rowData.add(variableFormat);
 
             // Column 2: Variable description.
             String variableDescription = variable.getDescription();
