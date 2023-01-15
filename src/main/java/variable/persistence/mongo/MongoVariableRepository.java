@@ -1,11 +1,13 @@
 package variable.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
 import subtotal.application.Subtotal;
@@ -107,6 +109,17 @@ public class MongoVariableRepository extends MongoRepository implements Variable
     }
 
     /**
+     * Obtain the filter for the variable name.
+     *
+     * @param name The variable name.
+     * @return A filter indicating that the query must only obtain the variable
+     * which contains the given variable name.
+     */
+    private Bson getVariableNameFilter(String name) {
+        return Filters.eq("name", name);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -144,6 +157,15 @@ public class MongoVariableRepository extends MongoRepository implements Variable
     public void register(Variable variable) {
         Document document = this.createDocumentFrom(variable);
         super.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Variable variable) {
+        Bson variableNameFilter = this.getVariableNameFilter(variable.getName());
+        return super.replaceOne(variableNameFilter, this.createDocumentFrom(variable));
     }
 
 }

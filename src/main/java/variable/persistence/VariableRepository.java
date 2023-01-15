@@ -31,4 +31,12 @@ public interface VariableRepository extends Repository {
      */
     public ArrayList<String> getNamesList();
 
+    /**
+     * Update the given variable with its associated data.
+     *
+     * @param variable The variable to update.
+     * @return Whether the variable has been updated or not.
+     */
+    public boolean update(Variable variable);
+
 }
