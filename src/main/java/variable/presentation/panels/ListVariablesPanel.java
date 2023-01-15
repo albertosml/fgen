@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.table.TableColumn;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import shared.presentation.utils.ButtonRenderer;
+import subtotal.application.Subtotal;
+import subtotal.application.usecases.ListSubtotals;
+import subtotal.persistence.mongo.MongoSubtotalRepository;
+import variable.application.EntityAttribute;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
@@ -27,6 +33,25 @@ public class ListVariablesPanel extends javax.swing.JPanel {
         initComponents();
         initializeTable();
     }
+
+    /**
+     * Obtain all the subtotals data by executing the use case.
+     *
+     * @return A list with all subtotals on the system.
+     */
+    private ArrayList<Subtotal> getSubtotals() {
+        try {
+            MongoSubtotalRepository subtotalRepository = new MongoSubtotalRepository();
+            ListSubtotals listSubtotals = new ListSubtotals(subtotalRepository);
+            return listSubtotals.execute();
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListVariablesPanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Subtotals cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
+    }
+
 
     /**
      * Obtain all the variables data by executing the use case.
@@ -120,6 +145,15 @@ public class ListVariablesPanel extends javax.swing.JPanel {
             Vector<Vector<Object>> data = this.setTableData(variables);
 
             table.setModel(new ListVariablesTableModel(data, columnNames));
+
+            // Set a combobox cell editor for the entity attribute and subtotal columns.
+            TableColumn entityAttributeColumn = table.getColumn(columnNames.get(2));
+            JComboBox comboBox = new JComboBox(EntityAttribute.values());
+            entityAttributeColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+            TableColumn subtotalColumn = table.getColumn(columnNames.get(3));
+            comboBox = new JComboBox(new Vector<Subtotal>(this.getSubtotals()));
+            subtotalColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
             // Set a button renderer for the action button.
             TableColumn removeRestoreVariableColumn = table.getColumn(columnNames.get(4));
