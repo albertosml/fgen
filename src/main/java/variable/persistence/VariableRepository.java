@@ -39,4 +39,12 @@ public interface VariableRepository extends Repository {
      */
     public boolean update(Variable variable);
 
+    /**
+     * Find the variable which matches with the given name.
+     *
+     * @param name The name of the variable to find.
+     * @return The found variable, otherwise null.
+     */
+    public Variable find(String name);
+
 }

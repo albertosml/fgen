@@ -131,6 +131,22 @@ public class MongoVariableRepository extends MongoRepository implements Variable
      * {@inheritDoc}
      */
     @Override
+    public Variable find(String name) {
+        Bson variableNameFilter = this.getVariableNameFilter(name);
+        ArrayList<Document> foundVariableDocuments = super.find(variableNameFilter);
+
+        if (foundVariableDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundVariableDocument = foundVariableDocuments.get(0);
+            return this.createVariableFrom(foundVariableDocument);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<Variable> get() {
         ArrayList<Document> foundDocuments = super.find();
 
