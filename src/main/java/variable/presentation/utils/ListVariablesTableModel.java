@@ -161,6 +161,10 @@ public class ListVariablesTableModel extends DefaultTableModel {
         }
 
         super.setValueAt(newValue, row, column);
-        this.editVariable(newValue, row, column);
+
+        // Only update the variable if the cell is editable.
+        if (this.isCellEditable(row, column)) {
+            this.editVariable(newValue, row, column);
+        }
     }
 }
