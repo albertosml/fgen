@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.1] - 2023-01-18
+
+### Fixed
+
+- Fixed an issue where a removed variable could be edited.
+
 ## [0.15.0] - 2023-01-18
 
 ### Added
