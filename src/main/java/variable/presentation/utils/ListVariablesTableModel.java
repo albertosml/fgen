@@ -129,6 +129,7 @@ public class ListVariablesTableModel extends DefaultTableModel {
         // Rows associated to removed variables will not be editable.
         String removeRestoreButtonText = (String) super.getValueAt(row, 4);
         String restoreText = Localization.getLocalization(LocalizationKey.RESTORE);
+        // Restore text is shown when the variable has been removed.
         boolean isVariableRemoved = removeRestoreButtonText.equals(restoreText);
         if (isVariableRemoved) {
             return false;
