@@ -10,6 +10,7 @@ import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import variable.application.usecases.RemoveVariable;
+import variable.application.usecases.RestoreVariable;
 import variable.persistence.mongo.MongoVariableRepository;
 
 /**
@@ -52,6 +53,26 @@ public class ListVariablesMouseAdapter extends MouseAdapter {
     }
 
     /**
+     * Execute the restore variable use case.
+     *
+     * @param name The name of the variable to restore.
+     * @return Whether the variable with the given code has been restored or
+     * not.
+     */
+    private boolean restoreVariable(String name) {
+        try {
+            MongoVariableRepository variableRepository = new MongoVariableRepository();
+            RestoreVariable restoreVariable = new RestoreVariable(variableRepository);
+            return restoreVariable.execute(name);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListVariablesMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Variable not restored because the database has not been found", ex);
+        }
+
+        return false;
+    }
+
+    /**
      * Remove or restore the variable depending on the deletion state.
      *
      * @param evt The mouse event.
@@ -77,8 +98,12 @@ public class ListVariablesMouseAdapter extends MouseAdapter {
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
             }
         } else {
-            // Button state needs to be updated as the variable state has changed.
-            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            boolean isVariableRestored = this.restoreVariable(finalVariableName);
+
+            if (isVariableRestored) {
+                // Button state needs to be updated as the variable state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            }
         }
     }
 
