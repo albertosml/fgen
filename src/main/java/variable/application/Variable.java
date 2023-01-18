@@ -82,6 +82,15 @@ public class Variable {
     }
 
     /**
+     * Update the deletion state for the variable.
+     *
+     * @param isDeleted Whether the variable is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Create a variable given its attribute values.
      *
      * @param attributes Map containing the value for each variable attribute.

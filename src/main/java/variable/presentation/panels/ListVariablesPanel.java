@@ -19,6 +19,7 @@ import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
+import variable.presentation.utils.ListVariablesMouseAdapter;
 import variable.presentation.utils.ListVariablesTableModel;
 
 /**
@@ -145,6 +146,8 @@ public class ListVariablesPanel extends javax.swing.JPanel {
             Vector<Vector<Object>> data = this.setTableData(variables);
 
             table.setModel(new ListVariablesTableModel(data, columnNames));
+
+            table.addMouseListener(new ListVariablesMouseAdapter(table));
 
             // Set a combobox cell editor for the entity attribute and subtotal columns.
             TableColumn entityAttributeColumn = table.getColumn(columnNames.get(2));
