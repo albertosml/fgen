@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
+import shared.presentation.localization.Localization;
+import shared.presentation.localization.LocalizationKey;
 import subtotal.application.Subtotal;
 import subtotal.application.usecases.ListSubtotals;
 import subtotal.persistence.mongo.MongoSubtotalRepository;
@@ -124,6 +126,15 @@ public class ListVariablesTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int column) {
+        // Rows associated to removed variables will not be editable.
+        String removeRestoreButtonText = (String) super.getValueAt(row, 4);
+        String restoreText = Localization.getLocalization(LocalizationKey.RESTORE);
+        // Restore text is shown when the variable has been removed.
+        boolean isVariableRemoved = removeRestoreButtonText.equals(restoreText);
+        if (isVariableRemoved) {
+            return false;
+        }
+
         // Subtotal column will not be edited if the entity attribute is not
         // invoice subtotal.
         if (column == 3) {
