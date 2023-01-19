@@ -43,6 +43,17 @@ public abstract class MongoRepository {
     }
 
     /**
+     * Count all the documents on the collection which match with the given
+     * filters.
+     *
+     * @param filters The filters.
+     * @return The number of documents on the collection which match the filters.
+     */
+    protected int count(Bson filters) {
+        return (int) this.collection.countDocuments(filters);
+    }
+
+    /**
      * Create a list with the different values that the given field has based on
      * the received filters.
      *

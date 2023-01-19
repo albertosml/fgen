@@ -184,4 +184,13 @@ public class MongoVariableRepository extends MongoRepository implements Variable
         return super.replaceOne(variableNameFilter, this.createDocumentFrom(variable));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existVariableWithSubtotal(int code) {
+        Bson subtotalFilter = Filters.eq("subtotal", code);
+        return super.count(subtotalFilter) > 0;
+    }
+
 }

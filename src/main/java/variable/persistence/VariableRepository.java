@@ -47,4 +47,13 @@ public interface VariableRepository extends Repository {
      */
     public Variable find(String name);
 
+    /**
+     * Checks if there is at least one variable which contains a subtotal with
+     * the given code.
+     *
+     * @param code The subtotal code.
+     * @return Whether a subtotal is associated to at least one variable.
+     */
+    public boolean existVariableWithSubtotal(int code);
+
 }

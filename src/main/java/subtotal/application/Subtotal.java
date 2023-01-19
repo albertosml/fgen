@@ -98,6 +98,15 @@ public class Subtotal {
     }
 
     /**
+     * Update the deletion state for the subtotal.
+     *
+     * @param isDeleted Whether the subtotal is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Set the subtotal percentage.
      *
      * @param percentage A percentage between 0 and 100.
