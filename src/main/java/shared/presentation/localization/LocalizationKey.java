@@ -256,4 +256,8 @@ public enum LocalizationKey {
      * Variables.
      */
     VARIABLES,
+    /**
+     * Message shown when the subtotal is associated to a variable.
+     */
+    SUBTOTAL_ASSOCIATED_WITH_VARIABLE_MESSAGE,
 }

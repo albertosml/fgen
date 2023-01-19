@@ -140,7 +140,9 @@ public class ListSubtotalsTableModel extends DefaultTableModel {
             super.setValueAt(newValue, row, column);
         }
 
-        this.editSubtotal(newValue, row, column);
+        if (this.isCellEditable(row, column)) {
+            this.editSubtotal(newValue, row, column);
+        }
     }
 
 }
