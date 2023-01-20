@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
@@ -11,6 +12,7 @@ import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import variable.application.usecases.RemoveVariable;
 import variable.application.usecases.RestoreVariable;
+import variable.application.utils.VariableRestorationState;
 import variable.persistence.mongo.MongoVariableRepository;
 
 /**
@@ -56,10 +58,9 @@ public class ListVariablesMouseAdapter extends MouseAdapter {
      * Execute the restore variable use case.
      *
      * @param name The name of the variable to restore.
-     * @return Whether the variable with the given code has been restored or
-     * not.
+     * @return The variable restoration state.
      */
-    private boolean restoreVariable(String name) {
+    private VariableRestorationState restoreVariable(String name) {
         try {
             MongoVariableRepository variableRepository = new MongoVariableRepository();
             RestoreVariable restoreVariable = new RestoreVariable(variableRepository);
@@ -69,7 +70,7 @@ public class ListVariablesMouseAdapter extends MouseAdapter {
             Logger.getLogger(className).log(Level.INFO, "Variable not restored because the database has not been found", ex);
         }
 
-        return false;
+        return VariableRestorationState.NOT_FOUND;
     }
 
     /**
@@ -98,11 +99,15 @@ public class ListVariablesMouseAdapter extends MouseAdapter {
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
             }
         } else {
-            boolean isVariableRestored = this.restoreVariable(finalVariableName);
+            VariableRestorationState variableRestorationState = this.restoreVariable(finalVariableName);
 
-            if (isVariableRestored) {
+            if (variableRestorationState == VariableRestorationState.RESTORED) {
                 // Button state needs to be updated as the variable state has changed.
                 tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            } else if (variableRestorationState == VariableRestorationState.ASSOCIATED_WITH_DELETED_SUBTOTAL) {
+                // Show an error message in this case.
+                String infoMessage = Localization.getLocalization(LocalizationKey.VARIABLE_ASSOCIATED_WITH_DELETED_SUBTOTAL_MESSAGE);
+                JOptionPane.showMessageDialog(table.getParent(), infoMessage);
             }
         }
     }

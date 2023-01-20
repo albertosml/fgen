@@ -260,4 +260,9 @@ public enum LocalizationKey {
      * Message shown when the subtotal is associated to a variable.
      */
     SUBTOTAL_ASSOCIATED_WITH_VARIABLE_MESSAGE,
+    /**
+     * Message shown when the variable cannot be restored because the variable
+     * is associated with a deleted subtotal.
+     */
+    VARIABLE_ASSOCIATED_WITH_DELETED_SUBTOTAL_MESSAGE,
 }
