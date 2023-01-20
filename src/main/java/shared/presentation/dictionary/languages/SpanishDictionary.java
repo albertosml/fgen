@@ -76,6 +76,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVOICE_TOTAL, "Total de la factura");
         super.setTranslation(LocalizationKey.VARIABLES, "Variables");
         super.setTranslation(LocalizationKey.SUBTOTAL_ASSOCIATED_WITH_VARIABLE_MESSAGE, "El subtotal no se puede eliminar porque está asociado a una variable");
+        super.setTranslation(LocalizationKey.VARIABLE_ASSOCIATED_WITH_DELETED_SUBTOTAL_MESSAGE, "La variable no puede ser restaurada porque está asociada a una variable eliminada");
     }
 
 }
