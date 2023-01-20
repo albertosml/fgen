@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.2] - 2023-01-20
+
+### Fixed
+
+- Fixed an issue where a subtotal could not be removed if it was associated to a removed variable.
+
 ## [0.17.1] - 2023-01-20
 
 ### Fixed
