@@ -154,8 +154,15 @@ public class ListVariablesPanel extends javax.swing.JPanel {
             JComboBox comboBox = new JComboBox(EntityAttribute.values());
             entityAttributeColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
+            Vector<Subtotal> nonRemovedSubtotals = new Vector<>();
+            for (Subtotal subtotal : this.getSubtotals()) {
+                if (!subtotal.isDeleted()) {
+                    nonRemovedSubtotals.add(subtotal);
+                }
+            }
+
             TableColumn subtotalColumn = table.getColumn(columnNames.get(3));
-            comboBox = new JComboBox(new Vector<Subtotal>(this.getSubtotals()));
+            comboBox = new JComboBox(new Vector<Subtotal>(nonRemovedSubtotals));
             subtotalColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
             // Set a button renderer for the action button.
