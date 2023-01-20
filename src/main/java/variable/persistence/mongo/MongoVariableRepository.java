@@ -189,8 +189,10 @@ public class MongoVariableRepository extends MongoRepository implements Variable
      */
     @Override
     public boolean existVariableWithSubtotal(int code) {
-        Bson subtotalFilter = Filters.eq("subtotal", code);
-        return super.count(subtotalFilter) > 0;
+        Bson subtotalWithGivenCode = Filters.eq("subtotal", code);
+        Bson nonDeletedVariable = Filters.eq("isDeleted", false);
+        Bson filters = Filters.and(subtotalWithGivenCode, nonDeletedVariable);
+        return super.count(filters) > 0;
     }
 
 }
