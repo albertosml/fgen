@@ -11,6 +11,7 @@ import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import subtotal.application.usecases.RemoveSubtotal;
+import subtotal.application.usecases.RestoreSubtotal;
 import subtotal.application.utils.SubtotalRemovalState;
 import subtotal.persistence.mongo.MongoSubtotalRepository;
 import variable.persistence.mongo.MongoVariableRepository;
@@ -39,7 +40,7 @@ public class ListSubtotalsMouseAdapter extends MouseAdapter {
      * Execute the remove subtotal use case.
      *
      * @param code The code of the subtotal to remove.
-     * @return Whether the subtotal with the given code has been removed or not.
+     * @return The subtotal removal state.
      */
     private SubtotalRemovalState removeSubtotal(int code) {
         try {
@@ -53,6 +54,26 @@ public class ListSubtotalsMouseAdapter extends MouseAdapter {
         }
 
         return SubtotalRemovalState.NOT_UPDATED;
+    }
+
+    /**
+     * Execute the restore subtotal use case.
+     *
+     * @param code The code of the subtotal to restore.
+     * @return Whether the subtotal with the given code has been restored or
+     * not.
+     */
+    private boolean restoreSubtotal(int code) {
+        try {
+            MongoSubtotalRepository subtotalRepository = new MongoSubtotalRepository();
+            RestoreSubtotal restoreSubtotal = new RestoreSubtotal(subtotalRepository);
+            return restoreSubtotal.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListSubtotalsMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Subtotal not restored because the database has not been found", ex);
+        }
+
+        return false;
     }
 
     /**
@@ -84,8 +105,12 @@ public class ListSubtotalsMouseAdapter extends MouseAdapter {
                 JOptionPane.showMessageDialog(table.getParent(), infoMessage);
             }
         } else {
-            // Button state needs to be updated as the subtotal state has changed.
-            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            boolean isVariableRestored = this.restoreSubtotal(subtotalCode);
+
+            if (isVariableRestored) {
+                // Button state needs to be updated as the subtotal state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            }
         }
     }
 
