@@ -165,9 +165,21 @@ public class ListVariablesTableModel extends DefaultTableModel {
             } else if (newEntityAttribute == EntityAttribute.INVOICE_SUBTOTAL && oldEntityAttribute != EntityAttribute.INVOICE_SUBTOTAL) {
                 // Set the first subtotal by default when choosing the invoice
                 // subtotal entity attribute.
-                ArrayList<Subtotal> subtotals = this.getSubtotals();
-                Subtotal firstSubtotal = subtotals.isEmpty() ? null : subtotals.get(0);
-                super.setValueAt(firstSubtotal, row, 3);
+                Vector<Subtotal> nonRemovedSubtotals = new Vector<>();
+
+                for (Subtotal subtotal : this.getSubtotals()) {
+                    if (!subtotal.isDeleted()) {
+                        nonRemovedSubtotals.add(subtotal);
+                    }
+                }
+
+                if (nonRemovedSubtotals.isEmpty()) {
+                    // Abort the process if there is no subtotal to associate.
+                    return;
+                } else {
+                    Subtotal firstSubtotal = nonRemovedSubtotals.get(0);
+                    super.setValueAt(firstSubtotal, row, 3);
+                }
             }
         }
 
