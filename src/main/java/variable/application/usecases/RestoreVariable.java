@@ -1,5 +1,6 @@
 package variable.application.usecases;
 
+import subtotal.application.Subtotal;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.utils.VariableRestorationState;
@@ -41,8 +42,9 @@ public class RestoreVariable {
 
         if (variable instanceof SubtotalVariable) {
             SubtotalVariable subtotalVariable = (SubtotalVariable) variable;
+            Subtotal subtotal = subtotalVariable.getSubtotal();
 
-            if (subtotalVariable.isDeleted()) {
+            if (subtotal.isDeleted()) {
                 return VariableRestorationState.ASSOCIATED_WITH_DELETED_SUBTOTAL;
             }
         }
