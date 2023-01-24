@@ -12,6 +12,7 @@ import shared.presentation.localization.LocalizationKey;
 import shared.presentation.panels.AboutPanel;
 import subtotal.presentation.panels.ListSubtotalsPanel;
 import subtotal.presentation.panels.RegisterSubtotalPanel;
+import template.presentation.panels.RegisterTemplatePanel;
 import variable.presentation.panels.ListVariablesPanel;
 import variable.presentation.panels.RegisterVariablePanel;
 
@@ -41,6 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.registerCustomer.setText(registerName);
         this.registerSubtotal.setText(registerName);
         this.registerVariable.setText(registerName);
+        this.registerTemplate.setText(registerName);
 
         String customerName = Localization.getLocalization(LocalizationKey.CUSTOMER);
         this.customer.setText(customerName);
@@ -55,6 +57,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         String variableName = Localization.getLocalization(LocalizationKey.VARIABLE);
         this.variable.setText(variableName);
+
+        String templateName = Localization.getLocalization(LocalizationKey.TEMPLATE);
+        this.template.setText(templateName);
     }
 
     /**
@@ -177,6 +182,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ListVariablesPanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the register template panel.
+     */
+    public void redirectToRegisterTemplate() {
+        String registerName = Localization.getLocalization(LocalizationKey.REGISTER);
+        String templateName = Localization.getLocalization(LocalizationKey.TEMPLATE);
+        String panelTitle = String.format("%s %s", registerName, templateName);
+        this.redirectTo(new RegisterTemplatePanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -185,6 +200,8 @@ public class MainFrame extends javax.swing.JFrame {
         customer = new javax.swing.JMenu();
         registerCustomer = new javax.swing.JMenuItem();
         listCustomers = new javax.swing.JMenuItem();
+        template = new javax.swing.JMenu();
+        registerTemplate = new javax.swing.JMenuItem();
         subtotal = new javax.swing.JMenu();
         registerSubtotal = new javax.swing.JMenuItem();
         listSubtotals = new javax.swing.JMenuItem();
@@ -215,6 +232,18 @@ public class MainFrame extends javax.swing.JFrame {
         customer.add(listCustomers);
 
         menuBar.add(customer);
+
+        template.setText("${TEMPLATE}");
+
+        registerTemplate.setText("${REGISTER}");
+        registerTemplate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerTemplateActionPerformed(evt);
+            }
+        });
+        template.add(registerTemplate);
+
+        menuBar.add(template);
 
         subtotal.setText("${SUBTOTAL}");
 
@@ -297,6 +326,10 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListVariables();
     }//GEN-LAST:event_listVariablesActionPerformed
 
+    private void registerTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerTemplateActionPerformed
+        this.redirectToRegisterTemplate();
+    }//GEN-LAST:event_registerTemplateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu customer;
@@ -306,8 +339,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem registerCustomer;
     private javax.swing.JMenuItem registerSubtotal;
+    private javax.swing.JMenuItem registerTemplate;
     private javax.swing.JMenuItem registerVariable;
     private javax.swing.JMenu subtotal;
+    private javax.swing.JMenu template;
     private javax.swing.JMenu variable;
     // End of variables declaration//GEN-END:variables
 }
