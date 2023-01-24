@@ -265,4 +265,32 @@ public enum LocalizationKey {
      * is associated with a deleted subtotal.
      */
     VARIABLE_ASSOCIATED_WITH_DELETED_SUBTOTAL_MESSAGE,
+    /**
+     * Template field spreadsheet position.
+     */
+    POSITION,
+    /**
+     * Template field expression.
+     */
+    EXPRESSION,
+    /**
+     * Add action.
+     */
+    ADD,
+    /**
+     * Template.
+     */
+    TEMPLATE,
+    /**
+     * Fields.
+     */
+    FIELDS,
+    /**
+     * Message introduced when the introduced template field is invalid.
+     */
+    INVALID_TEMPLATE_FIELD_MESSAGE,
+    /**
+     * Field.
+     */
+    FIELD,
 }
