@@ -46,6 +46,24 @@ public class TemplateField {
     }
 
     /**
+     * Update the template field position.
+     *
+     * @param position The template field position.
+     */
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    /**
+     * Update the template field expression.
+     *
+     * @param expression The template field expression.
+     */
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    /**
      * Create a template field given its attribute values.
      *
      * @param attributes Map containing the value for each template field
