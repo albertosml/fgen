@@ -1,6 +1,5 @@
 package template.presentation.panels;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -17,17 +16,13 @@ import shared.presentation.utils.ButtonRenderer;
 import template.application.TemplateField;
 import template.application.TemplateFieldAttribute;
 import template.application.usecases.CreateTemplateField;
+import template.presentation.utils.TemplateFieldsMouseAdapter;
 import template.presentation.utils.TemplateFieldsTableModel;
 
 /**
  * Panel which shows all the template fields.
  */
 public class TemplateFieldsPanel extends javax.swing.JPanel {
-
-    /**
-     * Template fields.
-     */
-    private ArrayList<TemplateField> templateFields = new ArrayList<>();
 
     /**
      * Constructor.
@@ -70,6 +65,7 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
         Vector<String> columnNames = this.generateColumnNames();
 
         table.setModel(new TemplateFieldsTableModel(new Vector<>(), columnNames));
+        table.addMouseListener(new TemplateFieldsMouseAdapter(table));
 
         // Set a button renderer for the remove button.
         TableColumn removeColumn = table.getColumn(columnNames.get(2));
