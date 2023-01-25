@@ -84,6 +84,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_TEMPLATE_FIELD_MESSAGE, "Campo no añadido porque es inválido");
         super.setTranslation(LocalizationKey.FIELDS, "Campos");
         super.setTranslation(LocalizationKey.FIELD, "Campo");
+        super.setTranslation(LocalizationKey.INVALID_POSITION_MESSAGE, "La posición del campo de la plantilla introducida no es válida");
     }
 
 }
