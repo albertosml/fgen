@@ -293,4 +293,8 @@ public enum LocalizationKey {
      * Field.
      */
     FIELD,
+    /**
+     * Message shown when we introduce an invalid template field position.
+     */
+    INVALID_POSITION_MESSAGE,
 }

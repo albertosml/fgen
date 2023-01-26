@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.0] - 2023-01-26
+
+### Added
+
+- Added feature to edit a template field.
+
 ## [0.20.0] - 2023-01-26
 
 ### Added

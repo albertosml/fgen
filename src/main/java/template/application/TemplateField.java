@@ -2,6 +2,9 @@ package template.application;
 
 import java.util.Map;
 
+/**
+ * Template field element.
+ */
 public class TemplateField {
 
     /**
@@ -43,6 +46,24 @@ public class TemplateField {
      */
     public String getExpression() {
         return this.expression;
+    }
+
+    /**
+     * Update the template field position.
+     *
+     * @param position The template field position.
+     */
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    /**
+     * Update the template field expression.
+     *
+     * @param expression The template field expression.
+     */
+    public void setExpression(String expression) {
+        this.expression = expression;
     }
 
     /**
