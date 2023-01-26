@@ -2,6 +2,9 @@ package template.application;
 
 import java.util.Map;
 
+/**
+ * Template field element.
+ */
 public class TemplateField {
 
     /**
