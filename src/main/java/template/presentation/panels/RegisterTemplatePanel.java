@@ -1,11 +1,31 @@
 package template.presentation.panels;
 
 import java.awt.GridLayout;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import shared.persistence.exceptions.NotDefinedDatabaseContextException;
+import shared.presentation.localization.Localization;
+import shared.presentation.localization.LocalizationKey;
+import template.application.TemplateAttribute;
+import template.application.usecases.RegisterTemplate;
+import template.application.utils.TemplateValidationState;
+import template.persistence.mongo.MongoTemplateRepository;
 
 /**
  * Panel which shows a form to register the template.
  */
 public class RegisterTemplatePanel extends javax.swing.JPanel {
+
+    /**
+     * Chosen file.
+     */
+    private File chosenFile;
 
     /**
      * Template fields panel.
@@ -17,10 +37,80 @@ public class RegisterTemplatePanel extends javax.swing.JPanel {
      */
     public RegisterTemplatePanel() {
         initComponents();
+        initializeLabels();
 
         this.templateFieldsPanel = new TemplateFieldsPanel();
         this.bookedPanel.setLayout(new GridLayout());
         this.bookedPanel.add(templateFieldsPanel);
+    }
+
+    /**
+     * Initialize the form labels.
+     */
+    private void initializeLabels() {
+        String nameLabelText = Localization.getLocalization(LocalizationKey.NAME);
+        String nameLabelFormattedText = String.format("%s:", nameLabelText);
+        this.nameLabel.setText(nameLabelFormattedText);
+
+        String fileLabelText = Localization.getLocalization(LocalizationKey.FILE);
+        String fileLabelFormattedText = String.format("%s:", fileLabelText);
+        this.fileLabel.setText(fileLabelFormattedText);
+
+        String chooseText = Localization.getLocalization(LocalizationKey.CHOOSE);
+        this.chooseFileButton.setText(chooseText);
+
+        String registerText = Localization.getLocalization(LocalizationKey.REGISTER);
+        this.registerButton.setText(registerText);
+    }
+
+    /**
+     * Show the information message after the registration process.
+     *
+     * @param state The validation state for the template.
+     */
+    private void showInfoMessage(TemplateValidationState state) {
+        Map<TemplateValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
+        localizationKeysByState.put(TemplateValidationState.VALID, LocalizationKey.REGISTERED_TEMPLATE_MESSAGE);
+        localizationKeysByState.put(TemplateValidationState.INVALID_NAME, LocalizationKey.INVALID_NAME_MESSAGE);
+        localizationKeysByState.put(TemplateValidationState.INVALID_FILE, LocalizationKey.INVALID_FILE_MESSAGE);
+
+        LocalizationKey key = localizationKeysByState.get(state);
+        String infoMessage = Localization.getLocalization(key);
+        JOptionPane.showMessageDialog(this, infoMessage);
+    }
+
+    /**
+     * Clear all the form fields to register a template.
+     */
+    private void clearForm() {
+        this.nameInput.setText("");
+
+        this.chosenFile = null;
+        this.fileInput.setText("");
+
+        this.templateFieldsPanel.cleanTable();
+    }
+
+    /**
+     * Execute the register template use case.
+     *
+     * @param attributes Map containing each template attribute.
+     */
+    private void registerTemplate(Map<TemplateAttribute, Object> attributes) {
+        try {
+            MongoTemplateRepository templateRepository = new MongoTemplateRepository();
+            RegisterTemplate registerTemplate = new RegisterTemplate(templateRepository);
+            TemplateValidationState state = registerTemplate.execute(attributes);
+
+            this.showInfoMessage(state);
+
+            if (state == TemplateValidationState.VALID) {
+                this.clearForm();
+            }
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = RegisterTemplatePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Template not registered because the database has not been found", ex);
+        }
     }
 
     /**
@@ -33,6 +123,12 @@ public class RegisterTemplatePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         bookedPanel = new javax.swing.JPanel();
+        registerButton = new javax.swing.JButton();
+        nameLabel = new javax.swing.JLabel();
+        nameInput = new javax.swing.JTextField();
+        fileLabel = new javax.swing.JLabel();
+        chooseFileButton = new javax.swing.JButton();
+        fileInput = new javax.swing.JLabel();
 
         bookedPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -47,6 +143,26 @@ public class RegisterTemplatePanel extends javax.swing.JPanel {
             .addGap(0, 188, Short.MAX_VALUE)
         );
 
+        registerButton.setText("${REGISTER}");
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerButtonActionPerformed(evt);
+            }
+        });
+
+        nameLabel.setText("${NAME}:");
+
+        fileLabel.setText("${FILE}:");
+
+        chooseFileButton.setText("${CHOOSE}");
+        chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseFileButtonActionPerformed(evt);
+            }
+        });
+
+        fileInput.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -55,18 +171,78 @@ public class RegisterTemplatePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nameLabel)
+                    .addComponent(fileLabel))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(fileInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chooseFileButton))
+                    .addComponent(nameInput))
+                .addGap(19, 19, 19))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(nameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chooseFileButton)
+                    .addComponent(fileInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fileLabel))
+                .addGap(19, 19, 19)
                 .addComponent(bookedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(registerButton)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chooseFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseFileButtonActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        // Supported formats (XLSX, XLS, XLSB, ODS, CSV).
+        FileNameExtensionFilter spreadsheetFilesFilter = new FileNameExtensionFilter("Spreadsheet files", "xlsx", "xls", "xlsb", "ods", "csv");
+        fileChooser.setFileFilter(spreadsheetFilesFilter);
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            this.fileInput.setText(file.getAbsolutePath());
+            this.chosenFile = file;
+        }
+    }//GEN-LAST:event_chooseFileButtonActionPerformed
+
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
+        Map<TemplateAttribute, Object> templateAttributes = new HashMap<>();
+        templateAttributes.put(TemplateAttribute.NAME, this.nameInput.getText());
+        templateAttributes.put(TemplateAttribute.FILE, this.chosenFile);
+        templateAttributes.put(TemplateAttribute.FIELDS, this.templateFieldsPanel.getFields());
+
+        this.registerTemplate(templateAttributes);
+    }//GEN-LAST:event_registerButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookedPanel;
+    private javax.swing.JButton chooseFileButton;
+    private javax.swing.JLabel fileInput;
+    private javax.swing.JLabel fileLabel;
+    private javax.swing.JTextField nameInput;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables
 }
