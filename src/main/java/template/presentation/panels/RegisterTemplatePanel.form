@@ -16,9 +16,31 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="bookedPanel" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="nameLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="fileLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="fileInput" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="chooseFileButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="nameInput" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="registerButton" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -26,9 +48,22 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="nameInput" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="chooseFileButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="fileInput" alignment="1" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="fileLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="bookedPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="43" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="registerButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="21" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -56,5 +91,42 @@
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="javax.swing.JButton" name="registerButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${REGISTER}"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="nameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${NAME}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="nameInput">
+    </Component>
+    <Component class="javax.swing.JLabel" name="fileLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${FILE}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="chooseFileButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${CHOOSE}"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chooseFileButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="fileInput">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

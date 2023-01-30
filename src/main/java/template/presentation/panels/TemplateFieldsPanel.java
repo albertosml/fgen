@@ -1,5 +1,6 @@
 package template.presentation.panels;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -93,6 +94,37 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
             DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
             tableModel.addRow(new Object[]{position, expression, removeLabel});
         }
+    }
+
+    /**
+     * Get the registered template fields.
+     *
+     * @return A list with all template fields set on the table.
+     */
+    public ArrayList<TemplateField> getFields() {
+        ArrayList<TemplateField> templateFields = new ArrayList<>();
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            String position = (String) table.getValueAt(i, 0);
+            String expression = (String) table.getValueAt(i, 1);
+
+            Map<TemplateFieldAttribute, String> attributes = new HashMap<>();
+            attributes.put(TemplateFieldAttribute.POSITION, position);
+            attributes.put(TemplateFieldAttribute.EXPRESSION, expression);
+
+            TemplateField field = TemplateField.from(attributes);
+            templateFields.add(field);
+        }
+
+        return templateFields;
+    }
+
+    /**
+     * Clean the table for the template fields.
+     */
+    public void cleanTable() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
     }
 
     @SuppressWarnings("unchecked")

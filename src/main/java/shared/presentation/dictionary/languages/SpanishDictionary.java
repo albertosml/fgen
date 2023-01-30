@@ -85,6 +85,10 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.FIELDS, "Campos");
         super.setTranslation(LocalizationKey.FIELD, "Campo");
         super.setTranslation(LocalizationKey.INVALID_POSITION_MESSAGE, "La posición del campo de la plantilla introducida no es válida");
+        super.setTranslation(LocalizationKey.FILE, "Archivo");
+        super.setTranslation(LocalizationKey.CHOOSE, "Elegir");
+        super.setTranslation(LocalizationKey.REGISTERED_TEMPLATE_MESSAGE, "La plantilla ha sido registrada con éxito");
+        super.setTranslation(LocalizationKey.INVALID_FILE_MESSAGE, "Archivo inválido");
     }
 
 }

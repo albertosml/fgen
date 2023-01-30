@@ -297,4 +297,20 @@ public enum LocalizationKey {
      * Message shown when we introduce an invalid template field position.
      */
     INVALID_POSITION_MESSAGE,
+    /**
+     * File.
+     */
+    FILE,
+    /**
+     * Choose action.
+     */
+    CHOOSE,
+    /**
+     * Registered template message.
+     */
+    REGISTERED_TEMPLATE_MESSAGE,
+    /**
+     * Invalid file message.
+     */
+    INVALID_FILE_MESSAGE,
 }
