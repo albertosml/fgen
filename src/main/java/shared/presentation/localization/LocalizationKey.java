@@ -313,4 +313,8 @@ public enum LocalizationKey {
      * Invalid file message.
      */
     INVALID_FILE_MESSAGE,
+    /**
+     * Templates.
+     */
+    TEMPLATES,
 }

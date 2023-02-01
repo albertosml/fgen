@@ -12,6 +12,7 @@ import shared.presentation.localization.LocalizationKey;
 import shared.presentation.panels.AboutPanel;
 import subtotal.presentation.panels.ListSubtotalsPanel;
 import subtotal.presentation.panels.RegisterSubtotalPanel;
+import template.presentation.panels.ListTemplatesPanel;
 import template.presentation.panels.RegisterTemplatePanel;
 import variable.presentation.panels.ListVariablesPanel;
 import variable.presentation.panels.RegisterVariablePanel;
@@ -51,6 +52,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.listCustomers.setText(listName);
         this.listSubtotals.setText(listName);
         this.listVariables.setText(listName);
+        this.listTemplates.setText(listName);
 
         String subtotalName = Localization.getLocalization(LocalizationKey.SUBTOTAL);
         this.subtotal.setText(subtotalName);
@@ -192,6 +194,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new RegisterTemplatePanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the list templates panel.
+     */
+    public void redirectToListTemplates() {
+        String listName = Localization.getLocalization(LocalizationKey.LIST);
+        String templatesName = Localization.getLocalization(LocalizationKey.TEMPLATES);
+        String panelTitle = String.format("%s %s", listName, templatesName);
+        this.redirectTo(new ListTemplatesPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -202,6 +214,7 @@ public class MainFrame extends javax.swing.JFrame {
         listCustomers = new javax.swing.JMenuItem();
         template = new javax.swing.JMenu();
         registerTemplate = new javax.swing.JMenuItem();
+        listTemplates = new javax.swing.JMenuItem();
         subtotal = new javax.swing.JMenu();
         registerSubtotal = new javax.swing.JMenuItem();
         listSubtotals = new javax.swing.JMenuItem();
@@ -242,6 +255,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         template.add(registerTemplate);
+
+        listTemplates.setText("${LIST}");
+        listTemplates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listTemplatesActionPerformed(evt);
+            }
+        });
+        template.add(listTemplates);
 
         menuBar.add(template);
 
@@ -330,11 +351,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToRegisterTemplate();
     }//GEN-LAST:event_registerTemplateActionPerformed
 
+    private void listTemplatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listTemplatesActionPerformed
+        this.redirectToListTemplates();
+    }//GEN-LAST:event_listTemplatesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu customer;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listSubtotals;
+    private javax.swing.JMenuItem listTemplates;
     private javax.swing.JMenuItem listVariables;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem registerCustomer;
