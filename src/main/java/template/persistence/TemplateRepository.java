@@ -1,5 +1,6 @@
 package template.persistence;
 
+import java.util.ArrayList;
 import shared.persistence.Repository;
 import template.application.Template;
 
@@ -15,5 +16,13 @@ public interface TemplateRepository extends Repository {
      * @return Whether the template has been registered or not.
      */
     public boolean register(Template template);
+
+    /**
+     * Obtain all the templates registered on the system, even if they have been
+     * removed after.
+     *
+     * @return A list with all templates.
+     */
+    public ArrayList<Template> get();
 
 }

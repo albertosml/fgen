@@ -3,6 +3,7 @@ package shared.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,5 +47,27 @@ public class Base64Converter {
         attributes.put("extension", fileExtension);
 
         return attributes;
+    }
+
+    /**
+     * Decode the given base64 content and save it on a temporary file with the given extension.
+     *
+     * @param fileAttributes The base64 file attributes.
+     * @return The created temporary file containing the specified content.
+     */
+    public static File decode(Map<String, String> fileAttributes) {
+        String content = fileAttributes.get("content");
+        String extension = fileAttributes.get("extension");
+
+        try {
+            byte[] contentBytes = Base64.getDecoder().decode(content);
+            Path temp = Files.createTempFile(null, extension);
+            Files.write(temp, contentBytes);
+            return temp.toFile();
+        } catch (IOException ex) {
+            Logger.getLogger(Base64Converter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 }

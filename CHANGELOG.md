@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.23.0] - 2023-02-02
+
+### Added
+
+- Added feature to list templates.
+
 ## [0.22.0] - 2023-01-30
 
 ### Added
