@@ -1,10 +1,12 @@
 package template.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import shared.persistence.Base64Converter;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
@@ -90,11 +92,38 @@ public class MongoTemplateRepository extends MongoRepository implements Template
     }
 
     /**
+     * Obtain the filter for the template code.
+     *
+     * @param code The template code.
+     * @return A filter indicating that the query must only obtain the template
+     * which contains the given template code.
+     */
+    private Bson getTemplateCodeFilter(int code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Template find(int code) {
+        Bson templateCodeFilter = this.getTemplateCodeFilter(code);
+        ArrayList<Document> foundTemplateDocuments = super.find(templateCodeFilter);
+
+        if (foundTemplateDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundTemplateDocument = foundTemplateDocuments.get(0);
+            return this.createTemplateFrom(foundTemplateDocument);
+        }
     }
 
     /**

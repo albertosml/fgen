@@ -12,6 +12,7 @@ import shared.presentation.utils.ButtonRenderer;
 import template.application.Template;
 import template.application.usecases.ListTemplates;
 import template.persistence.mongo.MongoTemplateRepository;
+import template.presentation.utils.ListTemplatesMouseAdapter;
 import template.presentation.utils.ListTemplatesTableModel;
 
 /**
@@ -114,6 +115,7 @@ public class ListTemplatesPanel extends javax.swing.JPanel {
             Vector<Vector<Object>> data = this.setTableData(templates);
 
             table.setModel(new ListTemplatesTableModel(data, columnNames));
+            table.addMouseListener(new ListTemplatesMouseAdapter(table));
 
             // Set a button renderer for the show button.
             TableColumn showColumn = table.getColumn(columnNames.get(2));

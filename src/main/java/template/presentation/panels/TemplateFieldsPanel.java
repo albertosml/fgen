@@ -35,6 +35,18 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
     }
 
     /**
+     * Constructor.
+     *
+     * @param fields Map with all template fields data.
+     */
+    public TemplateFieldsPanel(Map<String, String> fields) {
+        initComponents();
+        initializeTable();
+        initializeLabels();
+        initializeTemplateFields(fields);
+    }
+
+    /**
      * Initialize panel labels.
      */
     private void initializeLabels() {
@@ -93,6 +105,21 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
 
             DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
             tableModel.addRow(new Object[]{position, expression, removeLabel});
+        }
+    }
+
+    /**
+     * Initialize the template fields.
+     *
+     * @param fields Map with all template fields data.
+     */
+    private void initializeTemplateFields(Map<String, String> templateFields) {
+        for (Map.Entry<String, String> field : templateFields.entrySet()) {
+            Map<TemplateFieldAttribute, String> templateFieldAttributes = new HashMap<>();
+            templateFieldAttributes.put(TemplateFieldAttribute.POSITION, field.getKey());
+            templateFieldAttributes.put(TemplateFieldAttribute.EXPRESSION, field.getValue());
+
+            this.addTemplateField(templateFieldAttributes);
         }
     }
 

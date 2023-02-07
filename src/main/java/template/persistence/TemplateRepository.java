@@ -25,4 +25,12 @@ public interface TemplateRepository extends Repository {
      */
     public ArrayList<Template> get();
 
+    /**
+     * Find the template which matches with the given code.
+     *
+     * @param code The code of the template to find.
+     * @return The found template, otherwise null.
+     */
+    public Template find(int code);
+
 }
