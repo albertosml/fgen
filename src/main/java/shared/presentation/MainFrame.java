@@ -14,6 +14,7 @@ import subtotal.presentation.panels.ListSubtotalsPanel;
 import subtotal.presentation.panels.RegisterSubtotalPanel;
 import template.presentation.panels.ListTemplatesPanel;
 import template.presentation.panels.RegisterTemplatePanel;
+import template.presentation.panels.ShowTemplatePanel;
 import variable.presentation.panels.ListVariablesPanel;
 import variable.presentation.panels.RegisterVariablePanel;
 
@@ -202,6 +203,18 @@ public class MainFrame extends javax.swing.JFrame {
         String templatesName = Localization.getLocalization(LocalizationKey.TEMPLATES);
         String panelTitle = String.format("%s %s", listName, templatesName);
         this.redirectTo(new ListTemplatesPanel(), panelTitle);
+    }
+
+    /**
+     * Redirect to the show template panel.
+     *
+     * @param templateCode The template code.
+     */
+    public void redirectToShowTemplate(int templateCode) {
+        String showName = Localization.getLocalization(LocalizationKey.SHOW);
+        String templateName = Localization.getLocalization(LocalizationKey.TEMPLATE);
+        String panelTitle = String.format("%s %s", showName, templateName);
+        this.redirectTo(new ShowTemplatePanel(templateCode), panelTitle);
     }
 
     @SuppressWarnings("unchecked")
