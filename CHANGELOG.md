@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added feature to edit a template.
+- Added feature to show a template.
 
 ## [0.23.0] - 2023-02-02
 
