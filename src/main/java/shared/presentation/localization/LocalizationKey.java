@@ -317,4 +317,12 @@ public enum LocalizationKey {
      * Templates.
      */
     TEMPLATES,
+    /**
+     * Message shown when the template has been updated.
+     */
+    UPDATED_TEMPLATE_MESSAGE,
+    /**
+     * Message shown when the template has not been updated.
+     */
+    NOT_UPDATED_TEMPLATE_MESSAGE,
 }

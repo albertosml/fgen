@@ -156,4 +156,13 @@ public class MongoTemplateRepository extends MongoRepository implements Template
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Template template) {
+        Bson templateCodeFilter = this.getTemplateCodeFilter(template.getCode());
+        return super.replaceOne(templateCodeFilter, this.createDocumentFrom(template));
+    }
+
 }

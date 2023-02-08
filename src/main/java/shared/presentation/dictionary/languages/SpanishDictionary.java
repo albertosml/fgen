@@ -90,6 +90,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.REGISTERED_TEMPLATE_MESSAGE, "La plantilla ha sido registrada con éxito");
         super.setTranslation(LocalizationKey.INVALID_FILE_MESSAGE, "Archivo inválido");
         super.setTranslation(LocalizationKey.TEMPLATES, "Plantillas");
+        super.setTranslation(LocalizationKey.UPDATED_TEMPLATE_MESSAGE, "La plantilla ha sido actualizada con éxito");
+        super.setTranslation(LocalizationKey.NOT_UPDATED_TEMPLATE_MESSAGE, "La plantilla no ha podido ser actualizada");
     }
 
 }

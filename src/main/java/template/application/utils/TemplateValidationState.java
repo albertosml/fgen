@@ -15,5 +15,9 @@ public enum TemplateValidationState {
     /**
      * Invalid template because of the file.
      */
-    INVALID_FILE
+    INVALID_FILE,
+    /**
+     * Invalid.
+     */
+    INVALID
 }

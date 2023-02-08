@@ -33,4 +33,12 @@ public interface TemplateRepository extends Repository {
      */
     public Template find(int code);
 
+    /**
+     * Update the given template with its associated data.
+     *
+     * @param template The template to update.
+     * @return Whether the template has been updated or not.
+     */
+    public boolean update(Template template);
+
 }
