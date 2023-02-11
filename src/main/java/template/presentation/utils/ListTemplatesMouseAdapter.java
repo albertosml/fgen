@@ -12,6 +12,7 @@ import shared.presentation.MainFrame;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import template.application.usecases.RemoveTemplate;
+import template.application.usecases.RestoreTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
 
 /**
@@ -54,6 +55,25 @@ public class ListTemplatesMouseAdapter extends MouseAdapter {
     }
 
     /**
+     * Execute the restore template use case.
+     *
+     * @param code The code of the template to restore.
+     * @return Whether the template has been restored or not.
+     */
+    private boolean restoreTemplate(int code) {
+        try {
+            MongoTemplateRepository templateRepository = new MongoTemplateRepository();
+            RestoreTemplate restoreTemplate = new RestoreTemplate(templateRepository);
+            return restoreTemplate.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListTemplatesMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Template not restored because the database has not been found", ex);
+        }
+
+        return false;
+    }
+
+    /**
      * Remove or restore the template depending on the deletion state.
      *
      * @param evt The mouse event.
@@ -78,8 +98,12 @@ public class ListTemplatesMouseAdapter extends MouseAdapter {
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
             }
         } else {
-            // Button state needs to be updated as the template deletion state has changed.
-            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            boolean isTemplateRestored = this.restoreTemplate(templateCode);
+            
+            if (isTemplateRestored) {
+                // Button state needs to be updated as the template deletion state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            }
         }
     }
 
