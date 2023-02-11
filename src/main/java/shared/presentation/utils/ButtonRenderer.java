@@ -18,6 +18,16 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
     }
 
     /**
+     * Constructor.
+     *
+     * @param isEnabled Whether the button must be enabled or not.
+     */
+    public ButtonRenderer(boolean isEnabled) {
+        this.setOpaque(true);
+        this.setEnabled(isEnabled);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

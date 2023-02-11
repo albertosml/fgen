@@ -16,13 +16,20 @@ import template.application.usecases.EditTemplateField;
 public class TemplateFieldsTableModel extends DefaultTableModel {
 
     /**
+     * Whether the template is deleted or not.
+     */
+    private boolean isDeleted;
+
+    /**
      * Constructor.
      *
      * @param data Table data.
      * @param columnNames Table column names.
+     * @param isDeleted Whether the template is deleted or not.
      */
-    public TemplateFieldsTableModel(Vector<? extends Vector> data, Vector<?> columnNames) {
+    public TemplateFieldsTableModel(Vector<? extends Vector> data, Vector<?> columnNames, boolean isDeleted) {
         super(data, columnNames);
+        this.isDeleted = isDeleted;
     }
 
     /**
@@ -65,7 +72,8 @@ public class TemplateFieldsTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // All the columns except the remove button column can be edited.
-        return column < 2;
+        // Cells can be only edited if the template is not deleted.
+        return column < 2 && !this.isDeleted;
     }
 
     /**

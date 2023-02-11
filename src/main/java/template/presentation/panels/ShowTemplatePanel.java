@@ -79,8 +79,16 @@ public class ShowTemplatePanel extends javax.swing.JPanel {
         Template template = this.showTemplate(templateCode);
 
         Map<String, String> templateFields = new HashMap<>();
+        boolean isDeleted = false;
 
         if (template != null) {
+            if (template.isDeleted()) {
+                isDeleted = true;
+                this.nameInput.setEditable(false);
+                this.chooseFileButton.setEnabled(false);
+                this.updateButton.setEnabled(false);
+            }
+
             this.codeInput.setText(Integer.toString(templateCode));
             this.nameInput.setText(template.getName());
             this.isDeletedCheckbox.setSelected(template.isDeleted());
@@ -99,7 +107,7 @@ public class ShowTemplatePanel extends javax.swing.JPanel {
             templateFields = template.getFields();
         }
 
-        this.templateFieldsPanel = new TemplateFieldsPanel(templateFields);
+        this.templateFieldsPanel = new TemplateFieldsPanel(templateFields, isDeleted);
         this.bookedPanel.setLayout(new GridLayout());
         this.bookedPanel.add(templateFieldsPanel);
     }

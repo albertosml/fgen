@@ -30,7 +30,7 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
      */
     public TemplateFieldsPanel() {
         initComponents();
-        initializeTable();
+        initializeTable(false);
         initializeLabels();
     }
 
@@ -38,12 +38,17 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
      * Constructor.
      *
      * @param fields Map with all template fields data.
+     * @param isDeleted Whether the template is deleted or not.
      */
-    public TemplateFieldsPanel(Map<String, String> fields) {
+    public TemplateFieldsPanel(Map<String, String> fields, boolean isDeleted) {
         initComponents();
-        initializeTable();
+        initializeTable(isDeleted);
         initializeLabels();
         initializeTemplateFields(fields);
+
+        if (isDeleted) {
+            disableInputs();
+        }
     }
 
     /**
@@ -73,16 +78,18 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
 
     /**
      * Initialize the table.
+     *
+     * @param isDeleted Whether the template is deleted or not.
      */
-    private void initializeTable() {
+    private void initializeTable(boolean isDeleted) {
         Vector<String> columnNames = this.generateColumnNames();
 
-        table.setModel(new TemplateFieldsTableModel(new Vector<>(), columnNames));
-        table.addMouseListener(new TemplateFieldsMouseAdapter(table));
+        table.setModel(new TemplateFieldsTableModel(new Vector<>(), columnNames, isDeleted));
+        table.addMouseListener(new TemplateFieldsMouseAdapter(table, isDeleted));
 
         // Set a button renderer for the remove button.
         TableColumn removeColumn = table.getColumn(columnNames.get(2));
-        removeColumn.setCellRenderer(new ButtonRenderer());
+        removeColumn.setCellRenderer(new ButtonRenderer(!isDeleted));
     }
 
     /**
@@ -121,6 +128,13 @@ public class TemplateFieldsPanel extends javax.swing.JPanel {
 
             this.addTemplateField(templateFieldAttributes);
         }
+    }
+
+    /**
+     * Disable inputs.
+     */
+    private void disableInputs() {
+        this.addTemplateFieldButton.setEnabled(false);
     }
 
     /**

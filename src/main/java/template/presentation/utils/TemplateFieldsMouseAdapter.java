@@ -13,6 +13,11 @@ import template.presentation.panels.TemplateFieldsPanel;
 public class TemplateFieldsMouseAdapter extends MouseAdapter {
 
     /**
+     * Whether the template is deleted or not.
+     */
+    private boolean isDeleted;
+
+    /**
      * Table associated to the mouse adapter.
      */
     private JTable table;
@@ -21,9 +26,11 @@ public class TemplateFieldsMouseAdapter extends MouseAdapter {
      * Constructor.
      *
      * @param table The table associated to the mouse adapter.
+     * @param isDeleted Whether the template is deleted or not.
      */
-    public TemplateFieldsMouseAdapter(JTable table) {
+    public TemplateFieldsMouseAdapter(JTable table, boolean isDeleted) {
         this.table = table;
+        this.isDeleted = isDeleted;
     }
 
     /**
@@ -32,6 +39,11 @@ public class TemplateFieldsMouseAdapter extends MouseAdapter {
      * @param evt The mouse event.
      */
     private void removeTemplateField(MouseEvent evt) {
+        // A template field can be only removed if the template is not deleted.
+        if (this.isDeleted) {
+            return;
+        }
+
         int row = table.rowAtPoint(evt.getPoint());
 
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
