@@ -102,6 +102,15 @@ public class Template {
     public boolean isDeleted() {
         return this.isDeleted;
     }
+    
+    /**
+     * Update the deletion state for the template.
+     *
+     * @param isDeleted Whether the template is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     /**
      * Create a template given its attribute values.

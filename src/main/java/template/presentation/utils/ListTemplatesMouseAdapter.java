@@ -2,12 +2,17 @@ package template.presentation.utils;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
+import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.MainFrame;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
+import template.application.usecases.RemoveTemplate;
+import template.persistence.mongo.MongoTemplateRepository;
 
 /**
  * Mouse adapter for the list templates panel, which includes buttons to
@@ -28,6 +33,25 @@ public class ListTemplatesMouseAdapter extends MouseAdapter {
     public ListTemplatesMouseAdapter(JTable table) {
         this.table = table;
     }
+    
+    /**
+     * Execute the remove template use case.
+     *
+     * @param code The code of the template to remove.
+     * @return Whether the template has been removed or not.
+     */
+    private boolean removeTemplate(int code) {
+        try {
+            MongoTemplateRepository templateRepository = new MongoTemplateRepository();
+            RemoveTemplate removeTemplate = new RemoveTemplate(templateRepository);
+            return removeTemplate.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListTemplatesMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Template not removed because the database has not been found", ex);
+        }
+
+        return false;
+    }
 
     /**
      * Remove or restore the template depending on the deletion state.
@@ -43,12 +67,20 @@ public class ListTemplatesMouseAdapter extends MouseAdapter {
         String cellText = (String) tableModel.getValueAt(row, removeRestoreColumn);
         String removeText = Localization.getLocalization(LocalizationKey.REMOVE);
         String restoreText = Localization.getLocalization(LocalizationKey.RESTORE);
+        
+        int templateCode = row + 1;
 
-        boolean isRemoved = cellText.equals(removeText);
-        String newCellText = isRemoved ? restoreText : removeText;
-
-        // Button state needs to be updated as the template deletion state has changed.
-        tableModel.setValueAt(newCellText, row, removeRestoreColumn);
+        if (cellText.equals(removeText)) {
+            boolean isTemplateRemoved = this.removeTemplate(templateCode);
+            
+            if (isTemplateRemoved) {
+                // Button state needs to be updated as the template deletion state has changed.
+                tableModel.setValueAt(restoreText, row, removeRestoreColumn);
+            }
+        } else {
+            // Button state needs to be updated as the template deletion state has changed.
+            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+        }
     }
 
     /**
