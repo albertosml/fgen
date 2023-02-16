@@ -3,6 +3,7 @@ package invoice.presentation.panels;
 import invoice.application.InvoiceItem;
 import invoice.application.InvoiceItemAttribute;
 import invoice.application.usecases.CreateInvoiceItem;
+import invoice.presentation.utils.InvoiceItemsMouseAdapter;
 import invoice.presentation.utils.InvoiceItemsTableModel;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class InvoiceItemsPanel extends javax.swing.JPanel {
         Vector<String> columnNames = this.generateColumnNames();
 
         table.setModel(new InvoiceItemsTableModel(new Vector<>(), columnNames));
+        table.addMouseListener(new InvoiceItemsMouseAdapter(table));
 
         // Set a button renderer for the remove button.
         TableColumn removeColumn = table.getColumn(columnNames.get(3));
