@@ -54,6 +54,19 @@ public abstract class MongoRepository {
     }
 
     /**
+     * Create a list with the different values that the given field has.
+     *
+     * @param <TResult> The results type.
+     * @param field The field name.
+     * @param type The class of the field type.
+     * @return A list with the different field values.
+     */
+    protected <TResult extends Object> ArrayList<TResult> distinct(String field, Class<TResult> type) {
+        DistinctIterable<TResult> distinctIterator = collection.distinct(field, type);
+        return distinctIterator.into(new ArrayList<>());
+    }
+
+    /**
      * Create a list with the different values that the given field has based on
      * the received filters.
      *
