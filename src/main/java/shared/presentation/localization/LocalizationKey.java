@@ -325,4 +325,32 @@ public enum LocalizationKey {
      * Message shown when the template has not been updated.
      */
     NOT_UPDATED_TEMPLATE_MESSAGE,
+    /**
+     * Items.
+     */
+    ITEMS,
+    /**
+     * Quantity.
+     */
+    QTY,
+    /**
+     * Price.
+     */
+    PRICE,
+    /**
+     * Message introduced when the introduced invoice item is invalid.
+     */
+    INVALID_INVOICE_ITEM_MESSAGE,
+    /**
+     * Item.
+     */
+    ITEM,
+    /**
+     * Invoice.
+     */
+    INVOICE,
+    /**
+     * Generate.
+     */
+    GENERATE,
 }
