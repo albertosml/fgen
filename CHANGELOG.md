@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.29.0] - 2023-02-16
+
+### Added
+
+- Added feature to edit an invoice item.
+
 ## [0.28.0] - 2023-02-16
 
 ### Added

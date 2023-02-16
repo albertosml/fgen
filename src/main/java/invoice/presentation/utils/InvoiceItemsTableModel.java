@@ -1,5 +1,9 @@
 package invoice.presentation.utils;
 
+import invoice.application.InvoiceItemAttribute;
+import invoice.application.usecases.EditInvoiceItem;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +23,28 @@ public class InvoiceItemsTableModel extends DefaultTableModel {
      */
     public InvoiceItemsTableModel(Vector<? extends Vector> data, Vector<?> columnNames) {
         super(data, columnNames);
+    }
+
+    /**
+     * Edit the invoice item.
+     *
+     * @param newValue The new value for the modified cell.
+     * @param row The row of the modified cell.
+     * @param column The column of the modified cell.
+     * @return Whether the invoice item is allowed to be edited or not.
+     */
+    private boolean editInvoiceItem(Object newValue, int row, int column) {
+        Object qty = column == 0 ? newValue : super.getValueAt(row, 0);
+        Object description = column == 1 ? newValue : super.getValueAt(row, 1);
+        Object price = column == 2 ? newValue : super.getValueAt(row, 2);
+
+        Map<InvoiceItemAttribute, Object> attributes = new HashMap<>();
+        attributes.put(InvoiceItemAttribute.QTY, (int) qty);
+        attributes.put(InvoiceItemAttribute.DESCRIPTION, (String) description);
+        attributes.put(InvoiceItemAttribute.PRICE, (double) price);
+
+        EditInvoiceItem editInvoiceItem = new EditInvoiceItem();
+        return editInvoiceItem.execute(attributes);
     }
 
     /**
@@ -47,7 +73,24 @@ public class InvoiceItemsTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int column) {
-        return false;
+        // All the columns except the remove button column can be edited.
+        return column < 3;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValueAt(Object newValue, int row, int column) {
+        if (this.isCellEditable(row, column)) {
+            if (this.editInvoiceItem(newValue, row, column)) {
+                super.setValueAt(newValue, row, column);
+            } else if (column == 1) {
+                // Invalid description, show message.
+                String invalidDescriptionMessage = Localization.getLocalization(LocalizationKey.INVALID_POSITION_MESSAGE);
+                JOptionPane.showMessageDialog(null, invalidDescriptionMessage);
+            }
+        }
     }
 
 }

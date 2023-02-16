@@ -353,4 +353,8 @@ public enum LocalizationKey {
      * Generate.
      */
     GENERATE,
+    /**
+     * Message shown when an invalid invoice item is introduced.
+     */
+    INVALID_INVOICE_ITEM_DESCRIPTION_MESSAGE,
 }

@@ -99,6 +99,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.ITEM, "Unidad");
         super.setTranslation(LocalizationKey.GENERATE, "Generar");
         super.setTranslation(LocalizationKey.INVOICE, "Factura");
+        super.setTranslation(LocalizationKey.INVALID_INVOICE_ITEM_DESCRIPTION_MESSAGE, "La descripción introducida para la unidad de la factura no es válida");
     }
 
 }
