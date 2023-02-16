@@ -92,6 +92,13 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.TEMPLATES, "Plantillas");
         super.setTranslation(LocalizationKey.UPDATED_TEMPLATE_MESSAGE, "La plantilla ha sido actualizada con éxito");
         super.setTranslation(LocalizationKey.NOT_UPDATED_TEMPLATE_MESSAGE, "La plantilla no ha podido ser actualizada");
+        super.setTranslation(LocalizationKey.ITEMS, "Unidades");
+        super.setTranslation(LocalizationKey.QTY, "Cantidad (en Kilos)");
+        super.setTranslation(LocalizationKey.PRICE, "Precio (en Euros)");
+        super.setTranslation(LocalizationKey.INVALID_INVOICE_ITEM_MESSAGE, "Unidad no añadida porque es inválida");
+        super.setTranslation(LocalizationKey.ITEM, "Unidad");
+        super.setTranslation(LocalizationKey.GENERATE, "Generar");
+        super.setTranslation(LocalizationKey.INVOICE, "Factura");
     }
 
 }
