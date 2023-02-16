@@ -136,7 +136,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
      */
     @Override
     public ArrayList<String> getTinList() {
-        return super.distinct("tin", isNotDeletedFilter(), String.class);
+        return super.distinct("tin", String.class);
     }
 
     /**

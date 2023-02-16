@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.30.1] - 2023-02-17
+
+### Fixed
+
+- Fixed an issue where there could be two customers with the same TIN.
+
 ## [0.30.0] - 2023-02-17
 
 ### Added
