@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.32.0] - 2023-04-06
+
+### Removed
+
+- Invoice item entity, as its concept is going to change.
+
 ## [0.31.0] - 2023-04-06
 
 ### Added
