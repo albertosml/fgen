@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.31.0] - 2023-04-06
+
+### Added
+
+- Restriction not to allow ranges on spreadsheet positions from template fields.
+
 ## [0.30.1] - 2023-02-17
 
 ### Fixed

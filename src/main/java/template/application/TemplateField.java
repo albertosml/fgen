@@ -10,7 +10,7 @@ public class TemplateField {
     /**
      * The position on the spreadsheet file.
      *
-     * It can be a field or a range.
+     * It can be only a field.
      */
     private String position;
 
