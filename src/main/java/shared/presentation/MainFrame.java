@@ -3,7 +3,6 @@ package shared.presentation;
 import customer.presentation.panels.ListCustomersPanel;
 import customer.presentation.panels.RegisterCustomerPanel;
 import customer.presentation.panels.ShowCustomerPanel;
-import invoice.presentation.panels.GenerateInvoicePanel;
 import java.awt.Container;
 import javax.swing.JPanel;
 import shared.application.configuration.ApplicationConfiguration;
@@ -64,12 +63,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         String templateName = Localization.getLocalization(LocalizationKey.TEMPLATE);
         this.template.setText(templateName);
-
-        String generateName = Localization.getLocalization(LocalizationKey.GENERATE);
-        this.generateInvoice.setText(generateName);
-
-        String invoiceName = Localization.getLocalization(LocalizationKey.INVOICE);
-        this.invoice.setText(invoiceName);
     }
 
     /**
@@ -224,23 +217,11 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ShowTemplatePanel(templateCode), panelTitle);
     }
 
-    /**
-     * Redirect to the generate invoice panel.
-     */
-    public void redirectToGenerateInvoice() {
-        String generateName = Localization.getLocalization(LocalizationKey.GENERATE);
-        String invoiceName = Localization.getLocalization(LocalizationKey.INVOICE);
-        String panelTitle = String.format("%s %s", generateName, invoiceName);
-        this.redirectTo(new GenerateInvoicePanel(), panelTitle);
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         menuBar = new javax.swing.JMenuBar();
-        invoice = new javax.swing.JMenu();
-        generateInvoice = new javax.swing.JMenuItem();
         customer = new javax.swing.JMenu();
         registerCustomer = new javax.swing.JMenuItem();
         listCustomers = new javax.swing.JMenuItem();
@@ -257,18 +238,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
-
-        invoice.setText("${INVOICE}");
-
-        generateInvoice.setText("${GENERATE}");
-        generateInvoice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generateInvoiceActionPerformed(evt);
-            }
-        });
-        invoice.add(generateInvoice);
-
-        menuBar.add(invoice);
 
         customer.setText("${CUSTOMER}");
 
@@ -399,15 +368,9 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListTemplates();
     }//GEN-LAST:event_listTemplatesActionPerformed
 
-    private void generateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInvoiceActionPerformed
-        this.redirectToGenerateInvoice();
-    }//GEN-LAST:event_generateInvoiceActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu customer;
-    private javax.swing.JMenuItem generateInvoice;
-    private javax.swing.JMenu invoice;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listSubtotals;
     private javax.swing.JMenuItem listTemplates;
