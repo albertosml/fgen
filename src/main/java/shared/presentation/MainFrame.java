@@ -5,6 +5,7 @@ import customer.presentation.panels.RegisterCustomerPanel;
 import customer.presentation.panels.ShowCustomerPanel;
 import java.awt.Container;
 import javax.swing.JPanel;
+import product.presentation.panels.RegisterProductPanel;
 import shared.application.configuration.ApplicationConfiguration;
 import shared.application.configuration.ConfigurationVariable;
 import shared.presentation.localization.Localization;
@@ -45,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.registerSubtotal.setText(registerName);
         this.registerVariable.setText(registerName);
         this.registerTemplate.setText(registerName);
+        this.registerProduct.setText(registerName);
 
         String customerName = Localization.getLocalization(LocalizationKey.CUSTOMER);
         this.customer.setText(customerName);
@@ -63,6 +65,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         String templateName = Localization.getLocalization(LocalizationKey.TEMPLATE);
         this.template.setText(templateName);
+
+        String productName = Localization.getLocalization(LocalizationKey.PRODUCT);
+        this.product.setText(productName);
     }
 
     /**
@@ -217,6 +222,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ShowTemplatePanel(templateCode), panelTitle);
     }
 
+    /**
+     * Redirect to the register product panel.
+     */
+    public void redirectToRegisterProduct() {
+        String registerName = Localization.getLocalization(LocalizationKey.REGISTER);
+        String productName = Localization.getLocalization(LocalizationKey.PRODUCT);
+        String panelTitle = String.format("%s %s", registerName, productName);
+        this.redirectTo(new RegisterProductPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -225,6 +240,8 @@ public class MainFrame extends javax.swing.JFrame {
         customer = new javax.swing.JMenu();
         registerCustomer = new javax.swing.JMenuItem();
         listCustomers = new javax.swing.JMenuItem();
+        product = new javax.swing.JMenu();
+        registerProduct = new javax.swing.JMenuItem();
         template = new javax.swing.JMenu();
         registerTemplate = new javax.swing.JMenuItem();
         listTemplates = new javax.swing.JMenuItem();
@@ -258,6 +275,18 @@ public class MainFrame extends javax.swing.JFrame {
         customer.add(listCustomers);
 
         menuBar.add(customer);
+
+        product.setText("${PRODUCT}");
+
+        registerProduct.setText("${REGISTER}");
+        registerProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerProductActionPerformed(evt);
+            }
+        });
+        product.add(registerProduct);
+
+        menuBar.add(product);
 
         template.setText("${TEMPLATE}");
 
@@ -368,6 +397,10 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListTemplates();
     }//GEN-LAST:event_listTemplatesActionPerformed
 
+    private void registerProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerProductActionPerformed
+        this.redirectToRegisterProduct();
+    }//GEN-LAST:event_registerProductActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu customer;
@@ -376,7 +409,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem listTemplates;
     private javax.swing.JMenuItem listVariables;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu product;
     private javax.swing.JMenuItem registerCustomer;
+    private javax.swing.JMenuItem registerProduct;
     private javax.swing.JMenuItem registerSubtotal;
     private javax.swing.JMenuItem registerTemplate;
     private javax.swing.JMenuItem registerVariable;

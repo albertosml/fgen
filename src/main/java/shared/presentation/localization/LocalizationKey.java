@@ -357,4 +357,24 @@ public enum LocalizationKey {
      * Message shown when an invalid invoice item is introduced.
      */
     INVALID_INVOICE_ITEM_DESCRIPTION_MESSAGE,
+    /**
+     * Registered product message.
+     */
+    REGISTERED_PRODUCT_MESSAGE,
+    /**
+     * Invalid code message.
+     */
+    INVALID_CODE_MESSAGE,
+    /**
+     * Invalid price message.
+     */
+    INVALID_PRICE_MESSAGE,
+    /**
+     * Duplicated product message.
+     */
+    DUPLICATED_PRODUCT_MESSAGE,
+    /**
+     * Product.
+     */
+    PRODUCT,
 }
