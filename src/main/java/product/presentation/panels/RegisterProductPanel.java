@@ -68,7 +68,7 @@ public class RegisterProductPanel extends javax.swing.JPanel {
      */
     private void initializeInputs() {
         // Price input.
-        SpinnerNumberModel priceSpinnerNumberModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 0.1);
+        SpinnerNumberModel priceSpinnerNumberModel = new SpinnerNumberModel(0d, 0d, 1e11d, 0.01d);
         this.priceInput.setModel(priceSpinnerNumberModel);
     }
 
@@ -111,7 +111,10 @@ public class RegisterProductPanel extends javax.swing.JPanel {
             ProductValidationState state = registerProduct.execute(newProductAttributes);
 
             this.showInfoMessage(state);
-            this.clearForm();
+
+            if (state == ProductValidationState.VALID) {
+                this.clearForm();
+            }
         } catch (NotDefinedDatabaseContextException ex) {
             String className = RegisterProductPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Product not registered because the database has not been found", ex);

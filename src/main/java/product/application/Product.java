@@ -100,7 +100,8 @@ public class Product {
 
         String code = (String) attributes.getOrDefault(ProductAttribute.CODE, unregisteredProductCode);
         String name = (String) attributes.getOrDefault(ProductAttribute.NAME, "");
-        double price = (double) attributes.getOrDefault(ProductAttribute.PRICE, 0);
+        Object priceValue = attributes.getOrDefault(ProductAttribute.PRICE, "0");
+        double price = Double.parseDouble(priceValue.toString());
         boolean isDeleted = (boolean) attributes.getOrDefault(ProductAttribute.ISDELETED, false);
 
         return new Product(code, name, price, isDeleted);
