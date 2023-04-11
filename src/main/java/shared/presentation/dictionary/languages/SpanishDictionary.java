@@ -100,6 +100,11 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.GENERATE, "Generar");
         super.setTranslation(LocalizationKey.INVOICE, "Factura");
         super.setTranslation(LocalizationKey.INVALID_INVOICE_ITEM_DESCRIPTION_MESSAGE, "La descripción introducida para la unidad de la factura no es válida");
+        super.setTranslation(LocalizationKey.INVALID_CODE_MESSAGE, "Código inválido (Debe ser numérico)");
+        super.setTranslation(LocalizationKey.INVALID_PRICE_MESSAGE, "Precio inválido");
+        super.setTranslation(LocalizationKey.REGISTERED_PRODUCT_MESSAGE, "El producto ha sido registrado con éxito");
+        super.setTranslation(LocalizationKey.DUPLICATED_PRODUCT_MESSAGE, "El producto a registrar tiene un código ya existente en el sistema.");                
+        super.setTranslation(LocalizationKey.PRODUCT, "Producto");
     }
 
 }
