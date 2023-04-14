@@ -1,8 +1,11 @@
 package product.persistence.mongo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.bson.Document;
 import product.application.Product;
+import product.application.ProductAttribute;
 import product.persistence.ProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
@@ -40,6 +43,23 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
     }
 
     /**
+     * It creates a product a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A product object based on the data obtained from the given
+     * document.
+     */
+    private Product createProductFrom(Document document) {
+        Map<ProductAttribute, Object> attributes = new HashMap<>();
+        attributes.put(ProductAttribute.CODE, document.get("code"));
+        attributes.put(ProductAttribute.NAME, document.get("name"));
+        attributes.put(ProductAttribute.PRICE, document.get("price"));
+        attributes.put(ProductAttribute.ISDELETED, document.get("isDeleted"));
+
+        return Product.from(attributes);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -53,6 +73,21 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
     @Override
     public ArrayList<String> getCodeList() {
         return super.distinct("code", String.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Product> get() {
+        ArrayList<Document> foundDocuments = super.find();
+
+        ArrayList<Product> products = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            products.add(this.createProductFrom(document));
+        }
+
+        return products;
     }
 
     /**
