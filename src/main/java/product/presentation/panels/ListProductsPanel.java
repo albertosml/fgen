@@ -110,8 +110,8 @@ public class ListProductsPanel extends javax.swing.JPanel {
             table.setModel(new ListProductsTableModel(data, columnNames));
 
             // Set a button renderer for the action button.
-            TableColumn removeRestoreCustomerColumn = table.getColumn(columnNames.get(3));
-            removeRestoreCustomerColumn.setCellRenderer(new ButtonRenderer());
+            TableColumn removeRestoreProductColumn = table.getColumn(columnNames.get(3));
+            removeRestoreProductColumn.setCellRenderer(new ButtonRenderer());
         }
     }
 
