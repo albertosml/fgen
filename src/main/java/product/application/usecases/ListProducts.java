@@ -5,7 +5,7 @@ import product.application.Product;
 import product.persistence.ProductRepository;
 
 /**
- * List customers use case.
+ * List products use case.
  */
 public class ListProducts {
 
