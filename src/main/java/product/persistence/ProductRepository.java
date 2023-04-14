@@ -17,6 +17,14 @@ public interface ProductRepository extends Repository {
     public ArrayList<String> getCodeList();
 
     /**
+     * Obtain all the products registered on the system, even if they have been
+     * removed after.
+     *
+     * @return A list with all products.
+     */
+    public ArrayList<Product> get();
+
+    /**
      * Register the given product.
      *
      * @param product The product to register.
