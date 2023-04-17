@@ -1,9 +1,11 @@
 package product.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import product.application.Product;
 import product.application.ProductAttribute;
 import product.persistence.ProductRepository;
@@ -60,6 +62,17 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
     }
 
     /**
+     * Obtain the filter for the product code.
+     *
+     * @param code The product code.
+     * @return A filter indicating that the query must only obtain the product
+     * which contains the given product code.
+     */
+    private Bson getProductCodeFilter(String code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -97,6 +110,15 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
     public void register(Product product) {
         Document document = this.createDocumentFrom(product);
         super.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Product product) {
+        Bson productCodeFilter = this.getProductCodeFilter(product.getCode());
+        return super.replaceOne(productCodeFilter, this.createDocumentFrom(product));
     }
 
 }
