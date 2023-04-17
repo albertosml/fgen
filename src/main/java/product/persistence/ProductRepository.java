@@ -31,4 +31,12 @@ public interface ProductRepository extends Repository {
      */
     public void register(Product product);
 
+    /**
+     * Update the given product with its associated data.
+     *
+     * @param product The product to update.
+     * @return Whether the product has been updated or not.
+     */
+    public boolean update(Product product);
+
 }
