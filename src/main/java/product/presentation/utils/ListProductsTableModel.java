@@ -100,6 +100,14 @@ public class ListProductsTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int column) {
+        // Removed products cannot be edited.
+        String buttonValue = (String) super.getValueAt(row, 3);
+        boolean isRemovedProduct = buttonValue.equals(Localization.getLocalization(LocalizationKey.RESTORE));
+
+        if (isRemovedProduct) {
+            return false;
+        }
+
         int nameColumnIndex = 1;
         int priceColumnIndex = 2;
 

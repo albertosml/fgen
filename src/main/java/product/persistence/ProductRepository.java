@@ -10,6 +10,14 @@ import shared.persistence.Repository;
 public interface ProductRepository extends Repository {
 
     /**
+     * Find the product which matches with the given code.
+     *
+     * @param code The code of the product to find.
+     * @return The found product, otherwise null.
+     */
+    public Product find(String code);
+
+    /**
      * Get the code from all products from the repository.
      *
      * @return A list with all the retrieved product codes.

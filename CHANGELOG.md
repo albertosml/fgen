@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.36.0] - 2023-04-18
+
+### Added
+
+- Added feature to remove a product.
+
 ## [0.35.0] - 2023-04-18
 
 ### Added
