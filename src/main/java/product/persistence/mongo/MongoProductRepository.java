@@ -62,6 +62,22 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Product find(String code) {
+        Bson productCodeFilter = this.getProductCodeFilter(code);
+        ArrayList<Document> foundProductDocuments = super.find(productCodeFilter);
+
+        if (foundProductDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundProductDocument = foundProductDocuments.get(0);
+            return this.createProductFrom(foundProductDocument);
+        }
+    }
+
+    /**
      * Obtain the filter for the product code.
      *
      * @param code The product code.

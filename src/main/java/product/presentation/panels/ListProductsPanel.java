@@ -8,6 +8,7 @@ import javax.swing.table.TableColumn;
 import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
+import product.presentation.utils.ListProductsMouseAdapter;
 import product.presentation.utils.ListProductsTableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
@@ -108,6 +109,8 @@ public class ListProductsPanel extends javax.swing.JPanel {
             Vector<Vector<Object>> data = this.setTableData(products);
 
             table.setModel(new ListProductsTableModel(data, columnNames));
+
+            table.addMouseListener(new ListProductsMouseAdapter(table));
 
             // Set a button renderer for the action button.
             TableColumn removeRestoreProductColumn = table.getColumn(columnNames.get(3));
