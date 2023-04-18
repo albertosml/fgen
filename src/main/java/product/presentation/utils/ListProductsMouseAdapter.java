@@ -4,10 +4,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import product.application.usecases.RemoveProduct;
+import product.application.usecases.RestoreProduct;
 import product.persistence.mongo.MongoProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
@@ -54,6 +54,25 @@ public class ListProductsMouseAdapter extends MouseAdapter {
     }
 
     /**
+     * Execute the restore product use case.
+     *
+     * @param code The code of the product to restore.
+     * @return Whether the product with the given code has been restored or not.
+     */
+    private boolean restoreProduct(String code) {
+        try {
+            MongoProductRepository productRepository = new MongoProductRepository();
+            RestoreProduct restoreProduct = new RestoreProduct(productRepository);
+            return restoreProduct.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListProductsMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Product not restored because the database has not been found", ex);
+        }
+
+        return false;
+    }
+
+    /**
      * Remove or restore the product depending on the deletion state.
      *
      * @param evt The mouse event.
@@ -78,8 +97,12 @@ public class ListProductsMouseAdapter extends MouseAdapter {
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
             }
         } else {
-            // Button state needs to be updated as the product state has changed.
-            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            boolean isProductRestored = this.restoreProduct(productCode);
+
+            if (isProductRestored) {
+                // Button state needs to be updated as the product state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            }
         }
     }
 
