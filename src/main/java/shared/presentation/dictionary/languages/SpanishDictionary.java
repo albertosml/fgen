@@ -105,6 +105,11 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.REGISTERED_PRODUCT_MESSAGE, "El producto ha sido registrado con éxito");
         super.setTranslation(LocalizationKey.DUPLICATED_PRODUCT_MESSAGE, "El producto a registrar tiene un código ya existente en el sistema.");                
         super.setTranslation(LocalizationKey.PRODUCT, "Producto");
+        super.setTranslation(LocalizationKey.WEIGHT, "Peso (en kilos)");
+        super.setTranslation(LocalizationKey.INVALID_WEIGHT_MESSAGE, "Peso inválido");
+        super.setTranslation(LocalizationKey.REGISTERED_CONTAINER_MESSAGE, "El contenedor (palé o caja) ha sido registrado con éxito");
+        super.setTranslation(LocalizationKey.DUPLICATED_CONTAINER_MESSAGE, "El contenedor (palé o caja) a registrar tiene un código ya existente en el sistema.");
+        super.setTranslation(LocalizationKey.CONTAINER, "Palé/Caja");
     }
 
 }

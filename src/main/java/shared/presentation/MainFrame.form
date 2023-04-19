@@ -50,6 +50,21 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="container">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="${CONTAINER}"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="registerContainer">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="${REGISTER}"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerContainerActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="template">
           <Properties>
             <Property name="text" type="java.lang.String" value="${TEMPLATE}"/>

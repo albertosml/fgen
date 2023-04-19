@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.38.0] - 2023-04-19
+
+### Added
+
+- Added feature to register a container.
+
 ## [0.37.0] - 2023-04-18
 
 ### Added

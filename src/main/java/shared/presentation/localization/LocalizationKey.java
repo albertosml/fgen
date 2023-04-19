@@ -377,4 +377,24 @@ public enum LocalizationKey {
      * Product.
      */
     PRODUCT,
+    /**
+     * Weight.
+     */
+    WEIGHT,
+    /**
+     * Register container message.
+     */
+    REGISTERED_CONTAINER_MESSAGE,
+    /**
+     * Invalid weight message.
+     */
+    INVALID_WEIGHT_MESSAGE,
+    /**
+     * Duplicated container message.
+     */
+    DUPLICATED_CONTAINER_MESSAGE,
+    /**
+     * Container.
+     */
+    CONTAINER,
 }
