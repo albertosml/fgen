@@ -1,8 +1,11 @@
 package container.persistence.mongo;
 
 import container.application.Container;
+import container.application.ContainerAttribute;
 import container.persistence.ContainerRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.bson.Document;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
@@ -20,6 +23,23 @@ public class MongoContainerRepository extends MongoRepository implements Contain
      */
     public MongoContainerRepository() throws NotDefinedDatabaseContextException {
         super("container");
+    }
+
+    /**
+     * It creates a container from a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A container object based on the data obtained from the given
+     * document.
+     */
+    private Container createContainerFrom(Document document) {
+        Map<ContainerAttribute, Object> attributes = new HashMap<>();
+        attributes.put(ContainerAttribute.CODE, document.get("code"));
+        attributes.put(ContainerAttribute.NAME, document.get("name"));
+        attributes.put(ContainerAttribute.WEIGHT, document.get("weight"));
+        attributes.put(ContainerAttribute.ISDELETED, document.get("isDeleted"));
+
+        return Container.from(attributes);
     }
 
     /**
@@ -45,6 +65,21 @@ public class MongoContainerRepository extends MongoRepository implements Contain
     @Override
     public int count() {
         return super.count();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Container> get() {
+        ArrayList<Document> foundDocuments = super.find();
+
+        ArrayList<Container> containers = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            containers.add(this.createContainerFrom(document));
+        }
+
+        return containers;
     }
 
     /**

@@ -1,5 +1,6 @@
 package shared.presentation;
 
+import container.presentation.panels.ListContainersPanel;
 import container.presentation.panels.RegisterContainerPanel;
 import customer.presentation.panels.ListCustomersPanel;
 import customer.presentation.panels.RegisterCustomerPanel;
@@ -60,6 +61,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.listVariables.setText(listName);
         this.listTemplates.setText(listName);
         this.listProducts.setText(listName);
+        this.listContainers.setText(listName);
 
         String subtotalName = Localization.getLocalization(LocalizationKey.SUBTOTAL);
         this.subtotal.setText(subtotalName);
@@ -259,6 +261,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new RegisterContainerPanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the list containers panel.
+     */
+    public void redirectToListContainers() {
+        String listName = Localization.getLocalization(LocalizationKey.LIST);
+        String containerName = Localization.getLocalization(LocalizationKey.CONTAINER);
+        String panelTitle = String.format("%s %s", listName, containerName);
+        this.redirectTo(new ListContainersPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -272,6 +284,7 @@ public class MainFrame extends javax.swing.JFrame {
         listProducts = new javax.swing.JMenuItem();
         container = new javax.swing.JMenu();
         registerContainer = new javax.swing.JMenuItem();
+        listContainers = new javax.swing.JMenuItem();
         template = new javax.swing.JMenu();
         registerTemplate = new javax.swing.JMenuItem();
         listTemplates = new javax.swing.JMenuItem();
@@ -335,6 +348,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         container.add(registerContainer);
+
+        listContainers.setText("${LIST}");
+        listContainers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listContainersActionPerformed(evt);
+            }
+        });
+        container.add(listContainers);
 
         menuBar.add(container);
 
@@ -459,10 +480,15 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToRegisterContainer();
     }//GEN-LAST:event_registerContainerActionPerformed
 
+    private void listContainersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listContainersActionPerformed
+        this.redirectToListContainers();
+    }//GEN-LAST:event_listContainersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu container;
     private javax.swing.JMenu customer;
+    private javax.swing.JMenuItem listContainers;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listProducts;
     private javax.swing.JMenuItem listSubtotals;
