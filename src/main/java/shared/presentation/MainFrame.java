@@ -1,5 +1,6 @@
 package shared.presentation;
 
+import container.presentation.panels.RegisterContainerPanel;
 import customer.presentation.panels.ListCustomersPanel;
 import customer.presentation.panels.RegisterCustomerPanel;
 import customer.presentation.panels.ShowCustomerPanel;
@@ -48,6 +49,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.registerVariable.setText(registerName);
         this.registerTemplate.setText(registerName);
         this.registerProduct.setText(registerName);
+        this.registerContainer.setText(registerName);
 
         String customerName = Localization.getLocalization(LocalizationKey.CUSTOMER);
         this.customer.setText(customerName);
@@ -70,6 +72,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         String productName = Localization.getLocalization(LocalizationKey.PRODUCT);
         this.product.setText(productName);
+
+        String containerName = Localization.getLocalization(LocalizationKey.CONTAINER);
+        this.container.setText(containerName);
     }
 
     /**
@@ -244,6 +249,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ListProductsPanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the register container panel.
+     */
+    public void redirectToRegisterContainer() {
+        String registerName = Localization.getLocalization(LocalizationKey.REGISTER);
+        String containerName = Localization.getLocalization(LocalizationKey.CONTAINER);
+        String panelTitle = String.format("%s %s", registerName, containerName);
+        this.redirectTo(new RegisterContainerPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -255,6 +270,8 @@ public class MainFrame extends javax.swing.JFrame {
         product = new javax.swing.JMenu();
         registerProduct = new javax.swing.JMenuItem();
         listProducts = new javax.swing.JMenuItem();
+        container = new javax.swing.JMenu();
+        registerContainer = new javax.swing.JMenuItem();
         template = new javax.swing.JMenu();
         registerTemplate = new javax.swing.JMenuItem();
         listTemplates = new javax.swing.JMenuItem();
@@ -308,6 +325,18 @@ public class MainFrame extends javax.swing.JFrame {
         product.add(listProducts);
 
         menuBar.add(product);
+
+        container.setText("${CONTAINER}");
+
+        registerContainer.setText("${REGISTER}");
+        registerContainer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerContainerActionPerformed(evt);
+            }
+        });
+        container.add(registerContainer);
+
+        menuBar.add(container);
 
         template.setText("${TEMPLATE}");
 
@@ -426,8 +455,13 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListProducts();
     }//GEN-LAST:event_listProductsActionPerformed
 
+    private void registerContainerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerContainerActionPerformed
+        this.redirectToRegisterContainer();
+    }//GEN-LAST:event_registerContainerActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
+    private javax.swing.JMenu container;
     private javax.swing.JMenu customer;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listProducts;
@@ -436,6 +470,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem listVariables;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu product;
+    private javax.swing.JMenuItem registerContainer;
     private javax.swing.JMenuItem registerCustomer;
     private javax.swing.JMenuItem registerProduct;
     private javax.swing.JMenuItem registerSubtotal;
