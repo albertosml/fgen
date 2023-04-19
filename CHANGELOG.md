@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.39.0] - 2023-04-20
+
+### Added
+
+- Added feature to list containers.
+
 ## [0.38.0] - 2023-04-19
 
 ### Added

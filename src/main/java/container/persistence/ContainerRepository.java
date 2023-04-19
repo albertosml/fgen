@@ -10,6 +10,14 @@ import shared.persistence.Repository;
 public interface ContainerRepository extends Repository {
 
     /**
+     * Obtain all the containers registered on the system, even if they have
+     * been removed after.
+     *
+     * @return A list with all containers.
+     */
+    public ArrayList<Container> get();
+
+    /**
      * Get the code from all containers from the repository.
      *
      * @return A list with all the retrieved container codes.
