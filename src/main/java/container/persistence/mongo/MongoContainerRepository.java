@@ -1,5 +1,6 @@
 package container.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
 import container.application.Container;
 import container.application.ContainerAttribute;
 import container.persistence.ContainerRepository;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
 
@@ -60,6 +62,17 @@ public class MongoContainerRepository extends MongoRepository implements Contain
     }
 
     /**
+     * Obtain the filter for the container code.
+     *
+     * @param code The container code.
+     * @return A filter indicating that the query must only obtain the container
+     * which contains the given container code.
+     */
+    private Bson getContainerCodeFilter(int code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -97,6 +110,15 @@ public class MongoContainerRepository extends MongoRepository implements Contain
     public void register(Container container) {
         Document document = this.createDocumentFrom(container);
         super.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(Container container) {
+        Bson containerCodeFilter = this.getContainerCodeFilter(container.getCode());
+        return super.replaceOne(containerCodeFilter, this.createDocumentFrom(container));
     }
 
 }
