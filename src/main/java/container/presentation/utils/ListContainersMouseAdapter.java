@@ -1,6 +1,7 @@
 package container.presentation.utils;
 
 import container.application.usecases.RemoveContainer;
+import container.application.usecases.RestoreContainer;
 import container.persistence.mongo.MongoContainerRepository;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -53,6 +54,26 @@ public class ListContainersMouseAdapter extends MouseAdapter {
     }
 
     /**
+     * Execute the restore container use case.
+     *
+     * @param code The code of the container to restore.
+     * @return Whether the container with the given code has been restored or
+     * not.
+     */
+    private boolean restoreContainer(int code) {
+        try {
+            MongoContainerRepository containerRepository = new MongoContainerRepository();
+            RestoreContainer restoreContainer = new RestoreContainer(containerRepository);
+            return restoreContainer.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListContainersMouseAdapter.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Container not restored because the database has not been found", ex);
+        }
+
+        return false;
+    }
+
+    /**
      * Remove or restore the container depending on the deletion state.
      *
      * @param evt The mouse event.
@@ -77,8 +98,12 @@ public class ListContainersMouseAdapter extends MouseAdapter {
                 tableModel.setValueAt(restoreText, row, removeRestoreColumn);
             }
         } else {
-            // Button state needs to be updated as the container state has changed.
-            tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            boolean isContainerRestored = this.restoreContainer(containerCode);
+
+            if (isContainerRestored) {
+                // Button state needs to be updated as the container state has changed.
+                tableModel.setValueAt(removeText, row, removeRestoreColumn);
+            }
         }
     }
 
