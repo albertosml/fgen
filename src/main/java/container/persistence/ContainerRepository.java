@@ -10,6 +10,14 @@ import shared.persistence.Repository;
 public interface ContainerRepository extends Repository {
 
     /**
+     * Find the container which matches with the given code.
+     *
+     * @param code The code of the container to find.
+     * @return The found container, otherwise null.
+     */
+    public Container find(int code);
+
+    /**
      * Obtain all the containers registered on the system, even if they have
      * been removed after.
      *

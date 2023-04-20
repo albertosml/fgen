@@ -3,6 +3,7 @@ package container.presentation.panels;
 import container.application.Container;
 import container.persistence.mongo.MongoContainerRepository;
 import container.application.usecases.ListContainers;
+import container.presentation.utils.ListContainersMouseAdapter;
 import container.presentation.utils.ListContainersTableModel;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -109,6 +110,8 @@ public class ListContainersPanel extends javax.swing.JPanel {
             Vector<Vector<Object>> data = this.setTableData(containers);
 
             table.setModel(new ListContainersTableModel(data, columnNames));
+
+            table.addMouseListener(new ListContainersMouseAdapter(table));
 
             // Set a button renderer for the action button.
             TableColumn removeRestoreContainerColumn = table.getColumn(columnNames.get(3));

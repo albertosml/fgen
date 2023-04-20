@@ -84,6 +84,22 @@ public class MongoContainerRepository extends MongoRepository implements Contain
      * {@inheritDoc}
      */
     @Override
+    public Container find(int code) {
+        Bson containerCodeFilter = this.getContainerCodeFilter(code);
+        ArrayList<Document> foundContainerDocuments = super.find(containerCodeFilter);
+
+        if (foundContainerDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundContainerDocument = foundContainerDocuments.get(0);
+            return this.createContainerFrom(foundContainerDocument);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<Container> get() {
         ArrayList<Document> foundDocuments = super.find();
 
