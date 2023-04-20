@@ -31,4 +31,12 @@ public interface ContainerRepository extends Repository {
      */
     public void register(Container container);
 
+    /**
+     * Update the given container with its associated data.
+     *
+     * @param container The container to update.
+     * @return Whether the container has been updated or not.
+     */
+    public boolean update(Container container);
+
 }
