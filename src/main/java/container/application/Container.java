@@ -79,6 +79,15 @@ public class Container {
     }
 
     /**
+     * Update the deletion state for the container.
+     *
+     * @param isDeleted Whether the container is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Create a container given its attribute values.
      *
      * @param attributes Map containing the value for each container attribute.

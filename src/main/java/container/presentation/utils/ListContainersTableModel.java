@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
+import shared.presentation.localization.Localization;
+import shared.presentation.localization.LocalizationKey;
 
 /**
  * Table model for the list containers panel.
@@ -98,6 +100,14 @@ public class ListContainersTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int column) {
+        // Removed containers cannot be edited.
+        String buttonValue = (String) super.getValueAt(row, 3);
+        boolean isRemovedContainer = buttonValue.equals(Localization.getLocalization(LocalizationKey.RESTORE));
+
+        if (isRemovedContainer) {
+            return false;
+        }
+
         int nameColumnIndex = 1;
         int weightColumnIndex = 2;
 
