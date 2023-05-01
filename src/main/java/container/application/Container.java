@@ -88,6 +88,14 @@ public class Container {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return String.format("%d - %s", this.code, this.name);
+    }
+
+    /**
      * Create a container given its attribute values.
      *
      * @param attributes Map containing the value for each container attribute.

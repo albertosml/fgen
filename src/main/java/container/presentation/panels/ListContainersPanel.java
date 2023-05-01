@@ -37,7 +37,7 @@ public class ListContainersPanel extends javax.swing.JPanel {
         try {
             MongoContainerRepository containerRepository = new MongoContainerRepository();
             ListContainers listContainers = new ListContainers(containerRepository);
-            return listContainers.execute();
+            return listContainers.execute(true);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListContainersPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Containers cannot be shown because the database has not been found", ex);
