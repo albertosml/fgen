@@ -21,9 +21,11 @@ public interface ContainerRepository extends Repository {
      * Obtain all the containers registered on the system, even if they have
      * been removed after.
      *
+     * @param includeRemoved Whether we should include removed containers or
+     * not.
      * @return A list with all containers.
      */
-    public ArrayList<Container> get();
+    public ArrayList<Container> get(boolean includeRemoved);
 
     /**
      * Get the code from all containers from the repository.

@@ -100,12 +100,16 @@ public class MongoContainerRepository extends MongoRepository implements Contain
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Container> get() {
+    public ArrayList<Container> get(boolean includeRemoved) {
         ArrayList<Document> foundDocuments = super.find();
 
         ArrayList<Container> containers = new ArrayList<>();
         for (Document document : foundDocuments) {
-            containers.add(this.createContainerFrom(document));
+            Container container = this.createContainerFrom(document);
+
+            if (includeRemoved || !container.isDeleted()) {
+                containers.add(container);
+            }
         }
 
         return containers;
