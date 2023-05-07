@@ -6,6 +6,7 @@ import container.persistence.mongo.MongoContainerRepository;
 import deliverynote.application.DeliveryNoteItem;
 import deliverynote.application.DeliveryNoteItemAttribute;
 import deliverynote.application.usecases.CreateDeliveryNoteItem;
+import deliverynote.presentation.utils.DeliveryNoteItemsMouseAdapter;
 import deliverynote.presentation.utils.DeliveryNoteItemsTableModel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,6 +95,7 @@ public class DeliveryNoteItemsPanel extends javax.swing.JPanel {
         Vector<String> columnNames = this.generateColumnNames();
 
         table.setModel(new DeliveryNoteItemsTableModel(new Vector<>(), columnNames));
+        table.addMouseListener(new DeliveryNoteItemsMouseAdapter(table));
 
         // Set a combobox cell editor for the container column.
         TableColumn containerColumn = table.getColumn(columnNames.get(0));
