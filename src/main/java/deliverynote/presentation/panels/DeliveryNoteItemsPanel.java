@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -93,6 +94,11 @@ public class DeliveryNoteItemsPanel extends javax.swing.JPanel {
         Vector<String> columnNames = this.generateColumnNames();
 
         table.setModel(new DeliveryNoteItemsTableModel(new Vector<>(), columnNames));
+
+        // Set a combobox cell editor for the container column.
+        TableColumn containerColumn = table.getColumn(columnNames.get(0));
+        JComboBox comboBox = new JComboBox(new Vector<Container>(this.getContainers()));
+        containerColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
         // Set a button renderer for the remove button.
         TableColumn removeColumn = table.getColumn(columnNames.get(2));

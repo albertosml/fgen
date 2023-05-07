@@ -112,6 +112,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.CONTAINER, "Palé/Caja");
         super.setTranslation(LocalizationKey.INVALID_DELIVERY_NOTE_ITEM_MESSAGE, "Elemento no añadido porque no es válido");
         super.setTranslation(LocalizationKey.DELIVERY_NOTE, "Albarán");
+        super.setTranslation(LocalizationKey.INVALID_CONTAINER_MESSAGE, "El contenedor introducido es inválido");
+        super.setTranslation(LocalizationKey.INVALID_QTY_MESSAGE, "La cantidad introducida es inválida");
     }
 
 }

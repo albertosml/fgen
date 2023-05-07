@@ -405,4 +405,13 @@ public enum LocalizationKey {
      * Delivery note.
      */
     DELIVERY_NOTE,
+    /**
+     * Message shown when the introduced container is invalid.
+     */
+    INVALID_CONTAINER_MESSAGE,
+    /**
+     * Message shown when the introduced quantity is invalid.
+     */
+    INVALID_QTY_MESSAGE,
+
 }
