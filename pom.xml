@@ -45,5 +45,10 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.0.5</version>
         </dependency>
+        <dependency>
+            <groupId>at.swimmesberger</groupId>
+            <artifactId>swingx-autocomplete</artifactId>
+            <version>1.6.8</version>
+        </dependency>
     </dependencies>
 </project>

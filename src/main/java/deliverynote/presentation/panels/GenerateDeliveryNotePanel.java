@@ -11,14 +11,19 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -72,7 +77,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
      *
      * @return A list with all non-removed products on the system.
      */
-    private ArrayList<Template> getProducts() {
+    private ArrayList<Product> getProducts() {
         try {
             MongoProductRepository productRepository = new MongoProductRepository();
             ListProducts listProducts = new ListProducts(productRepository);
@@ -141,6 +146,21 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
      * Initialize inputs.
      */
     private void initializeInputs() {
+        // Customers input.
+        Vector<Customer> customers = new Vector<>(this.getCustomers());
+        customerInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Customer>(customers));
+        AutoCompleteDecorator.decorate(customerInput);
+
+        // Product input.
+        Vector<Product> products = new Vector<>(this.getProducts());
+        productInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Product>(products));
+        AutoCompleteDecorator.decorate(productInput);
+
+        // Templates input.
+        Vector<Template> templates = new Vector<>(this.getTemplates());
+        templateInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Template>(templates));
+        AutoCompleteDecorator.decorate(templateInput);
+
         // Weight input.
         SpinnerNumberModel weightSpinnerNumberModel = new SpinnerNumberModel(0d, 0d, 1e11d, 0.01d);
         this.weightInput.setModel(weightSpinnerNumberModel);

@@ -26,10 +26,11 @@ public class ListCustomers {
     /**
      * List all customers.
      *
+     * @param includeRemoved Whether we should include removed customers or not.
      * @return A list with all available customers.
      */
-    public ArrayList<Customer> execute() {
-        return customerRepository.get();
+    public ArrayList<Customer> execute(boolean includeRemoved) {
+        return customerRepository.get(includeRemoved);
     }
 
 }

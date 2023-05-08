@@ -174,6 +174,14 @@ public class Customer {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", this.name, this.tin);
+    }
+
+    /**
      * Create a customer given its attribute values.
      *
      * @param attributes Map containing the value for each customer attribute.

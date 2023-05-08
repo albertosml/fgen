@@ -90,6 +90,14 @@ public class Product {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    /**
      * Create a product given its attribute values.
      *
      * @param attributes Map containing the value for each product attribute.

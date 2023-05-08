@@ -108,12 +108,16 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Product> get() {
+    public ArrayList<Product> get(boolean includeRemoved) {
         ArrayList<Document> foundDocuments = super.find();
 
         ArrayList<Product> products = new ArrayList<>();
         for (Document document : foundDocuments) {
-            products.add(this.createProductFrom(document));
+            Product product = this.createProductFrom(document);
+
+            if (includeRemoved || !product.isDeleted()) {
+                products.add(product);
+            }
         }
 
         return products;
