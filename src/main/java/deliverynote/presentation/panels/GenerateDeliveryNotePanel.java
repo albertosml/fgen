@@ -1,11 +1,14 @@
 package deliverynote.presentation.panels;
 
-import container.presentation.panels.*;
 import container.application.ContainerAttribute;
 import container.application.usecases.RegisterContainer;
 import container.application.utils.ContainerValidationState;
 import container.persistence.mongo.MongoContainerRepository;
+import customer.application.Customer;
+import customer.application.usecases.ListCustomers;
+import customer.persistence.mongo.MongoCustomerRepository;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,9 +17,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import product.application.usecases.ListProducts;
+import product.persistence.mongo.MongoProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
+import template.application.Template;
+import template.application.usecases.ListTemplates;
+import template.persistence.mongo.MongoTemplateRepository;
 
 /**
  * Panel which shows the form to register a container.
@@ -39,6 +47,60 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.deliveryNoteItemsPanel = new DeliveryNoteItemsPanel();
         this.bookedPanel.setLayout(new GridLayout());
         this.bookedPanel.add(deliveryNoteItemsPanel);
+    }
+
+    /**
+     * Obtain all the non-removed customers data by executing the use case.
+     *
+     * @return A list with all non-removed customers on the system.
+     */
+    private ArrayList<Customer> getCustomers() {
+        try {
+            MongoCustomerRepository customerRepository = new MongoCustomerRepository();
+            ListCustomers listCustomers = new ListCustomers(customerRepository);
+            return listCustomers.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Customers cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Obtain all the non-removed products data by executing the use case.
+     *
+     * @return A list with all non-removed products on the system.
+     */
+    private ArrayList<Template> getProducts() {
+        try {
+            MongoProductRepository productRepository = new MongoProductRepository();
+            ListProducts listProducts = new ListProducts(productRepository);
+            return listProducts.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Products cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Obtain all the non-removed templates data by executing the use case.
+     *
+     * @return A list with all non-removed templates on the system.
+     */
+    private ArrayList<Template> getTemplates() {
+        try {
+            MongoTemplateRepository templateRepository = new MongoTemplateRepository();
+            ListTemplates listTemplates = new ListTemplates(templateRepository);
+            return listTemplates.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Templates cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -68,7 +130,9 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
      * Initialize form labels.
      */
     private void initializeFormLabels() {
-        this.setLabelText(nameLabel, LocalizationKey.NAME);
+        this.setLabelText(customerLabel, LocalizationKey.CUSTOMER);
+        this.setLabelText(productLabel, LocalizationKey.PRODUCT);
+        this.setLabelText(templateLabel, LocalizationKey.TEMPLATE);
         this.setLabelText(weightLabel, LocalizationKey.WEIGHT);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
     }
@@ -104,7 +168,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
      * Clear all the form fields to register a container.
      */
     private void clearForm() {
-        this.nameInput.setText("");
         this.weightInput.setValue(0);
     }
 
@@ -135,21 +198,45 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        nameLabel = new javax.swing.JLabel();
+        customerLabel = new javax.swing.JLabel();
+        customerInput = new javax.swing.JComboBox<>();
+        productLabel = new javax.swing.JLabel();
+        productInput = new javax.swing.JComboBox<>();
+        templateLabel = new javax.swing.JLabel();
+        templateInput = new javax.swing.JComboBox<>();
         weightLabel = new javax.swing.JLabel();
         weightInput = new javax.swing.JSpinner();
+        bookedPanel = new javax.swing.JPanel();
         registerButton = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        nameLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        nameLabel2 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
 
-        nameLabel.setText("${PRODUCT}:");
+        customerLabel.setText("${CUSTOMER}:");
+
+        customerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        productLabel.setText("${PRODUCT}:");
+
+        productInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        templateLabel.setText("${TEMPLATE}:");
+
+        templateInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         weightLabel.setText("${WEIGHT}:");
 
         weightInput.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+
+        bookedPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout bookedPanelLayout = new javax.swing.GroupLayout(bookedPanel);
+        bookedPanel.setLayout(bookedPanelLayout);
+        bookedPanelLayout.setHorizontalGroup(
+            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 471, Short.MAX_VALUE)
+        );
+        bookedPanelLayout.setVerticalGroup(
+            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 149, Short.MAX_VALUE)
+        );
 
         registerButton.setText("${REGISTER}");
         registerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -157,28 +244,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                 registerButtonActionPerformed(evt);
             }
         });
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        nameLabel1.setText("${CUSTOMER}:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        nameLabel2.setText("${TEMPLATE}:");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        bookedPanel = new javax.swing.JPanel();
-
-        javax.swing.GroupLayout bookedPanelLayout = new javax.swing.GroupLayout(bookedPanel);
-        bookedPanel.setLayout(bookedPanelLayout);
-        bookedPanelLayout.setHorizontalGroup(
-            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
-        );
-        bookedPanelLayout.setVerticalGroup(
-            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 197, Short.MAX_VALUE)
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -188,39 +253,17 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(weightLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nameLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nameLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(productLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(customerLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(templateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addComponent(weightInput)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(customerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(productInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(templateInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(61, 61, 61))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nameLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(weightLabel)
-                    .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(registerButton)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -228,16 +271,34 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(templateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(templateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(weightLabel)
+                    .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(bookedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(registerButton)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         Map<ContainerAttribute, Object> newContainerAttributes = new HashMap<>();
-        newContainerAttributes.put(ContainerAttribute.NAME, nameInput.getText());
+        // newContainerAttributes.put(ContainerAttribute.NAME, nameInput.getText());
         newContainerAttributes.put(ContainerAttribute.WEIGHT, weightInput.getValue());
 
         this.registerContainer(newContainerAttributes);
@@ -245,15 +306,15 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JLabel nameLabel;
-    private javax.swing.JLabel nameLabel1;
-    private javax.swing.JLabel nameLabel2;
+    private javax.swing.JPanel bookedPanel;
+    private javax.swing.JComboBox<String> customerInput;
+    private javax.swing.JLabel customerLabel;
+    private javax.swing.JComboBox<String> productInput;
+    private javax.swing.JLabel productLabel;
     private javax.swing.JButton registerButton;
+    private javax.swing.JComboBox<String> templateInput;
+    private javax.swing.JLabel templateLabel;
     private javax.swing.JSpinner weightInput;
     private javax.swing.JLabel weightLabel;
-    private javax.swing.JPanel bookedPanel;
     // End of variables declaration//GEN-END:variables
 }
