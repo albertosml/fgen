@@ -5,6 +5,7 @@ import container.application.ContainerAttribute;
 import container.application.usecases.RegisterContainer;
 import container.application.utils.ContainerValidationState;
 import container.persistence.mongo.MongoContainerRepository;
+import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,12 +24,21 @@ import shared.presentation.localization.LocalizationKey;
 public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
     /**
+     * Delivery note items panel.
+     */
+    private DeliveryNoteItemsPanel deliveryNoteItemsPanel;
+
+    /**
      * Constructor.
      */
     public GenerateDeliveryNotePanel() {
         initComponents();
         initializeFormLabels();
         initializeInputs();
+
+        this.deliveryNoteItemsPanel = new DeliveryNoteItemsPanel();
+        this.bookedPanel.setLayout(new GridLayout());
+        this.bookedPanel.add(deliveryNoteItemsPanel);
     }
 
     /**
@@ -157,6 +167,18 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         nameLabel2.setText("${TEMPLATE}:");
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        bookedPanel = new javax.swing.JPanel();
+
+        javax.swing.GroupLayout bookedPanelLayout = new javax.swing.GroupLayout(bookedPanel);
+        bookedPanel.setLayout(bookedPanelLayout);
+        bookedPanelLayout.setHorizontalGroup(
+            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 388, Short.MAX_VALUE)
+        );
+        bookedPanelLayout.setVerticalGroup(
+            bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 197, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -199,10 +221,19 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                     .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(registerButton)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(81, Short.MAX_VALUE)
+                .addComponent(bookedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         Map<ContainerAttribute, Object> newContainerAttributes = new HashMap<>();
@@ -223,5 +254,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private javax.swing.JButton registerButton;
     private javax.swing.JSpinner weightInput;
     private javax.swing.JLabel weightLabel;
+    private javax.swing.JPanel bookedPanel;
     // End of variables declaration//GEN-END:variables
 }

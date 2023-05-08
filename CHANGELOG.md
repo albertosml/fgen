@@ -7,11 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.43.0] - 2023-04-21
+## [0.46.0] - 2023-05-07
 
 ### Added
 
 - Added feature to generate a delivery note.
+
+## [0.45.0] - 2023-05-07
+
+### Added
+
+- Added feature to remove a delivery note item.
+
+## [0.44.0] - 2023-05-07
+
+### Added
+
+- Added feature to edit a delivery note item.
+
+## [0.43.0] - 2023-05-01
+
+### Added
+
+- Added feature to add a delivery note item.
 
 ## [0.42.0] - 2023-04-21
 

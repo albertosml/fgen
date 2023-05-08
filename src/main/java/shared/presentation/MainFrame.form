@@ -4,6 +4,21 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
+        <Menu class="javax.swing.JMenu" name="deliveryNote">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="${DELIVERY_NOTE}"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="generateDeliveryNote">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="${GENERATE}"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateDeliveryNoteActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="customer">
           <Properties>
             <Property name="text" type="java.lang.String" value="${CUSTOMER}"/>
