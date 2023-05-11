@@ -7,6 +7,7 @@ import container.persistence.mongo.MongoContainerRepository;
 import customer.application.Customer;
 import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
+import deliverynote.application.DeliveryNoteAttribute;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -191,29 +192,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.weightInput.setValue(0);
     }
 
-    /**
-     * Execute the register container use case.
-     *
-     * @param newContainerAttributes The attributes for the container to
-     * register.
-     */
-    private void registerContainer(Map<ContainerAttribute, Object> newContainerAttributes) {
-        try {
-            MongoContainerRepository containerRepository = new MongoContainerRepository();
-            RegisterContainer registerContainer = new RegisterContainer(containerRepository);
-            ContainerValidationState state = registerContainer.execute(newContainerAttributes);
-
-            this.showInfoMessage(state);
-
-            if (state == ContainerValidationState.VALID) {
-                this.clearForm();
-            }
-        } catch (NotDefinedDatabaseContextException ex) {
-            String className = GenerateDeliveryNotePanel.class.getName();
-            Logger.getLogger(className).log(Level.INFO, "Container not registered because the database has not been found", ex);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -317,11 +295,14 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
-        Map<ContainerAttribute, Object> newContainerAttributes = new HashMap<>();
-        // newContainerAttributes.put(ContainerAttribute.NAME, nameInput.getText());
-        newContainerAttributes.put(ContainerAttribute.WEIGHT, weightInput.getValue());
+        Map<DeliveryNoteAttribute, Object> newDeliveryNoteAttributes = new HashMap<>();
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.CUSTOMER, customerInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, templateInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHT, weightInput.getValue());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, bookedPanel.);
 
-        this.registerContainer(newContainerAttributes);
+        this.generateDeliveryNote(newDeliveryNoteAttributes);
     }//GEN-LAST:event_registerButtonActionPerformed
 
 
