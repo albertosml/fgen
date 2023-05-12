@@ -7,7 +7,10 @@ import container.persistence.mongo.MongoContainerRepository;
 import customer.application.Customer;
 import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
+import deliverynote.application.DeliveryNote;
 import deliverynote.application.DeliveryNoteAttribute;
+import deliverynote.application.utils.DeliveryNoteValidationState;
+import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import shared.application.Pair;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -186,10 +190,38 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     }
 
     /**
-     * Clear all the form fields to register a container.
+     * Clear all the form fields.
      */
     private void clearForm() {
+        this.customerInput.setSelectedItem(null);
+        this.productInput.setSelectedItem(null);
+        this.templateInput.setSelectedItem(null);
         this.weightInput.setValue(0);
+        this.deliveryNoteItemsPanel.clear();
+    }
+
+    /**
+     * Execute the create delivery note use case.
+     *
+     * @param attributes Map containing the value for each delivery note
+     * attribute.
+     * @return A pair indicating the delivery note and its validation state.
+     */
+    private Pair<DeliveryNote, DeliveryNoteValidationState> createDeliveryNote(Map<DeliveryNoteAttribute, Object> attributes) {
+        try {
+            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+            CreateDeliveryNote createDeliveryNote = new CreateDeliveryNote(deliveryNoteRepository);
+            return createDeliveryNote.execute(attributes);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Delivery note cannot be created because the database has not been found", ex);
+        }
+
+        return new Pair<>(null, DeliveryNoteValidationState.INVALID);
+    }
+
+    public void generateDeliveryNote() {
+
     }
 
     @SuppressWarnings("unchecked")
@@ -300,7 +332,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, templateInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHT, weightInput.getValue());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, bookedPanel.);
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, deliveryNoteItemsPanel.getItems());
 
         this.generateDeliveryNote(newDeliveryNoteAttributes);
     }//GEN-LAST:event_registerButtonActionPerformed

@@ -1,7 +1,9 @@
 package deliverynote.application;
 
 import customer.application.Customer;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import product.application.Product;
 import template.application.Template;
@@ -10,6 +12,16 @@ import template.application.Template;
  * Delivery note element.
  */
 public class DeliveryNote {
+
+    /**
+     * The code.
+     */
+    private int code;
+
+    /**
+     * The date.
+     */
+    private Date date;
 
     /**
      * The customer.
@@ -39,18 +51,41 @@ public class DeliveryNote {
     /**
      * Constructor.
      *
+     * @param code The delivery note code.
+     * @param date The delivery note date. If it is null, it will be set to the
+     * current date time.
      * @param customer The delivery note customer.
      * @param product The delivery note product.
      * @param template The delivery note template.
      * @param weight The delivery note weight.
      * @param items The delivery note items.
      */
-    private DeliveryNote(Customer customer, Product product, Template template, double weight, ArrayList<DeliveryNoteItem> items) {
+    private DeliveryNote(int code, Date date, Customer customer, Product product, Template template, double weight, ArrayList<DeliveryNoteItem> items) {
+        this.code = code;
+        this.date = date == null ? Date.from(Instant.now()) : date;
         this.customer = customer;
         this.product = product;
         this.template = template;
         this.weight = weight;
         this.items = items;
+    }
+
+    /**
+     * Retrieve the delivery note code.
+     *
+     * @return The delivery note code.
+     */
+    public int getCode() {
+        return this.code;
+    }
+
+    /**
+     * Retrieve the delivery note date.
+     *
+     * @return The delivery note date.
+     */
+    public Date getDate() {
+        return this.date;
     }
 
     /**
@@ -106,13 +141,15 @@ public class DeliveryNote {
      * @return The created delivery note.
      */
     public static DeliveryNote from(Map<DeliveryNoteAttribute, Object> attributes) {
+        int code = (int) attributes.get(DeliveryNoteAttribute.CODE);
+        Date date = (Date) attributes.getOrDefault(DeliveryNoteAttribute.DATE, null);
         Customer customer = (Customer) attributes.get(DeliveryNoteAttribute.CUSTOMER);
         Product product = (Product) attributes.get(DeliveryNoteAttribute.PRODUCT);
         Template template = (Template) attributes.get(DeliveryNoteAttribute.TEMPLATE);
         double weight = (double) attributes.getOrDefault(DeliveryNoteAttribute.WEIGHT, 0);
         ArrayList<DeliveryNoteItem> items = (ArrayList<DeliveryNoteItem>) attributes.get(DeliveryNoteAttribute.ITEMS);
 
-        return new DeliveryNote(customer, product, template, weight, items);
+        return new DeliveryNote(code, date, customer, product, template, weight, items);
     }
 
 }

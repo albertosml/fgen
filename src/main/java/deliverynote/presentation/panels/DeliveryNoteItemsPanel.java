@@ -130,6 +130,36 @@ public class DeliveryNoteItemsPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Clear the content from the table.
+     */
+    public void clear() {
+        table.removeAll();
+    }
+
+    /**
+     * Get the registered delivery note items.
+     *
+     * @return A list with all the delivery note items set on the table.
+     */
+    public ArrayList<DeliveryNoteItem> getItems() {
+        ArrayList<DeliveryNoteItem> deliveryNoteItems = new ArrayList<>();
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            Container container = (Container) table.getValueAt(i, 0);
+            int qty = (int) table.getValueAt(i, 1);
+
+            Map<DeliveryNoteItemAttribute, Object> attributes = new HashMap<>();
+            attributes.put(DeliveryNoteItemAttribute.CONTAINER, container);
+            attributes.put(DeliveryNoteItemAttribute.QTY, qty);
+
+            DeliveryNoteItem item = DeliveryNoteItem.from(attributes);
+            deliveryNoteItems.add(item);
+        }
+
+        return deliveryNoteItems;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
