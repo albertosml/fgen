@@ -25,6 +25,10 @@ public enum DeliveryNoteValidationState {
      */
     INVALID_WEIGHT,
     /**
+     * Invalid delivery note items.
+     */
+    INVALID_ITEMS,
+    /**
      * Invalid delivery note.
      */
     INVALID,

@@ -9,9 +9,12 @@ import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
 import deliverynote.application.DeliveryNote;
 import deliverynote.application.DeliveryNoteAttribute;
+import deliverynote.application.usecases.CreateDeliveryNote;
 import deliverynote.application.utils.DeliveryNoteValidationState;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +24,11 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
@@ -172,17 +177,19 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     }
 
     /**
-     * Show the information message after the registration process.
+     * Show the information message after the generation process.
      *
-     * @param state The container validation state.
+     * @param state The delivery note validation state.
      */
-    private void showInfoMessage(ContainerValidationState state) {
-        Map<ContainerValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
-        localizationKeysByState.put(ContainerValidationState.VALID, LocalizationKey.REGISTERED_CONTAINER_MESSAGE);
-        localizationKeysByState.put(ContainerValidationState.INVALID_CODE, LocalizationKey.INVALID_CODE_MESSAGE);
-        localizationKeysByState.put(ContainerValidationState.INVALID_NAME, LocalizationKey.INVALID_NAME_MESSAGE);
-        localizationKeysByState.put(ContainerValidationState.INVALID_WEIGHT, LocalizationKey.INVALID_WEIGHT_MESSAGE);
-        localizationKeysByState.put(ContainerValidationState.DUPLICATED, LocalizationKey.DUPLICATED_CONTAINER_MESSAGE);
+    private void showInfoMessage(DeliveryNoteValidationState state) {
+        Map<DeliveryNoteValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
+        localizationKeysByState.put(DeliveryNoteValidationState.VALID, LocalizationKey.GENERATED_DELIVERY_NOTE_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_CUSTOMER, LocalizationKey.INVALID_CUSTOMER_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PRODUCT, LocalizationKey.INVALID_PRODUCT_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_TEMPLATE, LocalizationKey.INVALID_TEMPLATE_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_WEIGHT, LocalizationKey.INVALID_WEIGHT_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_ITEMS, LocalizationKey.INVALID_DELIVERY_NOTE_ITEMS_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID, LocalizationKey.NOT_GENERATED_DELIVERY_NOTE_MESSAGE);
 
         LocalizationKey key = localizationKeysByState.get(state);
         String infoMessage = Localization.getLocalization(key);
@@ -218,6 +225,30 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         }
 
         return new Pair<>(null, DeliveryNoteValidationState.INVALID);
+    }
+
+    /**
+     * Select the file where the delivery note will be saved.
+     *
+     * Note that the generated file will be a PDF.
+     *
+     * @return The file where the delivery note will be generated.
+     */
+    private File selectDeliveryNoteFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        // Supported formats (PDF).
+        FileNameExtensionFilter pdfFilesFilter = new FileNameExtensionFilter("PDF files", "pdf");
+        fileChooser.setFileFilter(pdfFilesFilter);
+
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+
+        return null;
     }
 
     public void generateDeliveryNote() {
@@ -334,7 +365,27 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHT, weightInput.getValue());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, deliveryNoteItemsPanel.getItems());
 
-        this.generateDeliveryNote(newDeliveryNoteAttributes);
+        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
+
+        DeliveryNote deliveryNote = deliveryNotePair.getFirst();
+        if (deliveryNote != null) {
+            File file = this.selectDeliveryNoteFile();
+
+            if (file == null) {
+                this.showInfoMessage(DeliveryNoteValidationState.INVALID);
+                return;
+            }
+
+            try {
+                DeliveryNoteGenerator.generate(deliveryNote, file);
+            } catch (IOException | InterruptedException ex) {
+                this.showInfoMessage(DeliveryNoteValidationState.INVALID);
+                return;
+            }
+        }
+
+        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
+        this.showInfoMessage(state);
     }//GEN-LAST:event_registerButtonActionPerformed
 
 

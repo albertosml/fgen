@@ -114,6 +114,13 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.DELIVERY_NOTE, "Albarán");
         super.setTranslation(LocalizationKey.INVALID_CONTAINER_MESSAGE, "El contenedor introducido es inválido");
         super.setTranslation(LocalizationKey.INVALID_QTY_MESSAGE, "La cantidad introducida es inválida");
+        super.setTranslation(LocalizationKey.GENERATED_DELIVERY_NOTE_MESSAGE, "El albarán se ha generado con éxito");
+        super.setTranslation(LocalizationKey.INVALID_CUSTOMER_MESSAGE, "Cliente no válido");
+        super.setTranslation(LocalizationKey.INVALID_PRODUCT_MESSAGE, "Producto no válido");
+        super.setTranslation(LocalizationKey.INVALID_TEMPLATE_MESSAGE, "Plantilla no válida");
+        super.setTranslation(LocalizationKey.INVALID_WEIGHT_MESSAGE, "Peso no válido");
+        super.setTranslation(LocalizationKey.INVALID_DELIVERY_NOTE_ITEMS_MESSAGE, "Elementos del albarán no válidos");
+        super.setTranslation(LocalizationKey.NOT_GENERATED_DELIVERY_NOTE_MESSAGE, "El albarán no se ha podido generar");
     }
 
 }

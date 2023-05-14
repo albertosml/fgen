@@ -413,5 +413,28 @@ public enum LocalizationKey {
      * Message shown when the introduced quantity is invalid.
      */
     INVALID_QTY_MESSAGE,
-
+    /**
+     * Generated delivery note message.
+     */
+    GENERATED_DELIVERY_NOTE_MESSAGE,
+    /**
+     * Invalid customer message.
+     */
+    INVALID_CUSTOMER_MESSAGE,
+    /**
+     * Invalid product message.
+     */
+    INVALID_PRODUCT_MESSAGE,
+    /**
+     * Invalid template message.
+     */
+    INVALID_TEMPLATE_MESSAGE,
+    /**
+     * Invalid delivery note items message.
+     */
+    INVALID_DELIVERY_NOTE_ITEMS_MESSAGE,
+    /**
+     * Not generated delivery note message.
+     */
+    NOT_GENERATED_DELIVERY_NOTE_MESSAGE,
 }
