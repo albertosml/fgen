@@ -9,6 +9,7 @@ import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
 import customer.application.Customer;
+import deliverynote.application.DeliveryNote;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,60 +44,42 @@ public class DeliveryNoteGenerator {
      * @return An object indicating the requested value, as the value can be a
      * string, a list, etc...
      */
-    private static Object getValue(Variable variable, Invoice invoice) {
+    private static Object getValue(Variable variable, DeliveryNote deliveryNote) {
         EntityAttribute entityAttribute = variable.getAttribute();
 
         switch (entityAttribute) {
-            case SENDER_CUSTOMER_CODE:
-                return invoice.getSender().getCode();
-            case SENDER_CUSTOMER_NAME:
-                return invoice.getSender().getName();
-            case SENDER_CUSTOMER_TIN:
-                return invoice.getSender().getTin();
-            case SENDER_CUSTOMER_ADDRESS:
-                return invoice.getSender().getAddress();
-            case SENDER_CUSTOMER_CITY:
-                return invoice.getSender().getCity();
-            case SENDER_CUSTOMER_PROVINCE:
-                return invoice.getSender().getProvince();
-            case SENDER_CUSTOMER_ZIPCODE:
-                return invoice.getSender().getZipCode();
-            case SENDER_CUSTOMER_IBAN:
-                return invoice.getSender().getIban();
-            case RECIPIENT_CUSTOMER_CODE:
-                return invoice.getRecipient().getCode();
-            case RECIPIENT_CUSTOMER_NAME:
-                return invoice.getRecipient().getName();
-            case RECIPIENT_CUSTOMER_TIN:
-                return invoice.getRecipient().getTin();
-            case RECIPIENT_CUSTOMER_ADDRESS:
-                return invoice.getRecipient().getAddress();
-            case RECIPIENT_CUSTOMER_CITY:
-                return invoice.getRecipient().getCity();
-            case RECIPIENT_CUSTOMER_PROVINCE:
-                return invoice.getRecipient().getProvince();
-            case RECIPIENT_CUSTOMER_ZIPCODE:
-                return invoice.getRecipient().getZipCode();
-            case RECIPIENT_CUSTOMER_IBAN:
-                return invoice.getRecipient().getIban();
-            case INVOICE_CODE:
-                return invoice.getCode();
-            case INVOICE_GENERATION_DATETIME:
-                return invoice.getDatetime();
-            case INVOICE_ITEMS:
-                return invoice.getItems();
-            case INVOICE_ITEMS_TOTAL:
-                return invoice.getItemsTotal();
-            case INVOICE_SUBTOTAL:
-                SubtotalVariable subtotalVariable = (SubtotalVariable) variable;
-                Subtotal subtotal = subtotalVariable.getSubtotal();
-                float invoiceItemsTotal = invoice.getItemsTotal();
-
-                //invoice.getTemplate().g
-                return subtotal.calculate(invoiceItemsTotal);
-            case INVOICE_TOTAL:
-                //return invoice.getTotal();
-                return 4;
+            case CUSTOMER_CODE:
+                return deliveryNote.getCustomer().getCode();
+            case CUSTOMER_NAME:
+                return deliveryNote.getCustomer().getName();
+            case CUSTOMER_TIN:
+                return deliveryNote.getCustomer().getTin();
+            case CUSTOMER_ADDRESS:
+                return deliveryNote.getCustomer().getAddress();
+            case CUSTOMER_CITY:
+                return deliveryNote.getCustomer().getCity();
+            case CUSTOMER_PROVINCE:
+                return deliveryNote.getCustomer().getProvince();
+            case CUSTOMER_ZIPCODE:
+                return deliveryNote.getCustomer().getZipCode();
+            case CUSTOMER_IBAN:
+                return deliveryNote.getCustomer().getIban();
+            case PRODUCT_CODE:
+                return deliveryNote.getProduct().getCode();
+            case PRODUCT_NAME:
+                return deliveryNote.getProduct().getName();
+            case PRODUCT_PRICE:
+                return deliveryNote.getProduct().getPrice();
+            case DELIVERY_NOTE_TOTAL_WEIGHT:
+                return deliveryNote.getWeight();
+            case DELIVERY_NOTE_NET_WEIGHT:
+                return deliveryNote.calculateNetWeight();
+            case DELIVERY_NOTE_ITEMS:
+                return deliveryNote.getItems();
+            case DELIVERY_NOTE_CODE:
+                return deliveryNote.getCode();
+            case DELIVERY_NOTE_GENERATION_DATETIME:
+                return deliveryNote.getDate();
         }
 
         return null;
