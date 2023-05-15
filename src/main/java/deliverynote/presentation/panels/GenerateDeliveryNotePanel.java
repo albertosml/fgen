@@ -10,6 +10,7 @@ import customer.persistence.mongo.MongoCustomerRepository;
 import deliverynote.application.DeliveryNote;
 import deliverynote.application.DeliveryNoteAttribute;
 import deliverynote.application.usecases.CreateDeliveryNote;
+import deliverynote.application.utils.DeliveryNoteGenerator;
 import deliverynote.application.utils.DeliveryNoteValidationState;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.awt.GridLayout;

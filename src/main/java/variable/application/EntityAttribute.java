@@ -70,7 +70,11 @@ public enum EntityAttribute {
     /**
      * Delivery note date time.
      */
-    DELIVERY_NOTE_GENERATION_DATETIME;
+    DELIVERY_NOTE_GENERATION_DATETIME,
+    /**
+     * Subtotal.
+     */
+    SUBTOTAL;
 
     /**
      * Gets the text to show for the corresponding enumeration value.

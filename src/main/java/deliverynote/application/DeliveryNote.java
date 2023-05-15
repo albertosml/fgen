@@ -1,5 +1,6 @@
 package deliverynote.application;
 
+import container.application.Container;
 import customer.application.Customer;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -68,6 +69,19 @@ public class DeliveryNote {
         this.template = template;
         this.weight = weight;
         this.items = items;
+    }
+
+    public double calculateNetWeight() {
+        double net_weight = this.weight;
+
+        for (DeliveryNoteItem deliveryNoteItem : this.items) {
+            Container container = deliveryNoteItem.getContainer();
+            int qty = deliveryNoteItem.getQty();
+
+            net_weight -= container.getWeight() * qty;
+        }
+
+        return net_weight;
     }
 
     /**

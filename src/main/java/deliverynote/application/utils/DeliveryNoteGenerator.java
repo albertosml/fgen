@@ -8,7 +8,6 @@ import com.gembox.spreadsheet.HtmlSaveOptions;
 import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
-import customer.application.Customer;
 import deliverynote.application.DeliveryNote;
 import java.io.File;
 import java.io.FileInputStream;
@@ -110,14 +109,14 @@ public class DeliveryNoteGenerator {
     }
 
     /**
-     * Generate the invoice.
+     * Generate the delivery note.
      *
-     * @param invoice The invoice.
+     * @param deliveryNote The delivery note.
      * @param file The file where the invoice must be saved.
      * @throws java.io.IOException
      */
-    public static void generate(Invoice invoice, File file) throws IOException, InterruptedException {
-        Template template = invoice.getTemplate();
+    public static void generate(DeliveryNote deliveryNote, File file) throws IOException, InterruptedException {
+        Template template = deliveryNote.getTemplate();
 
         SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
         SpreadsheetInfo.addFreeLimitReachedListener(args -> args.setFreeLimitReachedAction(FreeLimitReachedAction.CONTINUE_AS_TRIAL));
@@ -128,7 +127,7 @@ public class DeliveryNoteGenerator {
         ExcelWorksheet worksheet = workbook.getWorksheet(0);
 
         Pattern pattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, EntityAttribute> variables = InvoiceGenerator.getVariables();
+        Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
         Map<String, String> templateFields = template.getFields();
         for (Map.Entry<String, String> field : templateFields.entrySet()) {
             String position = field.getKey();
@@ -141,13 +140,11 @@ public class DeliveryNoteGenerator {
                 return variables.get(variableName).name();
             });
 
-            // PENSAR SOBRE RANGOS Y ORDEN DE SUBTOTALES DE CARA A CALCULAR EL TOTAL GLOBAL
             ExcelCell cell = worksheet.getCell(position);
             cell.setValue(replacedExpression);
         }
 
-        Timestamp timestamp = Timestamp.from(Instant.now());
-        File tmpHtmlFile = File.createTempFile(timestamp.toString(), ".html");
+        File tmpHtmlFile = File.createTempFile(Long.toString(deliveryNote.getDate().getTime()), ".html");
         tmpHtmlFile.deleteOnExit();
         OutputStream htmlStream = new FileOutputStream(tmpHtmlFile);
         workbook.save(htmlStream, new HtmlSaveOptions());

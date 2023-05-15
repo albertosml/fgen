@@ -50,5 +50,16 @@
             <artifactId>swingx-autocomplete</artifactId>
             <version>1.6.8</version>
         </dependency>
+        <!-- Manually install the artifact which is located on the "lib" folder -->
+        <dependency>
+            <groupId>gembox-spreadsheet</groupId>
+            <artifactId>gembox-spreadsheet</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jhonnymertz</groupId>
+            <artifactId>java-wkhtmltopdf-wrapper</artifactId>
+            <version>1.1.15-RELEASE</version>
+        </dependency>
     </dependencies>
 </project>
