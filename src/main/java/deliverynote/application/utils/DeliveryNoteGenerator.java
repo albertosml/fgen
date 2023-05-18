@@ -8,6 +8,7 @@ import com.gembox.spreadsheet.HtmlSaveOptions;
 import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 import deliverynote.application.DeliveryNote;
 import java.io.File;
 import java.io.FileInputStream;
@@ -151,6 +152,7 @@ public class DeliveryNoteGenerator {
 
         String executable = WrapperConfig.findExecutable();
         Pdf pdf = new Pdf(new WrapperConfig(executable));
+        pdf.addParam(new Param("--page-size", "A5"));
         pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
         pdf.saveAs(file.getAbsolutePath());
     }
