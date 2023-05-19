@@ -12,7 +12,6 @@ import product.persistence.mongo.MongoProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
-import variable.persistence.mongo.MongoVariableRepository;
 
 /**
  * Mouse adapter for the list products panel, which includes a button to remove
@@ -78,7 +77,7 @@ public class ListProductsMouseAdapter extends MouseAdapter {
      * @param evt The mouse event.
      */
     private void removeOrRestoreProduct(MouseEvent evt) {
-        int removeRestoreColumn = 3;
+        int removeRestoreColumn = 2;
         int row = table.rowAtPoint(evt.getPoint());
 
         TableModel tableModel = table.getModel();
@@ -113,8 +112,8 @@ public class ListProductsMouseAdapter extends MouseAdapter {
     public void mouseClicked(MouseEvent evt) {
         int column = table.columnAtPoint(evt.getPoint());
 
-        if (column == 3) {
-            // In column 3, there is a button to restore or remove
+        if (column == 2) {
+            // In column 2, there is a button to restore or remove
             // the chosen product defined by the clicked row.
             this.removeOrRestoreProduct(evt);
         }

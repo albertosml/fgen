@@ -38,7 +38,6 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
 
         document.append("code", product.getCode());
         document.append("name", product.getName());
-        document.append("price", product.getPrice());
         document.append("isDeleted", product.isDeleted());
 
         return document;
@@ -55,7 +54,6 @@ public class MongoProductRepository extends MongoRepository implements ProductRe
         Map<ProductAttribute, Object> attributes = new HashMap<>();
         attributes.put(ProductAttribute.CODE, document.get("code"));
         attributes.put(ProductAttribute.NAME, document.get("name"));
-        attributes.put(ProductAttribute.PRICE, document.get("price"));
         attributes.put(ProductAttribute.ISDELETED, document.get("isDeleted"));
 
         return Product.from(attributes);

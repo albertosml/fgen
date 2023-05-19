@@ -10,6 +10,5 @@ import customer.application.*;
 public enum ProductAttribute {
     CODE,
     NAME,
-    PRICE,
     ISDELETED;
 }

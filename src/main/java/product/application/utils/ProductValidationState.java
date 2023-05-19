@@ -17,10 +17,6 @@ public enum ProductValidationState {
      */
     INVALID_NAME,
     /**
-     * Invalid product because of the price.
-     */
-    INVALID_PRICE,
-    /**
      * Invalid product because it has a duplicated code.
      */
     DUPLICATED

@@ -4,7 +4,6 @@ import product.application.Product;
 import product.persistence.ProductRepository;
 import shared.application.utils.CodeValidator;
 import shared.application.utils.NameValidator;
-import shared.application.utils.PriceValidator;
 
 /**
  * Validate the product.
@@ -28,11 +27,6 @@ public class ProductValidator {
         boolean isValidName = NameValidator.isValid(product.getName());
         if (!isValidName) {
             return ProductValidationState.INVALID_NAME;
-        }
-
-        boolean isValidPrice = PriceValidator.isValid(product.getPrice());
-        if (!isValidPrice) {
-            return ProductValidationState.INVALID_PRICE;
         }
 
         boolean isValidCode = CodeValidator.isValid(product.getCode());
