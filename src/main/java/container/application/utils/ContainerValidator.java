@@ -7,7 +7,6 @@ import product.application.Product;
 import product.persistence.ProductRepository;
 import shared.application.utils.CodeValidator;
 import shared.application.utils.NameValidator;
-import shared.application.utils.PriceValidator;
 import shared.application.utils.WeightValidator;
 
 /**

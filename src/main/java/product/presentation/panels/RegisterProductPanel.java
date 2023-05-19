@@ -27,7 +27,6 @@ public class RegisterProductPanel extends javax.swing.JPanel {
     public RegisterProductPanel() {
         initComponents();
         initializeFormLabels();
-        initializeInputs();
     }
 
     /**
@@ -59,17 +58,7 @@ public class RegisterProductPanel extends javax.swing.JPanel {
     private void initializeFormLabels() {
         this.setLabelText(codeLabel, LocalizationKey.CODE);
         this.setLabelText(nameLabel, LocalizationKey.NAME);
-        this.setLabelText(priceLabel, LocalizationKey.PRICE);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
-    }
-
-    /**
-     * Initialize inputs.
-     */
-    private void initializeInputs() {
-        // Price input.
-        SpinnerNumberModel priceSpinnerNumberModel = new SpinnerNumberModel(0d, 0d, 1e11d, 0.01d);
-        this.priceInput.setModel(priceSpinnerNumberModel);
     }
 
     /**
@@ -82,7 +71,6 @@ public class RegisterProductPanel extends javax.swing.JPanel {
         localizationKeysByState.put(ProductValidationState.VALID, LocalizationKey.REGISTERED_PRODUCT_MESSAGE);
         localizationKeysByState.put(ProductValidationState.INVALID_CODE, LocalizationKey.INVALID_CODE_MESSAGE);
         localizationKeysByState.put(ProductValidationState.INVALID_NAME, LocalizationKey.INVALID_NAME_MESSAGE);
-        localizationKeysByState.put(ProductValidationState.INVALID_PRICE, LocalizationKey.INVALID_PRICE_MESSAGE);
         localizationKeysByState.put(ProductValidationState.DUPLICATED, LocalizationKey.DUPLICATED_PRODUCT_MESSAGE);
 
         LocalizationKey key = localizationKeysByState.get(state);
@@ -96,7 +84,6 @@ public class RegisterProductPanel extends javax.swing.JPanel {
     private void clearForm() {
         this.codeInput.setText("");
         this.nameInput.setText("");
-        this.priceInput.setValue(0);
     }
 
     /**
@@ -128,18 +115,12 @@ public class RegisterProductPanel extends javax.swing.JPanel {
         codeLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
         nameInput = new javax.swing.JTextField();
-        priceLabel = new javax.swing.JLabel();
-        priceInput = new javax.swing.JSpinner();
         registerButton = new javax.swing.JButton();
         codeInput = new javax.swing.JTextField();
 
         codeLabel.setText("${CODE}:");
 
         nameLabel.setText("${NAME}:");
-
-        priceLabel.setText("${PRICE}:");
-
-        priceInput.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
 
         registerButton.setText("${REGISTER}");
         registerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -155,14 +136,12 @@ public class RegisterProductPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(priceLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(codeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(codeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nameInput)
                     .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                    .addComponent(priceInput)
                     .addComponent(codeInput))
                 .addGap(61, 61, 61))
         );
@@ -177,13 +156,9 @@ public class RegisterProductPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(priceLabel)
-                    .addComponent(priceInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(registerButton)
-                .addContainerGap())
+                .addGap(33, 33, 33))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -192,7 +167,6 @@ public class RegisterProductPanel extends javax.swing.JPanel {
         Map<ProductAttribute, Object> newProductAttributes = new HashMap<>();
         newProductAttributes.put(ProductAttribute.CODE, codeInput.getText());
         newProductAttributes.put(ProductAttribute.NAME, nameInput.getText());
-        newProductAttributes.put(ProductAttribute.PRICE, priceInput.getValue());
 
         this.registerProduct(newProductAttributes);
     }//GEN-LAST:event_registerButtonActionPerformed
@@ -203,8 +177,6 @@ public class RegisterProductPanel extends javax.swing.JPanel {
     private javax.swing.JLabel codeLabel;
     private javax.swing.JTextField nameInput;
     private javax.swing.JLabel nameLabel;
-    private javax.swing.JSpinner priceInput;
-    private javax.swing.JLabel priceLabel;
     private javax.swing.JButton registerButton;
     // End of variables declaration//GEN-END:variables
 }
