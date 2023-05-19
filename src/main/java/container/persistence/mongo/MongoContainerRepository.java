@@ -39,6 +39,7 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         attributes.put(ContainerAttribute.CODE, document.get("code"));
         attributes.put(ContainerAttribute.NAME, document.get("name"));
         attributes.put(ContainerAttribute.WEIGHT, document.get("weight"));
+        attributes.put(ContainerAttribute.ISBOX, document.get("isBox"));
         attributes.put(ContainerAttribute.ISDELETED, document.get("isDeleted"));
 
         return Container.from(attributes);
@@ -56,6 +57,7 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         document.append("code", container.getCode());
         document.append("name", container.getName());
         document.append("weight", container.getWeight());
+        document.append("isBox", container.isBox());
         document.append("isDeleted", container.isDeleted());
 
         return document;

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.47.0] - 2023-05-20
+
+### Removed
+
+- Add distinction between pallet and box on the container entity.
+
 ## [0.46.0] - 2023-05-19
 
 ### Removed
