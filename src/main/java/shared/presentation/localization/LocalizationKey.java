@@ -413,5 +413,9 @@ public enum LocalizationKey {
      * Message shown when the introduced quantity is invalid.
      */
     INVALID_QTY_MESSAGE,
+    /**
+     * Whether the container is a box or a pallet.
+     */
+    IS_BOX,
 
 }

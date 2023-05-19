@@ -23,6 +23,11 @@ public class Container {
     private double weight;
 
     /**
+     * Whether the container is a box or a pallet.
+     */
+    private boolean isBox;
+
+    /**
      * Whether the container is deleted or not.
      */
     private boolean isDeleted;
@@ -33,12 +38,14 @@ public class Container {
      * @param code Container code.
      * @param name Container name.
      * @param weight Container weight.
+     * @param isBox Whether the container is a box or a pallet.
      * @param isDeleted Whether the container is deleted or not.
      */
-    private Container(int code, String name, double weight, boolean isDeleted) {
+    private Container(int code, String name, double weight, boolean isBox, boolean isDeleted) {
         this.code = code;
         this.name = name;
         this.weight = weight;
+        this.isBox = isBox;
         this.isDeleted = isDeleted;
     }
 
@@ -67,6 +74,15 @@ public class Container {
      */
     public double getWeight() {
         return this.weight;
+    }
+
+    /**
+     * Whether the container is a box or a pallet.
+     *
+     * @return true if the container is a box, false if it is a pallet.
+     */
+    public boolean isBox() {
+        return this.isBox;
     }
 
     /**
@@ -108,9 +124,10 @@ public class Container {
         String name = (String) attributes.getOrDefault(ContainerAttribute.NAME, "");
         Object weightValue = attributes.getOrDefault(ContainerAttribute.WEIGHT, "0");
         double weight = Double.parseDouble(weightValue.toString());
+        boolean isBox = (boolean) attributes.getOrDefault(ContainerAttribute.ISBOX, true);
         boolean isDeleted = (boolean) attributes.getOrDefault(ContainerAttribute.ISDELETED, false);
 
-        return new Container(code, name, weight, isDeleted);
+        return new Container(code, name, weight, isBox, isDeleted);
     }
 
 }

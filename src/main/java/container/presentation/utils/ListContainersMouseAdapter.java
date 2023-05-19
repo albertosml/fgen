@@ -79,7 +79,7 @@ public class ListContainersMouseAdapter extends MouseAdapter {
      * @param evt The mouse event.
      */
     private void removeOrRestoreContainer(MouseEvent evt) {
-        int removeRestoreColumn = 3;
+        int removeRestoreColumn = 4;
         int row = table.rowAtPoint(evt.getPoint());
 
         TableModel tableModel = table.getModel();
@@ -114,8 +114,8 @@ public class ListContainersMouseAdapter extends MouseAdapter {
     public void mouseClicked(MouseEvent evt) {
         int column = table.columnAtPoint(evt.getPoint());
 
-        if (column == 3) {
-            // In column 3, there is a button to restore or remove
+        if (column == 4) {
+            // In column 4, there is a button to restore or remove
             // the chosen contianer defined by the clicked row.
             this.removeOrRestoreContainer(evt);
         }
