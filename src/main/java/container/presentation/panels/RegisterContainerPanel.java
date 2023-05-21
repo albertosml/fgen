@@ -96,6 +96,7 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
     private void clearForm() {
         this.nameInput.setText("");
         this.weightInput.setValue(0);
+        this.isBoxInput.setSelected(false);
     }
 
     /**

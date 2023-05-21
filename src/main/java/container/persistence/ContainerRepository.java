@@ -1,5 +1,6 @@
 package container.persistence;
 
+import container.application.Box;
 import container.application.Container;
 import java.util.ArrayList;
 import shared.persistence.Repository;
@@ -26,6 +27,14 @@ public interface ContainerRepository extends Repository {
      * @return A list with all containers.
      */
     public ArrayList<Container> get(boolean includeRemoved);
+
+    /**
+     * Obtain all the boxes registered on the system.
+     *
+     * @param includeRemoved Whether we should include removed boxes or not.
+     * @return A list with all boxes.
+     */
+    public ArrayList<Box> getBoxes(boolean includeRemoved);
 
     /**
      * Get the code from all containers from the repository.

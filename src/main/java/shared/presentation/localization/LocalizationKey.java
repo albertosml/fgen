@@ -417,5 +417,28 @@ public enum LocalizationKey {
      * Whether the container is a box or a pallet.
      */
     IS_BOX,
-
+    /**
+     * Weighings.
+     */
+    WEIGHINGS,
+    /**
+     * Box.
+     */
+    BOX,
+    /**
+     * Boxes quantity.
+     */
+    BOXES_QTY,
+    /**
+     * Gross weight.
+     */
+    GROSS_WEIGHT,
+    /**
+     * Invalid box message.
+     */
+    INVALID_BOX_MESSAGE,
+    /**
+     * Number of pallets.
+     */
+    NUM_PALLETS,
 }
