@@ -1,6 +1,7 @@
 package container.persistence.mongo;
 
 import com.mongodb.client.model.Filters;
+import container.application.Box;
 import container.application.Container;
 import container.application.ContainerAttribute;
 import container.persistence.ContainerRepository;
@@ -39,6 +40,7 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         attributes.put(ContainerAttribute.CODE, document.get("code"));
         attributes.put(ContainerAttribute.NAME, document.get("name"));
         attributes.put(ContainerAttribute.WEIGHT, document.get("weight"));
+        attributes.put(ContainerAttribute.ISBOX, document.get("isBox"));
         attributes.put(ContainerAttribute.ISDELETED, document.get("isDeleted"));
 
         return Container.from(attributes);
@@ -56,6 +58,7 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         document.append("code", container.getCode());
         document.append("name", container.getName());
         document.append("weight", container.getWeight());
+        document.append("isBox", container.isBox());
         document.append("isDeleted", container.isDeleted());
 
         return document;
@@ -113,6 +116,22 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         }
 
         return containers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Box> getBoxes(boolean includeRemoved) {
+        ArrayList<Box> boxes = new ArrayList<>();
+
+        for (Container container : this.get(includeRemoved)) {
+            if (container instanceof Box) {
+                boxes.add((Box) container);
+            }
+        }
+
+        return boxes;
     }
 
     /**

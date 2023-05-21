@@ -113,8 +113,15 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_PRODUCT_MESSAGE, "Producto no válido");
         super.setTranslation(LocalizationKey.INVALID_TEMPLATE_MESSAGE, "Plantilla no válida");
         super.setTranslation(LocalizationKey.INVALID_WEIGHT_MESSAGE, "Peso no válido");
-        super.setTranslation(LocalizationKey.INVALID_DELIVERY_NOTE_ITEMS_MESSAGE, "Elementos del albarán no válidos");
+        super.setTranslation(LocalizationKey.INVALID_WEIGHINGS_MESSAGE, "Pesadas no válidas");
         super.setTranslation(LocalizationKey.NOT_GENERATED_DELIVERY_NOTE_MESSAGE, "El albarán no se ha podido generar");
+        super.setTranslation(LocalizationKey.IS_BOX, "¿Es caja?");
+        super.setTranslation(LocalizationKey.WEIGHINGS, "Pesadas");
+        super.setTranslation(LocalizationKey.BOX, "Caja");
+        super.setTranslation(LocalizationKey.BOXES_QTY, "Cantidad de cajas");
+        super.setTranslation(LocalizationKey.GROSS_WEIGHT, "Peso bruto (en kilos)");
+        super.setTranslation(LocalizationKey.INVALID_BOX_MESSAGE, "Caja inválida");
+        super.setTranslation(LocalizationKey.NUM_PALLETS, "Número de pallets");
     }
 
 }

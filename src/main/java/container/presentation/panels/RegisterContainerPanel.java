@@ -59,6 +59,7 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
     private void initializeFormLabels() {
         this.setLabelText(nameLabel, LocalizationKey.NAME);
         this.setLabelText(weightLabel, LocalizationKey.WEIGHT);
+        this.setLabelText(isBoxLabel, LocalizationKey.IS_BOX);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
     }
 
@@ -95,6 +96,7 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
     private void clearForm() {
         this.nameInput.setText("");
         this.weightInput.setValue(0);
+        this.isBoxInput.setSelected(false);
     }
 
     /**
@@ -126,13 +128,15 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
 
         nameLabel = new javax.swing.JLabel();
         nameInput = new javax.swing.JTextField();
-        weightLabel = new javax.swing.JLabel();
+        isBoxLabel = new javax.swing.JLabel();
         weightInput = new javax.swing.JSpinner();
         registerButton = new javax.swing.JButton();
+        weightLabel = new javax.swing.JLabel();
+        isBoxInput = new javax.swing.JCheckBox();
 
         nameLabel.setText("${NAME}:");
 
-        weightLabel.setText("${WEIGHT}:");
+        isBoxLabel.setText("${IS_BOX}:");
 
         weightInput.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
 
@@ -143,6 +147,8 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
             }
         });
 
+        weightLabel.setText("${WEIGHT}:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,14 +156,20 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(weightLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(isBoxLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(weightLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameInput)
-                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                    .addComponent(weightInput))
-                .addGap(61, 61, 61))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameInput)
+                            .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(weightInput))
+                        .addGap(61, 61, 61))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(isBoxInput)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,11 +180,15 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
                     .addComponent(nameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(weightLabel)
-                    .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
+                    .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weightLabel))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isBoxLabel)
+                    .addComponent(isBoxInput))
+                .addGap(18, 18, 18)
                 .addComponent(registerButton)
-                .addContainerGap())
+                .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -181,12 +197,15 @@ public class RegisterContainerPanel extends javax.swing.JPanel {
         Map<ContainerAttribute, Object> newContainerAttributes = new HashMap<>();
         newContainerAttributes.put(ContainerAttribute.NAME, nameInput.getText());
         newContainerAttributes.put(ContainerAttribute.WEIGHT, weightInput.getValue());
+        newContainerAttributes.put(ContainerAttribute.ISBOX, isBoxInput.isSelected());
 
         this.registerContainer(newContainerAttributes);
     }//GEN-LAST:event_registerButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox isBoxInput;
+    private javax.swing.JLabel isBoxLabel;
     private javax.swing.JTextField nameInput;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JButton registerButton;

@@ -9,5 +9,6 @@ public enum ContainerAttribute {
     CODE,
     NAME,
     WEIGHT,
+    ISBOX,
     ISDELETED;
 }

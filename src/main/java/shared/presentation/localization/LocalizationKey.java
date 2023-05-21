@@ -406,11 +406,38 @@ public enum LocalizationKey {
      */
     INVALID_TEMPLATE_MESSAGE,
     /**
-     * Invalid delivery note items message.
+     * Invalid weighings message.
      */
-    INVALID_DELIVERY_NOTE_ITEMS_MESSAGE,
+    INVALID_WEIGHINGS_MESSAGE,
     /**
      * Not generated delivery note message.
      */
     NOT_GENERATED_DELIVERY_NOTE_MESSAGE,
+     * Whether the container is a box or a pallet.
+     */
+    IS_BOX,
+    /**
+     * Weighings.
+     */
+    WEIGHINGS,
+    /**
+     * Box.
+     */
+    BOX,
+    /**
+     * Boxes quantity.
+     */
+    BOXES_QTY,
+    /**
+     * Gross weight.
+     */
+    GROSS_WEIGHT,
+    /**
+     * Invalid box message.
+     */
+    INVALID_BOX_MESSAGE,
+    /**
+     * Number of pallets.
+     */
+    NUM_PALLETS,
 }

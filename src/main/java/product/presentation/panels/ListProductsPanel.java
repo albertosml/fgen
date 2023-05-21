@@ -55,7 +55,6 @@ public class ListProductsPanel extends javax.swing.JPanel {
         Vector<String> columnNames = new Vector<>();
         columnNames.add(Localization.getLocalization(LocalizationKey.CODE));
         columnNames.add(Localization.getLocalization(LocalizationKey.NAME));
-        columnNames.add(Localization.getLocalization(LocalizationKey.PRICE));
         columnNames.add("");
 
         return columnNames;
@@ -81,11 +80,7 @@ public class ListProductsPanel extends javax.swing.JPanel {
             String productName = product.getName();
             rowData.add(productName);
 
-            // Column 3: Product price.
-            double productPrice = product.getPrice();
-            rowData.add(productPrice);
-
-            // Column 4: Empty name. It will show a button to remove or restore
+            // Column 3: Empty name. It will show a button to remove or restore
             // a customer.
             String removeName = Localization.getLocalization(LocalizationKey.REMOVE);
             String restoreName = Localization.getLocalization(LocalizationKey.RESTORE);
@@ -113,7 +108,7 @@ public class ListProductsPanel extends javax.swing.JPanel {
             table.addMouseListener(new ListProductsMouseAdapter(table));
 
             // Set a button renderer for the action button.
-            TableColumn removeRestoreProductColumn = table.getColumn(columnNames.get(3));
+            TableColumn removeRestoreProductColumn = table.getColumn(columnNames.get(2));
             removeRestoreProductColumn.setCellRenderer(new ButtonRenderer());
         }
     }

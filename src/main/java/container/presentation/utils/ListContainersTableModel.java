@@ -49,6 +49,9 @@ public class ListContainersTableModel extends DefaultTableModel {
         Object containerWeight = column == 2 ? newValue : super.getValueAt(row, 2);
         containerAttributes.put(ContainerAttribute.WEIGHT, containerWeight);
 
+        Object containerIsBox = column == 3 ? newValue : super.getValueAt(row, 3);
+        containerAttributes.put(ContainerAttribute.ISBOX, containerIsBox);
+
         // Container can be only updated if it is not deleted.
         containerAttributes.put(ContainerAttribute.ISDELETED, false);
 
@@ -90,6 +93,9 @@ public class ListContainersTableModel extends DefaultTableModel {
             // Weight column.
             case 2:
                 return Double.class;
+            // Box/pallet column.
+            case 3:
+                return Boolean.class;
             default:
                 return Object.class;
         }
@@ -101,7 +107,7 @@ public class ListContainersTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // Removed containers cannot be edited.
-        String buttonValue = (String) super.getValueAt(row, 3);
+        String buttonValue = (String) super.getValueAt(row, 4);
         boolean isRemovedContainer = buttonValue.equals(Localization.getLocalization(LocalizationKey.RESTORE));
 
         if (isRemovedContainer) {
@@ -110,9 +116,11 @@ public class ListContainersTableModel extends DefaultTableModel {
 
         int nameColumnIndex = 1;
         int weightColumnIndex = 2;
+        int isBoxColumnIndex = 3;
 
-        // Only the name and the weight can be edited.
-        return column == nameColumnIndex || column == weightColumnIndex;
+        // Only the name, the weight and whether is a box or a pallet columns
+        // can be edited.
+        return column == nameColumnIndex || column == weightColumnIndex || column == isBoxColumnIndex;
     }
 
     /**

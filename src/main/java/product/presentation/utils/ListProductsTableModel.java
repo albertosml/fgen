@@ -46,9 +46,6 @@ public class ListProductsTableModel extends DefaultTableModel {
         Object productName = column == 1 ? newValue : super.getValueAt(row, 1);
         productAttributes.put(ProductAttribute.NAME, productName);
 
-        Object productPrice = column == 2 ? newValue : super.getValueAt(row, 2);
-        productAttributes.put(ProductAttribute.PRICE, productPrice);
-
         // Product can be only updated if it is not deleted.
         productAttributes.put(ProductAttribute.ISDELETED, false);
 
@@ -87,9 +84,6 @@ public class ListProductsTableModel extends DefaultTableModel {
             // Name column.
             case 1:
                 return String.class;
-            // Price column.
-            case 2:
-                return Double.class;
             default:
                 return Object.class;
         }
@@ -101,18 +95,16 @@ public class ListProductsTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // Removed products cannot be edited.
-        String buttonValue = (String) super.getValueAt(row, 3);
+        String buttonValue = (String) super.getValueAt(row, 2);
         boolean isRemovedProduct = buttonValue.equals(Localization.getLocalization(LocalizationKey.RESTORE));
 
         if (isRemovedProduct) {
             return false;
         }
 
+        // Only the name can be edited.
         int nameColumnIndex = 1;
-        int priceColumnIndex = 2;
-
-        // Only the name and the price can be edited.
-        return column == nameColumnIndex || column == priceColumnIndex;
+        return column == nameColumnIndex;
     }
 
     /**

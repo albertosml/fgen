@@ -1,9 +1,5 @@
 package deliverynote.presentation.panels;
 
-import container.application.ContainerAttribute;
-import container.application.usecases.RegisterContainer;
-import container.application.utils.ContainerValidationState;
-import container.persistence.mongo.MongoContainerRepository;
 import customer.application.Customer;
 import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
@@ -41,6 +37,7 @@ import shared.presentation.localization.LocalizationKey;
 import template.application.Template;
 import template.application.usecases.ListTemplates;
 import template.persistence.mongo.MongoTemplateRepository;
+import weighing.presentation.panels.WeighingsPanel;
 
 /**
  * Panel which shows the form to register a container.
@@ -48,9 +45,9 @@ import template.persistence.mongo.MongoTemplateRepository;
 public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
     /**
-     * Delivery note items panel.
+     * Weighings panel.
      */
-    private DeliveryNoteItemsPanel deliveryNoteItemsPanel;
+    private WeighingsPanel weighingsPanel;
 
     /**
      * Constructor.
@@ -60,9 +57,9 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         initializeFormLabels();
         initializeInputs();
 
-        this.deliveryNoteItemsPanel = new DeliveryNoteItemsPanel();
+        this.weighingsPanel = new WeighingsPanel();
         this.bookedPanel.setLayout(new GridLayout());
-        this.bookedPanel.add(deliveryNoteItemsPanel);
+        this.bookedPanel.add(weighingsPanel);
     }
 
     /**
@@ -150,6 +147,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.setLabelText(productLabel, LocalizationKey.PRODUCT);
         this.setLabelText(templateLabel, LocalizationKey.TEMPLATE);
         this.setLabelText(weightLabel, LocalizationKey.WEIGHT);
+        this.setLabelText(numPalletsLabel, LocalizationKey.NUM_PALLETS);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
     }
 
@@ -189,7 +187,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PRODUCT, LocalizationKey.INVALID_PRODUCT_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_TEMPLATE, LocalizationKey.INVALID_TEMPLATE_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_WEIGHT, LocalizationKey.INVALID_WEIGHT_MESSAGE);
-        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_ITEMS, LocalizationKey.INVALID_DELIVERY_NOTE_ITEMS_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_WEIGHINGS, LocalizationKey.INVALID_WEIGHINGS_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID, LocalizationKey.NOT_GENERATED_DELIVERY_NOTE_MESSAGE);
 
         LocalizationKey key = localizationKeysByState.get(state);
@@ -205,7 +203,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.productInput.setSelectedItem(null);
         this.templateInput.setSelectedItem(null);
         this.weightInput.setValue(0);
-        this.deliveryNoteItemsPanel.clear();
+        this.weighingsPanel.clear();
     }
 
     /**
@@ -286,6 +284,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         weightLabel.setText("${WEIGHT}:");
 
         weightInput.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        numPalletsLabel = new javax.swing.JLabel();
+        numPalletsInput = new javax.swing.JSpinner();
 
         bookedPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -304,6 +304,14 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registerButtonActionPerformed(evt);
+            }
+        });
+
+        numPalletsLabel.setText("${NUM_PALLETS}:");
+
+        numPalletsInput.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                numPalletsInputStateChanged(evt);
             }
         });
 
@@ -328,7 +336,14 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                 .addGap(61, 61, 61))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(numPalletsLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(numPalletsInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -364,7 +379,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, templateInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHT, weightInput.getValue());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, deliveryNoteItemsPanel.getItems());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, weighingsPanel.getItems());
 
         Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
 
@@ -389,6 +404,9 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.showInfoMessage(state);
     }//GEN-LAST:event_registerButtonActionPerformed
 
+    private void numPalletsInputStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numPalletsInputStateChanged
+        this.weighingsPanel.setTotalWeighings((int) this.numPalletsInput.getValue());
+    }//GEN-LAST:event_numPalletsInputStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookedPanel;
@@ -401,5 +419,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private javax.swing.JLabel templateLabel;
     private javax.swing.JSpinner weightInput;
     private javax.swing.JLabel weightLabel;
+    private javax.swing.JSpinner numPalletsInput;
+    private javax.swing.JLabel numPalletsLabel;
     // End of variables declaration//GEN-END:variables
 }

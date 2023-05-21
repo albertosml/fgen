@@ -18,13 +18,6 @@ public class Product {
     private String name;
 
     /**
-     * Product price.
-     *
-     * It defines the price per single quantity unit.
-     */
-    private double price;
-
-    /**
      * Whether the product is deleted or not.
      */
     private boolean isDeleted;
@@ -34,13 +27,11 @@ public class Product {
      *
      * @param code Product code.
      * @param name Product name.
-     * @param price Product price.
      * @param isDeleted Whether the customer is deleted or not.
      */
-    private Product(String code, String name, double price, boolean isDeleted) {
+    private Product(String code, String name, boolean isDeleted) {
         this.code = code;
         this.name = name;
-        this.price = price;
         this.isDeleted = isDeleted;
     }
 
@@ -60,15 +51,6 @@ public class Product {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Retrieve the product price.
-     *
-     * @return The product price.
-     */
-    public double getPrice() {
-        return this.price;
     }
 
     /**
@@ -108,11 +90,9 @@ public class Product {
 
         String code = (String) attributes.getOrDefault(ProductAttribute.CODE, unregisteredProductCode);
         String name = (String) attributes.getOrDefault(ProductAttribute.NAME, "");
-        Object priceValue = attributes.getOrDefault(ProductAttribute.PRICE, "0");
-        double price = Double.parseDouble(priceValue.toString());
         boolean isDeleted = (boolean) attributes.getOrDefault(ProductAttribute.ISDELETED, false);
 
-        return new Product(code, name, price, isDeleted);
+        return new Product(code, name, isDeleted);
     }
 
 }

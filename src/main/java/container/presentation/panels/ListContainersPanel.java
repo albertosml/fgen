@@ -56,6 +56,7 @@ public class ListContainersPanel extends javax.swing.JPanel {
         columnNames.add(Localization.getLocalization(LocalizationKey.CODE));
         columnNames.add(Localization.getLocalization(LocalizationKey.NAME));
         columnNames.add(Localization.getLocalization(LocalizationKey.WEIGHT));
+        columnNames.add(Localization.getLocalization(LocalizationKey.IS_BOX));
         columnNames.add("");
 
         return columnNames;
@@ -86,7 +87,11 @@ public class ListContainersPanel extends javax.swing.JPanel {
             double containerWeight = container.getWeight();
             rowData.add(containerWeight);
 
-            // Column 4: Empty name. It will show a button to remove or restore
+            // Column 4: Is it a box or a pallet?
+            boolean containerIsBox = container.isBox();
+            rowData.add(containerIsBox);
+
+            // Column 5: Empty name. It will show a button to remove or restore
             // a customer.
             String removeName = Localization.getLocalization(LocalizationKey.REMOVE);
             String restoreName = Localization.getLocalization(LocalizationKey.RESTORE);
@@ -114,7 +119,7 @@ public class ListContainersPanel extends javax.swing.JPanel {
             table.addMouseListener(new ListContainersMouseAdapter(table));
 
             // Set a button renderer for the action button.
-            TableColumn removeRestoreContainerColumn = table.getColumn(columnNames.get(3));
+            TableColumn removeRestoreContainerColumn = table.getColumn(columnNames.get(4));
             removeRestoreContainerColumn.setCellRenderer(new ButtonRenderer());
         }
     }
@@ -131,14 +136,14 @@ public class ListContainersPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "${CODE}", "${NAME}", "${WEIGHT}", ""
+                "${CODE}", "${NAME}", "${WEIGHT}", "${IS_BOX}", ""
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -156,6 +161,7 @@ public class ListContainersPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(1).setResizable(false);
             table.getColumnModel().getColumn(2).setResizable(false);
             table.getColumnModel().getColumn(3).setResizable(false);
+            table.getColumnModel().getColumn(4).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
