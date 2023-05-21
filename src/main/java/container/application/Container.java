@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Container entity class.
  */
-public class Container {
+public abstract class Container {
 
     /**
      * Container code.
@@ -23,11 +23,6 @@ public class Container {
     private double weight;
 
     /**
-     * Whether the container is a box or a pallet.
-     */
-    private boolean isBox;
-
-    /**
      * Whether the container is deleted or not.
      */
     private boolean isDeleted;
@@ -38,14 +33,12 @@ public class Container {
      * @param code Container code.
      * @param name Container name.
      * @param weight Container weight.
-     * @param isBox Whether the container is a box or a pallet.
      * @param isDeleted Whether the container is deleted or not.
      */
-    private Container(int code, String name, double weight, boolean isBox, boolean isDeleted) {
+    protected Container(int code, String name, double weight, boolean isDeleted) {
         this.code = code;
         this.name = name;
         this.weight = weight;
-        this.isBox = isBox;
         this.isDeleted = isDeleted;
     }
 
@@ -81,9 +74,7 @@ public class Container {
      *
      * @return true if the container is a box, false if it is a pallet.
      */
-    public boolean isBox() {
-        return this.isBox;
-    }
+    public abstract boolean isBox();
 
     /**
      * Whether the container is deleted from the system or not.
@@ -127,7 +118,11 @@ public class Container {
         boolean isBox = (boolean) attributes.getOrDefault(ContainerAttribute.ISBOX, true);
         boolean isDeleted = (boolean) attributes.getOrDefault(ContainerAttribute.ISDELETED, false);
 
-        return new Container(code, name, weight, isBox, isDeleted);
+        if (isBox) {
+            return new Box(code, name, weight, isDeleted);
+        }
+
+        return new Pallet(code, name, weight, isDeleted);
     }
 
 }

@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.48.0] - 2023-05-21
+
+### Added
+
+- Add a weighings table.
+
 ## [0.47.0] - 2023-05-20
 
-### Removed
+### Added
 
 - Add distinction between pallet and box on the container entity.
 

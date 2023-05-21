@@ -115,6 +115,12 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_CONTAINER_MESSAGE, "El contenedor introducido es inválido");
         super.setTranslation(LocalizationKey.INVALID_QTY_MESSAGE, "La cantidad introducida es inválida");
         super.setTranslation(LocalizationKey.IS_BOX, "¿Es caja?");
+        super.setTranslation(LocalizationKey.WEIGHINGS, "Pesadas");
+        super.setTranslation(LocalizationKey.BOX, "Caja");
+        super.setTranslation(LocalizationKey.BOXES_QTY, "Cantidad de cajas");
+        super.setTranslation(LocalizationKey.GROSS_WEIGHT, "Peso bruto (en kilos)");
+        super.setTranslation(LocalizationKey.INVALID_BOX_MESSAGE, "Caja inválida");
+        super.setTranslation(LocalizationKey.NUM_PALLETS, "Número de pallets");
     }
 
 }

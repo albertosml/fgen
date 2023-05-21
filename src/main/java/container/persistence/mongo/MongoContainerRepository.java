@@ -1,6 +1,7 @@
 package container.persistence.mongo;
 
 import com.mongodb.client.model.Filters;
+import container.application.Box;
 import container.application.Container;
 import container.application.ContainerAttribute;
 import container.persistence.ContainerRepository;
@@ -115,6 +116,22 @@ public class MongoContainerRepository extends MongoRepository implements Contain
         }
 
         return containers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Box> getBoxes(boolean includeRemoved) {
+        ArrayList<Box> boxes = new ArrayList<>();
+
+        for (Container container : this.get(includeRemoved)) {
+            if (container instanceof Box) {
+                boxes.add((Box) container);
+            }
+        }
+
+        return boxes;
     }
 
     /**
