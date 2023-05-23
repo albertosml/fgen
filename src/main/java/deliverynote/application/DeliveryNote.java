@@ -1,6 +1,8 @@
 package deliverynote.application;
 
+import container.application.Box;
 import container.application.Container;
+import container.application.Pallet;
 import customer.application.Customer;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.Date;
 import java.util.Map;
 import product.application.Product;
 import template.application.Template;
+import weighing.application.Weighing;
 
 /**
  * Delivery note element.
@@ -40,14 +43,19 @@ public class DeliveryNote {
     private Template template;
 
     /**
-     * The total weight.
+     * The pallet.
      */
-    private double weight;
+    private Pallet pallet;
 
     /**
-     * The delivery note items.
+     * The total number of pallets.
      */
-    private ArrayList<DeliveryNoteItem> items;
+    private int numPallets;
+
+    /**
+     * The weighings.
+     */
+    private ArrayList<Weighing> weighings;
 
     /**
      * Constructor.
@@ -58,30 +66,36 @@ public class DeliveryNote {
      * @param customer The delivery note customer.
      * @param product The delivery note product.
      * @param template The delivery note template.
-     * @param weight The delivery note weight.
-     * @param items The delivery note items.
+     * @param pallet The delivery note pallet.
+     * @param numPallets The delivery note total pallets.
+     * @param weighings The delivery note weighings.
      */
-    private DeliveryNote(int code, Date date, Customer customer, Product product, Template template, double weight, ArrayList<DeliveryNoteItem> items) {
+    private DeliveryNote(int code, Date date, Customer customer, Product product, Template template, Pallet pallet, int numPallets, ArrayList<Weighing> weighings) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.customer = customer;
         this.product = product;
         this.template = template;
-        this.weight = weight;
-        this.items = items;
+        this.pallet = pallet;
+        this.numPallets = numPallets;
+        this.weighings = weighings;
     }
 
     public double calculateNetWeight() {
-        double net_weight = this.weight;
+        double totalNetWeight = 0;
 
-        for (DeliveryNoteItem deliveryNoteItem : this.items) {
-            Container container = deliveryNoteItem.getContainer();
-            int qty = deliveryNoteItem.getQty();
+        for (Weighing weighing : this.weighings) {
+            Box box = weighing.getBox();
+            int qty = weighing.getQty();
+            double grossWeight = weighing.getWeight();
 
-            net_weight -= container.getWeight() * qty;
+            double boxWeight = box.getWeight() * qty;
+            double netWeight = grossWeight - boxWeight;
+
+            totalNetWeight += netWeight;
         }
 
-        return net_weight;
+        return totalNetWeight;
     }
 
     /**
@@ -130,21 +144,30 @@ public class DeliveryNote {
     }
 
     /**
-     * Retrieve the delivery note total weight.
+     * Retrieve the delivery note pallet.
      *
-     * @return The delivery note total weight.
+     * @return The delivery note pallet.
      */
-    public double getWeight() {
-        return this.weight;
+    public Pallet getPallet() {
+        return this.pallet;
     }
 
     /**
-     * Retrieve the delivery note items.
+     * Retrieve the delivery note number of pallets.
      *
-     * @return The delivery note items.
+     * @return The delivery note number of pallets..
      */
-    public ArrayList<DeliveryNoteItem> getItems() {
-        return this.items;
+    public int getNumPallets() {
+        return this.numPallets;
+    }
+
+    /**
+     * Retrieve the delivery note weighings.
+     *
+     * @return The delivery note weighings.
+     */
+    public ArrayList<Weighing> getWeighings() {
+        return this.weighings;
     }
 
     /**
@@ -160,10 +183,11 @@ public class DeliveryNote {
         Customer customer = (Customer) attributes.get(DeliveryNoteAttribute.CUSTOMER);
         Product product = (Product) attributes.get(DeliveryNoteAttribute.PRODUCT);
         Template template = (Template) attributes.get(DeliveryNoteAttribute.TEMPLATE);
-        double weight = (double) attributes.getOrDefault(DeliveryNoteAttribute.WEIGHT, 0);
-        ArrayList<DeliveryNoteItem> items = (ArrayList<DeliveryNoteItem>) attributes.get(DeliveryNoteAttribute.ITEMS);
+        Pallet pallet = (Pallet) attributes.get(DeliveryNoteAttribute.PALLET);
+        int numPallets = (int) attributes.getOrDefault(DeliveryNoteAttribute.NUM_PALLETS, 0);
+        ArrayList<Weighing> weighings = (ArrayList<Weighing>) attributes.get(DeliveryNoteAttribute.WEIGHINGS);
 
-        return new DeliveryNote(code, date, customer, product, template, weight, items);
+        return new DeliveryNote(code, date, customer, product, template, pallet, numPallets, weighings);
     }
 
 }

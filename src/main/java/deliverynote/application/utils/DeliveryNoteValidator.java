@@ -1,11 +1,12 @@
 package deliverynote.application.utils;
 
+import container.application.Pallet;
 import customer.application.Customer;
 import deliverynote.application.DeliveryNote;
-import deliverynote.application.DeliveryNoteItem;
 import java.util.ArrayList;
 import product.application.Product;
 import template.application.Template;
+import weighing.application.Weighing;
 
 /**
  * Validate the delivery note.
@@ -36,14 +37,19 @@ public class DeliveryNoteValidator {
             return DeliveryNoteValidationState.INVALID_TEMPLATE;
         }
 
-        double weight = deliveryNote.getWeight();
-        if (!Double.isFinite(weight)) {
-            return DeliveryNoteValidationState.INVALID_WEIGHT;
+        Pallet pallet = deliveryNote.getPallet();
+        if (pallet == null) {
+            return DeliveryNoteValidationState.INVALID_PALLET;
         }
 
-        ArrayList<DeliveryNoteItem> items = deliveryNote.getItems();
-        if (items == null) {
-            return DeliveryNoteValidationState.INVALID_ITEMS;
+        int numPallets = deliveryNote.getNumPallets();
+        if (numPallets == 0) {
+            return DeliveryNoteValidationState.INVALID_NUM_PALLETS;
+        }
+
+        ArrayList<Weighing> weighings = deliveryNote.getWeighings();
+        if (weighings == null) {
+            return DeliveryNoteValidationState.INVALID_WEIGHINGS;
         }
 
         return DeliveryNoteValidationState.VALID;

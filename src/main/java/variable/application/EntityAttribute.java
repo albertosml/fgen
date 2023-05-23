@@ -52,10 +52,6 @@ public enum EntityAttribute {
      */
     PRODUCT_PRICE,
     /**
-     * Delivery note total weight.
-     */
-    DELIVERY_NOTE_TOTAL_WEIGHT,
-    /**
      * Delivery note net weight.
      */
     DELIVERY_NOTE_NET_WEIGHT,

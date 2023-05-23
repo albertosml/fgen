@@ -68,14 +68,10 @@ public class DeliveryNoteGenerator {
                 return deliveryNote.getProduct().getCode();
             case PRODUCT_NAME:
                 return deliveryNote.getProduct().getName();
-            case PRODUCT_PRICE:
-                return deliveryNote.getProduct().getPrice();
-            case DELIVERY_NOTE_TOTAL_WEIGHT:
-                return deliveryNote.getWeight();
             case DELIVERY_NOTE_NET_WEIGHT:
                 return deliveryNote.calculateNetWeight();
             case DELIVERY_NOTE_ITEMS:
-                return deliveryNote.getItems();
+                return deliveryNote.getWeighings();
             case DELIVERY_NOTE_CODE:
                 return deliveryNote.getCode();
             case DELIVERY_NOTE_GENERATION_DATETIME:

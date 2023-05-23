@@ -1,5 +1,8 @@
 package deliverynote.presentation.panels;
 
+import container.application.Pallet;
+import container.application.usecases.ListPallets;
+import container.persistence.mongo.MongoContainerRepository;
 import customer.application.Customer;
 import customer.application.usecases.ListCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
@@ -81,6 +84,24 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     }
 
     /**
+     * Obtain all the pallets data by executing the use case.
+     *
+     * @return A list with all non-removed pallets on the system.
+     */
+    private ArrayList<Pallet> getPallets() {
+        try {
+            MongoContainerRepository containerRepository = new MongoContainerRepository();
+            ListPallets listPallets = new ListPallets(containerRepository);
+            return listPallets.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = WeighingsPanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Pallets cannot be shown because the database has not been found", ex);
+        }
+
+        return null;
+    }
+
+    /**
      * Obtain all the non-removed products data by executing the use case.
      *
      * @return A list with all non-removed products on the system.
@@ -146,7 +167,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.setLabelText(customerLabel, LocalizationKey.CUSTOMER);
         this.setLabelText(productLabel, LocalizationKey.PRODUCT);
         this.setLabelText(templateLabel, LocalizationKey.TEMPLATE);
-        this.setLabelText(weightLabel, LocalizationKey.WEIGHT);
+        this.setLabelText(palletLabel, LocalizationKey.PALLET);
         this.setLabelText(numPalletsLabel, LocalizationKey.NUM_PALLETS);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
     }
@@ -170,9 +191,10 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         templateInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Template>(templates));
         AutoCompleteDecorator.decorate(templateInput);
 
-        // Weight input.
-        SpinnerNumberModel weightSpinnerNumberModel = new SpinnerNumberModel(0d, 0d, 1e11d, 0.01d);
-        this.weightInput.setModel(weightSpinnerNumberModel);
+        // Pallets input.
+        Vector<Pallet> pallets = new Vector<>(this.getPallets());
+        palletInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Pallet>(pallets));
+        AutoCompleteDecorator.decorate(palletInput);
     }
 
     /**
@@ -186,7 +208,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_CUSTOMER, LocalizationKey.INVALID_CUSTOMER_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PRODUCT, LocalizationKey.INVALID_PRODUCT_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_TEMPLATE, LocalizationKey.INVALID_TEMPLATE_MESSAGE);
-        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_WEIGHT, LocalizationKey.INVALID_WEIGHT_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PALLET, LocalizationKey.INVALID_PALLET_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_NUM_PALLETS, LocalizationKey.INVALID_NUM_PALLETS_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_WEIGHINGS, LocalizationKey.INVALID_WEIGHINGS_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID, LocalizationKey.NOT_GENERATED_DELIVERY_NOTE_MESSAGE);
 
@@ -202,7 +225,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.customerInput.setSelectedItem(null);
         this.productInput.setSelectedItem(null);
         this.templateInput.setSelectedItem(null);
-        this.weightInput.setValue(0);
+        this.palletInput.setSelectedItem(null);
+        this.numPalletsInput.setValue(0);
         this.weighingsPanel.clear();
     }
 
@@ -264,10 +288,12 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         productInput = new javax.swing.JComboBox<>();
         templateLabel = new javax.swing.JLabel();
         templateInput = new javax.swing.JComboBox<>();
-        weightLabel = new javax.swing.JLabel();
-        weightInput = new javax.swing.JSpinner();
+        palletLabel = new javax.swing.JLabel();
         bookedPanel = new javax.swing.JPanel();
         registerButton = new javax.swing.JButton();
+        numPalletsLabel = new javax.swing.JLabel();
+        numPalletsInput = new javax.swing.JSpinner();
+        palletInput = new javax.swing.JComboBox<>();
 
         customerLabel.setText("${CUSTOMER}:");
 
@@ -281,11 +307,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         templateInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        weightLabel.setText("${WEIGHT}:");
-
-        weightInput.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
-        numPalletsLabel = new javax.swing.JLabel();
-        numPalletsInput = new javax.swing.JSpinner();
+        palletLabel.setText("${PALLET}:");
 
         bookedPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -293,7 +315,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         bookedPanel.setLayout(bookedPanelLayout);
         bookedPanelLayout.setHorizontalGroup(
             bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 471, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         bookedPanelLayout.setVerticalGroup(
             bookedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,61 +337,65 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
             }
         });
 
+        palletInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(weightLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(productLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(customerLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(templateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                    .addComponent(weightInput)
-                    .addComponent(customerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(productInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(templateInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(palletLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(productLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(templateLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(customerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numPalletsLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(numPalletsInput)
+                    .addComponent(productInput, 0, 269, Short.MAX_VALUE)
+                    .addComponent(templateInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(palletInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(customerInput, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(61, 61, 61))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(numPalletsLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(numPalletsInput, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(customerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(templateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(templateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(weightLabel)
-                    .addComponent(weightInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(palletInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(palletLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(numPalletsInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numPalletsLabel))
                 .addGap(18, 18, 18)
                 .addComponent(bookedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(registerButton)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -378,8 +404,9 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.CUSTOMER, customerInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, templateInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHT, weightInput.getValue());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.ITEMS, weighingsPanel.getItems());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PALLET, palletInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.NUM_PALLETS, numPalletsInput.getValue());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHINGS, weighingsPanel.getWeighings());
 
         Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
 
@@ -412,14 +439,14 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private javax.swing.JPanel bookedPanel;
     private javax.swing.JComboBox<String> customerInput;
     private javax.swing.JLabel customerLabel;
+    private javax.swing.JSpinner numPalletsInput;
+    private javax.swing.JLabel numPalletsLabel;
+    private javax.swing.JComboBox<String> palletInput;
+    private javax.swing.JLabel palletLabel;
     private javax.swing.JComboBox<String> productInput;
     private javax.swing.JLabel productLabel;
     private javax.swing.JButton registerButton;
     private javax.swing.JComboBox<String> templateInput;
     private javax.swing.JLabel templateLabel;
-    private javax.swing.JSpinner weightInput;
-    private javax.swing.JLabel weightLabel;
-    private javax.swing.JSpinner numPalletsInput;
-    private javax.swing.JLabel numPalletsLabel;
     // End of variables declaration//GEN-END:variables
 }

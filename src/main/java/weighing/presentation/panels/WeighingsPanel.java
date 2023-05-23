@@ -6,6 +6,7 @@ import container.application.usecases.ListBoxes;
 import container.application.usecases.ListContainers;
 import container.persistence.mongo.MongoContainerRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -19,6 +20,8 @@ import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 import shared.presentation.utils.ButtonRenderer;
+import weighing.application.Weighing;
+import weighing.application.WeighingAttribute;
 import weighing.presentation.utils.WeighingsTableModel;
 
 /**
@@ -109,6 +112,38 @@ public class WeighingsPanel extends javax.swing.JPanel {
                 tableModel.removeRow(table.getRowCount() - 1);
             }
         }
+    }
+
+    /**
+     * Clear weighings data.
+     */
+    public void clear() {
+        table.removeAll();
+    }
+
+    /**
+     * Get the weighings from the table.
+     *
+     * @return A list with all weighings from the table.
+     */
+    public ArrayList<Weighing> getWeighings() {
+        ArrayList<Weighing> weighings = new ArrayList<>();
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            Box box = (Box) table.getValueAt(i, 0);
+            int qty = (int) table.getValueAt(i, 1);
+            double weight = (double) table.getValueAt(i, 2);
+
+            Map<WeighingAttribute, Object> attributes = new HashMap<>();
+            attributes.put(WeighingAttribute.BOX, box);
+            attributes.put(WeighingAttribute.QTY, qty);
+            attributes.put(WeighingAttribute.WEIGHT, weight);
+
+            Weighing weighing = Weighing.from(attributes);
+            weighings.add(weighing);
+        }
+
+        return weighings;
     }
 
     @SuppressWarnings("unchecked")

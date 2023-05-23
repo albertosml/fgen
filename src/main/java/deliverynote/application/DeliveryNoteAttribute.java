@@ -9,6 +9,7 @@ public enum DeliveryNoteAttribute {
     CUSTOMER,
     PRODUCT,
     TEMPLATE,
-    WEIGHT,
-    ITEMS
+    PALLET,
+    NUM_PALLETS,
+    WEIGHINGS
 }

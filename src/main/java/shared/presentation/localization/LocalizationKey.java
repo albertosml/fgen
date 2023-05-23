@@ -413,6 +413,7 @@ public enum LocalizationKey {
      * Not generated delivery note message.
      */
     NOT_GENERATED_DELIVERY_NOTE_MESSAGE,
+    /**
      * Whether the container is a box or a pallet.
      */
     IS_BOX,
@@ -440,4 +441,16 @@ public enum LocalizationKey {
      * Number of pallets.
      */
     NUM_PALLETS,
+    /**
+     * Invalid pallet message.
+     */
+    INVALID_PALLET_MESSAGE,
+    /**
+     * Invalid number of pallets message.
+     */
+    INVALID_NUM_PALLETS_MESSAGE,
+    /**
+     * Pallet.
+     */
+    PALLET,
 }

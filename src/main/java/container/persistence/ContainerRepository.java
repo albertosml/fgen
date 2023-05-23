@@ -2,6 +2,7 @@ package container.persistence;
 
 import container.application.Box;
 import container.application.Container;
+import container.application.Pallet;
 import java.util.ArrayList;
 import shared.persistence.Repository;
 
@@ -35,6 +36,14 @@ public interface ContainerRepository extends Repository {
      * @return A list with all boxes.
      */
     public ArrayList<Box> getBoxes(boolean includeRemoved);
+
+    /**
+     * Obtain all the pallets registered on the system.
+     *
+     * @param includeRemoved Whether we should include removed pallets or not.
+     * @return A list with all pallets.
+     */
+    public ArrayList<Pallet> getPallets(boolean includeRemoved);
 
     /**
      * Get the code from all containers from the repository.
