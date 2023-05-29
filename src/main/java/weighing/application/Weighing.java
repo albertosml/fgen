@@ -21,7 +21,7 @@ public class Weighing {
     /**
      * The gross weight.
      */
-    private double weight;
+    private int weight;
 
     /**
      * Constructor.
@@ -30,7 +30,7 @@ public class Weighing {
      * @param qty The boxes quantity in the weighing
      * @param weight The gross weight on the weighing.
      */
-    private Weighing(Box box, int qty, double weight) {
+    private Weighing(Box box, int qty, int weight) {
         this.box = box;
         this.qty = qty;
         this.weight = weight;
@@ -59,7 +59,7 @@ public class Weighing {
      *
      * @return A double indicating the gross weight.
      */
-    public double getWeight() {
+    public int getWeight() {
         return this.weight;
     }
 
@@ -72,7 +72,7 @@ public class Weighing {
     public static Weighing from(Map<WeighingAttribute, Object> attributes) {
         Box box = (Box) attributes.get(WeighingAttribute.BOX);
         int qty = (int) attributes.getOrDefault(WeighingAttribute.QTY, 0);
-        double weight = (double) attributes.getOrDefault(WeighingAttribute.WEIGHT, 0);
+        int weight = (int) attributes.getOrDefault(WeighingAttribute.WEIGHT, 0);
 
         return new Weighing(box, qty, weight);
     }

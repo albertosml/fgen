@@ -26,15 +26,13 @@ public class WeighingsTableModel extends DefaultTableModel {
      */
     @Override
     public Class getColumnClass(int columnIndex) {
-        // Quantity column.
-        if (columnIndex == 1) {
-            return Integer.class;
-        } else if (columnIndex == 2) {
-            // Gross weight column.
-            return Double.class;
+        // Box column.
+        if (columnIndex == 0) {
+            return Object.class;
         }
 
-        return Object.class;
+        // Quantity and gross weight columns.
+        return Integer.class;
     }
 
     /**

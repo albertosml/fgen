@@ -1,9 +1,7 @@
 package weighing.presentation.panels;
 
 import container.application.Box;
-import container.application.Container;
 import container.application.usecases.ListBoxes;
-import container.application.usecases.ListContainers;
 import container.persistence.mongo.MongoContainerRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,13 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
-import shared.presentation.utils.ButtonRenderer;
 import weighing.application.Weighing;
 import weighing.application.WeighingAttribute;
 import weighing.presentation.utils.WeighingsTableModel;
@@ -132,8 +128,7 @@ public class WeighingsPanel extends javax.swing.JPanel {
         for (int i = 0; i < table.getRowCount(); i++) {
             Box box = (Box) table.getValueAt(i, 0);
             int qty = (int) table.getValueAt(i, 1);
-            Object weightValue = table.getValueAt(i, 2);
-            double weight = Double.parseDouble(weightValue.toString());
+            int weight = (int) table.getValueAt(i, 2);
 
             Map<WeighingAttribute, Object> attributes = new HashMap<>();
             attributes.put(WeighingAttribute.BOX, box);

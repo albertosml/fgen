@@ -195,6 +195,10 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         Vector<Pallet> pallets = new Vector<>(this.getPallets());
         palletInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Pallet>(pallets));
         AutoCompleteDecorator.decorate(palletInput);
+
+        // Number of pallets input.
+        SpinnerNumberModel numPalletsSpinnerNumberModel = new SpinnerNumberModel(0, 0, 4, 1);
+        this.numPalletsInput.setModel(numPalletsSpinnerNumberModel);
     }
 
     /**

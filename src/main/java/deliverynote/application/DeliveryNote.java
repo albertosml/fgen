@@ -1,7 +1,6 @@
 package deliverynote.application;
 
 import container.application.Box;
-import container.application.Container;
 import container.application.Pallet;
 import customer.application.Customer;
 import java.time.Instant;
