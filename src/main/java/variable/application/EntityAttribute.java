@@ -70,7 +70,19 @@ public enum EntityAttribute {
     /**
      * Subtotal.
      */
-    SUBTOTAL;
+    SUBTOTAL,
+    /**
+     * Delivery note total number of pallets.
+     */
+    DELIVERY_NOTE_TOTAL_PALLETS,
+    /**
+     * Delivery note total number of boxes.
+     */
+    DELIVERY_NOTE_TOTAL_BOXES,
+    /**
+     * Delivery note total weight per box.
+     */
+    DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX;
 
     /**
      * Gets the text to show for the corresponding enumeration value.

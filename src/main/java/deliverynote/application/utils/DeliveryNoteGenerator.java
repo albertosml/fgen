@@ -16,17 +16,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
-import subtotal.application.Subtotal;
 import template.application.Template;
 import variable.application.EntityAttribute;
-import variable.application.SubtotalVariable;
+import static variable.application.EntityAttribute.DELIVERY_NOTE_NET_WEIGHT;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
@@ -68,14 +66,20 @@ public class DeliveryNoteGenerator {
                 return deliveryNote.getProduct().getCode();
             case PRODUCT_NAME:
                 return deliveryNote.getProduct().getName();
-            case DELIVERY_NOTE_NET_WEIGHT:
-                return deliveryNote.calculateNetWeight();
             case DELIVERY_NOTE_ITEMS:
                 return deliveryNote.getWeighings();
             case DELIVERY_NOTE_CODE:
                 return deliveryNote.getCode();
             case DELIVERY_NOTE_GENERATION_DATETIME:
                 return deliveryNote.getDate();
+            case DELIVERY_NOTE_NET_WEIGHT:
+                return deliveryNote.calculateNetWeight();
+            case DELIVERY_NOTE_TOTAL_PALLETS:
+                return deliveryNote.calculateTotalPallets();
+            case DELIVERY_NOTE_TOTAL_BOXES:
+                return deliveryNote.calculateTotalBoxes();
+            case DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX:
+                return deliveryNote.calculateTotalWeightPerBox();
         }
 
         return null;

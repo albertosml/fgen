@@ -132,7 +132,8 @@ public class WeighingsPanel extends javax.swing.JPanel {
         for (int i = 0; i < table.getRowCount(); i++) {
             Box box = (Box) table.getValueAt(i, 0);
             int qty = (int) table.getValueAt(i, 1);
-            double weight = (double) table.getValueAt(i, 2);
+            Object weightValue = table.getValueAt(i, 2);
+            double weight = Double.parseDouble(weightValue.toString());
 
             Map<WeighingAttribute, Object> attributes = new HashMap<>();
             attributes.put(WeighingAttribute.BOX, box);

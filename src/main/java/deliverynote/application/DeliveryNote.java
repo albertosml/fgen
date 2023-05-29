@@ -81,6 +81,11 @@ public class DeliveryNote {
         this.weighings = weighings;
     }
 
+    /**
+     * Calculate the net weight for all weighings of a delivery note.
+     *
+     * @return The global net weight.
+     */
     public double calculateNetWeight() {
         double totalNetWeight = 0;
 
@@ -96,6 +101,43 @@ public class DeliveryNote {
         }
 
         return totalNetWeight;
+    }
+
+    /**
+     * Calculate the total number of boxes.
+     *
+     * @return The number of boxes included on the delivery note.
+     */
+    public int calculateTotalBoxes() {
+        int numBoxes = 0;
+
+        for (Weighing weighing : this.weighings) {
+            numBoxes += weighing.getQty();
+        }
+
+        return numBoxes;
+    }
+
+    /**
+     * Calculate the total number of pallets.
+     *
+     * @return The number of pallets included on the delivery note.
+     */
+    public int calculateTotalPallets() {
+        return this.weighings.size();
+    }
+
+    /**
+     * Calculate the total weight per box.
+     *
+     * @return The quotient between the total net weight and the total number of
+     * boxes.
+     */
+    public double calculateTotalWeightPerBox() {
+        double totalWeightPerBox = this.calculateNetWeight() / this.calculateTotalBoxes();
+
+        // Round to 2 decimals.
+        return Math.round(totalWeightPerBox * 100.0) / 100.0;
     }
 
     /**
