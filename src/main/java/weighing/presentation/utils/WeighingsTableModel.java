@@ -67,7 +67,7 @@ public class WeighingsTableModel extends DefaultTableModel {
                     }
                     break;
                 default:
-                    if ((double) newValue == 0) {
+                    if ((int) newValue == 0) {
                         // Invalid gross weight, show message.
                         String invalidWeightMessage = Localization.getLocalization(LocalizationKey.INVALID_WEIGHT_MESSAGE);
                         JOptionPane.showMessageDialog(null, invalidWeightMessage);

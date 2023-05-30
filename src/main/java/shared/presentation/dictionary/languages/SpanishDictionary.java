@@ -125,6 +125,9 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_PALLET_MESSAGE, "Palé inválido");
         super.setTranslation(LocalizationKey.INVALID_NUM_PALLETS_MESSAGE, "Número de palés inválido");
         super.setTranslation(LocalizationKey.PALLET, "Pallet");
+        super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_PALLETS, "Número total de palés");
+        super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_BOXES, "Número total de cajas");
+        super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX, "Peso total por caja");
     }
 
 }
