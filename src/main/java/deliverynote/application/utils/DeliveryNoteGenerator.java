@@ -16,7 +16,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -28,6 +31,7 @@ import static variable.application.EntityAttribute.DELIVERY_NOTE_NET_WEIGHT;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
+import weighing.application.Weighing;
 
 /**
  * Represents the class responsible of generating the delivery note.
@@ -35,16 +39,14 @@ import variable.persistence.mongo.MongoVariableRepository;
 public class DeliveryNoteGenerator {
 
     /**
-     * Obtain the value from the given variable and invoice.
+     * Obtain the value from the given entity attribute and delivery note.
      *
-     * @param variable The variable used to retrieve the value.
+     * @param entityAttribtue The entity attribute used to get the value.
      * @param deliveryNote The delivery note used to retrieve the value.
      * @return An object indicating the requested value, as the value can be a
      * string, a list, etc...
      */
-    private static Object getValue(Variable variable, DeliveryNote deliveryNote) {
-        EntityAttribute entityAttribute = variable.getAttribute();
-
+    private static Object getValue(EntityAttribute entityAttribute, DeliveryNote deliveryNote) {
         switch (entityAttribute) {
             case CUSTOMER_CODE:
                 return deliveryNote.getCustomer().getCode();
@@ -71,7 +73,10 @@ public class DeliveryNoteGenerator {
             case DELIVERY_NOTE_CODE:
                 return deliveryNote.getCode();
             case DELIVERY_NOTE_GENERATION_DATETIME:
-                return deliveryNote.getDate();
+                String pattern = "dd-MM-yyyy HH:mm:ss";
+                DateFormat df = new SimpleDateFormat(pattern);
+                Date date = deliveryNote.getDate();
+                return df.format(date);
             case DELIVERY_NOTE_NET_WEIGHT:
                 return deliveryNote.calculateNetWeight();
             case DELIVERY_NOTE_TOTAL_PALLETS:
@@ -134,11 +139,45 @@ public class DeliveryNoteGenerator {
             String position = field.getKey();
             String expression = field.getValue();
 
+            // Specific processing for the delivery note items.
+            if (variables.get(expression.substring(2, expression.length() - 1)) == EntityAttribute.DELIVERY_NOTE_ITEMS) {
+                ExcelCell cell = worksheet.getCell(position);
+                int rowIndex = cell.getRow().getIndex();
+                int firstColumnIndex = cell.getColumn().getIndex();
+
+                for (Weighing weighing : deliveryNote.getWeighings()) {
+                    // Number of pallets.
+                    ExcelCell numPalletsCell = worksheet.getCell(rowIndex, firstColumnIndex);
+                    numPalletsCell.setValue(1);
+
+                    // Number of boxes.
+                    ExcelCell numBoxesCell = worksheet.getCell(rowIndex, firstColumnIndex + 1);
+                    numBoxesCell.setValue(weighing.getQty());
+
+                    // Net weight.
+                    int boxWeight = (int) weighing.getBox().getWeight();
+                    int netWeight = weighing.getWeight() - (weighing.getQty() * boxWeight);
+                    ExcelCell netWeightCell = worksheet.getCell(rowIndex, firstColumnIndex + 2);
+                    netWeightCell.setValue(netWeight);
+
+                    // Weight per box.
+                    ExcelCell weightPerBoxCell = worksheet.getCell(rowIndex, firstColumnIndex + 3);
+                    weightPerBoxCell.setValue(Math.round(netWeight / weighing.getQty() * 100.0) / 100.0);
+
+                    // Move to next row.
+                    rowIndex++;
+                }
+
+                continue;
+            }
+
             Matcher matcher = pattern.matcher(expression);
             String replacedExpression = matcher.replaceAll(match -> {
                 String variable = match.group();
                 String variableName = variable.substring(2, variable.length() - 1);
-                return variables.get(variableName).name();
+                EntityAttribute entityAttribute = variables.get(variableName);
+                Object variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote);
+                return variableValue.toString();
             });
 
             ExcelCell cell = worksheet.getCell(position);

@@ -85,16 +85,16 @@ public class DeliveryNote {
      *
      * @return The global net weight.
      */
-    public double calculateNetWeight() {
-        double totalNetWeight = 0;
+    public int calculateNetWeight() {
+        int totalNetWeight = 0;
 
         for (Weighing weighing : this.weighings) {
             Box box = weighing.getBox();
             int qty = weighing.getQty();
-            double grossWeight = weighing.getWeight();
+            int grossWeight = weighing.getWeight();
 
-            double boxWeight = box.getWeight() * qty;
-            double netWeight = grossWeight - boxWeight;
+            int boxWeight = (int) Math.round(box.getWeight() * qty);
+            int netWeight = grossWeight - boxWeight;
 
             totalNetWeight += netWeight;
         }
