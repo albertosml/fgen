@@ -133,7 +133,7 @@ public class DeliveryNote {
      * boxes.
      */
     public double calculateTotalWeightPerBox() {
-        double totalWeightPerBox = this.calculateNetWeight() / this.calculateTotalBoxes();
+        double totalWeightPerBox = (double) this.calculateNetWeight() / this.calculateTotalBoxes();
 
         // Round to 2 decimals.
         return Math.round(totalWeightPerBox * 100.0) / 100.0;

@@ -12,6 +12,7 @@ import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 import deliverynote.application.DeliveryNote;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,6 @@ import java.util.regex.Pattern;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import template.application.Template;
 import variable.application.EntityAttribute;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_NET_WEIGHT;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
@@ -96,7 +96,7 @@ public class DeliveryNoteGenerator {
      * @return A list with all variables on the system.
      */
     private static Map<String, EntityAttribute> getVariables() {
-        ArrayList<Variable> variables = null;
+        ArrayList<Variable> variables = new ArrayList<>();
 
         try {
             MongoVariableRepository variableRepository = new MongoVariableRepository();
@@ -115,76 +115,35 @@ public class DeliveryNoteGenerator {
     }
 
     /**
-     * Generate the delivery note.
+     * Load the given template file.
      *
-     * @param deliveryNote The delivery note.
-     * @param file The file where the invoice must be saved.
-     * @throws java.io.IOException
+     * @param template The given template.
+     * @return The excel file associated to the specified template.
+     * @throws FileNotFoundException if the file is not found.
+     * @throws IOException if the file cannot be read.
      */
-    public static void generate(DeliveryNote deliveryNote, File file) throws IOException, InterruptedException {
-        Template template = deliveryNote.getTemplate();
-
+    private static ExcelFile loadTemplate(Template template) throws FileNotFoundException, IOException {
         SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
         SpreadsheetInfo.addFreeLimitReachedListener(args -> args.setFreeLimitReachedAction(FreeLimitReachedAction.CONTINUE_AS_TRIAL));
 
         File templateFile = template.getFile();
         InputStream fileStream = new FileInputStream(templateFile);
-        ExcelFile workbook = ExcelFile.load(fileStream);
-        ExcelWorksheet worksheet = workbook.getWorksheet(0);
+        return ExcelFile.load(fileStream);
+    }
 
-        Pattern pattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
-        Map<String, String> templateFields = template.getFields();
-        for (Map.Entry<String, String> field : templateFields.entrySet()) {
-            String position = field.getKey();
-            String expression = field.getValue();
-
-            // Specific processing for the delivery note items.
-            if (variables.get(expression.substring(2, expression.length() - 1)) == EntityAttribute.DELIVERY_NOTE_ITEMS) {
-                ExcelCell cell = worksheet.getCell(position);
-                int rowIndex = cell.getRow().getIndex();
-                int firstColumnIndex = cell.getColumn().getIndex();
-
-                for (Weighing weighing : deliveryNote.getWeighings()) {
-                    // Number of pallets.
-                    ExcelCell numPalletsCell = worksheet.getCell(rowIndex, firstColumnIndex);
-                    numPalletsCell.setValue(1);
-
-                    // Number of boxes.
-                    ExcelCell numBoxesCell = worksheet.getCell(rowIndex, firstColumnIndex + 1);
-                    numBoxesCell.setValue(weighing.getQty());
-
-                    // Net weight.
-                    int boxWeight = (int) weighing.getBox().getWeight();
-                    int netWeight = weighing.getWeight() - (weighing.getQty() * boxWeight);
-                    ExcelCell netWeightCell = worksheet.getCell(rowIndex, firstColumnIndex + 2);
-                    netWeightCell.setValue(netWeight);
-
-                    // Weight per box.
-                    ExcelCell weightPerBoxCell = worksheet.getCell(rowIndex, firstColumnIndex + 3);
-                    weightPerBoxCell.setValue(Math.round(netWeight / weighing.getQty() * 100.0) / 100.0);
-
-                    // Move to next row.
-                    rowIndex++;
-                }
-
-                continue;
-            }
-
-            Matcher matcher = pattern.matcher(expression);
-            String replacedExpression = matcher.replaceAll(match -> {
-                String variable = match.group();
-                String variableName = variable.substring(2, variable.length() - 1);
-                EntityAttribute entityAttribute = variables.get(variableName);
-                Object variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote);
-                return variableValue.toString();
-            });
-
-            ExcelCell cell = worksheet.getCell(position);
-            cell.setValue(replacedExpression);
-        }
-
-        File tmpHtmlFile = File.createTempFile(Long.toString(deliveryNote.getDate().getTime()), ".html");
+    /**
+     * Save the workbook (excel file) on the given file.
+     *
+     * Note that the saved file will be a PDF.
+     *
+     * @param workbook The excel file to save.
+     * @param file The file with the path where the file will be saved-
+     * @param date The date time when the file will be saved.
+     * @throws java.io.IOException if the file is not found.
+     * @throws java.lang.InterruptedException if the conversion is interrupted.
+     */
+    private static void saveWorkbookOnFile(ExcelFile workbook, File file, Date date) throws IOException, InterruptedException {
+        File tmpHtmlFile = File.createTempFile(Long.toString(date.getTime()), ".html");
         tmpHtmlFile.deleteOnExit();
         OutputStream htmlStream = new FileOutputStream(tmpHtmlFile);
         workbook.save(htmlStream, new HtmlSaveOptions());
@@ -194,6 +153,104 @@ public class DeliveryNoteGenerator {
         pdf.addParam(new Param("--page-size", "A5"));
         pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
         pdf.saveAs(file.getAbsolutePath());
+    }
+
+    /**
+     * Write delivery note items into the spreadsheet cells.
+     *
+     * @param position Start position.
+     * @param weighings Weighings to write.
+     * @param worksheet
+     */
+    private static void writeDeliveryNoteItems(String position, ArrayList<Weighing> weighings, ExcelWorksheet worksheet) {
+        ExcelCell cell = worksheet.getCell(position);
+        int rowIndex = cell.getRow().getIndex();
+        int firstColumnIndex = cell.getColumn().getIndex();
+
+        for (Weighing weighing : weighings) {
+            // Number of pallets.
+            ExcelCell numPalletsCell = worksheet.getCell(rowIndex, firstColumnIndex);
+            numPalletsCell.setValue(1);
+
+            // Number of boxes.
+            ExcelCell numBoxesCell = worksheet.getCell(rowIndex, firstColumnIndex + 1);
+            numBoxesCell.setValue(weighing.getQty());
+
+            // Net weight.
+            double boxWeight = weighing.getBox().getWeight();
+            int netWeight = (int) (weighing.getWeight() - (weighing.getQty() * boxWeight));
+            ExcelCell netWeightCell = worksheet.getCell(rowIndex, firstColumnIndex + 2);
+            netWeightCell.setValue(netWeight);
+
+            // Weight per box.
+            double weightPerBox = (double) netWeight / weighing.getQty();
+            ExcelCell weightPerBoxCell = worksheet.getCell(rowIndex, firstColumnIndex + 3);
+            weightPerBoxCell.setValue(Math.round(weightPerBox * 100.0) / 100.0);
+
+            // Move to next row.
+            rowIndex++;
+        }
+    }
+
+    /**
+     * Write variable on the spreadsheet file.
+     *
+     * @param position Position to write.
+     * @param expression Expression to set.
+     * @param pattern Pattern to detect variables.
+     * @param deliveryNote Delivery note.
+     * @param variables Variables list.
+     * @param worksheet Worksheet to write the variable.
+     */
+    private static void writeVariable(String position, String expression, Pattern pattern, DeliveryNote deliveryNote, Map<String, EntityAttribute> variables, ExcelWorksheet worksheet) {
+        Matcher matcher = pattern.matcher(expression);
+        String replacedExpression = matcher.replaceAll(match -> {
+            String variable = match.group();
+            // Remove the "${" and "}" from the variable.
+            String variableName = variable.substring(2, variable.length() - 1);
+            EntityAttribute entityAttribute = variables.get(variableName);
+            Object variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote);
+            return variableValue.toString();
+        });
+
+        ExcelCell cell = worksheet.getCell(position);
+        cell.setValue(replacedExpression);
+    }
+
+    /**
+     * Generate the delivery note.
+     *
+     * @param deliveryNote The delivery note.
+     * @param file The file where the invoice must be saved.
+     * @throws java.io.IOException if the file is not found.
+     * @throws java.lang.InterruptedException if the conversion is interrupted.
+     */
+    public static void generate(DeliveryNote deliveryNote, File file) throws IOException, InterruptedException {
+        Template template = deliveryNote.getTemplate();
+
+        ExcelFile workbook = DeliveryNoteGenerator.loadTemplate(template);
+        ExcelWorksheet worksheet = workbook.getWorksheet(0);
+
+        Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
+        Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
+        Map<String, String> templateFields = template.getFields();
+        for (Map.Entry<String, String> field : templateFields.entrySet()) {
+            String position = field.getKey();
+            String expression = field.getValue();
+
+            // Specific processing for the delivery note items.
+            String expressionVariableName = expression.substring(2, expression.length() - 1);
+            EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
+            boolean shouldWriteDeliveryNoteItems = expressionEntityAttribute == EntityAttribute.DELIVERY_NOTE_ITEMS;
+            if (shouldWriteDeliveryNoteItems) {
+                DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), worksheet);
+                continue;
+            }
+
+            DeliveryNoteGenerator.writeVariable(position, expression, variablesPattern, deliveryNote, variables, worksheet);
+        }
+
+        DeliveryNoteGenerator.saveWorkbookOnFile(workbook, file, deliveryNote.getDate());
     }
 
 }
