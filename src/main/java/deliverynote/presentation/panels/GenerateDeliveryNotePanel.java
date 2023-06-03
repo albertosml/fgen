@@ -414,6 +414,12 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
 
+        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
+        if (state != DeliveryNoteValidationState.VALID) {
+            this.showInfoMessage(state);
+            return;
+        }
+
         DeliveryNote deliveryNote = deliveryNotePair.getFirst();
         if (deliveryNote != null) {
             File file = this.selectDeliveryNoteFile();
@@ -431,7 +437,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
             }
         }
 
-        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
         this.showInfoMessage(state);
     }//GEN-LAST:event_registerButtonActionPerformed
 

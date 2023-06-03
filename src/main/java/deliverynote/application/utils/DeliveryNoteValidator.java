@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import product.application.Product;
 import template.application.Template;
 import weighing.application.Weighing;
+import weighing.application.utils.WeighingValidator;
 
 /**
  * Validate the delivery note.
@@ -50,6 +51,12 @@ public class DeliveryNoteValidator {
         ArrayList<Weighing> weighings = deliveryNote.getWeighings();
         if (weighings == null) {
             return DeliveryNoteValidationState.INVALID_WEIGHINGS;
+        }
+
+        for (Weighing weighing : weighings) {
+            if (!WeighingValidator.isValid(weighing)) {
+                return DeliveryNoteValidationState.INVALID_WEIGHINGS;
+            }
         }
 
         return DeliveryNoteValidationState.VALID;

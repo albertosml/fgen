@@ -94,7 +94,7 @@ public class DeliveryNote {
             int grossWeight = weighing.getWeight();
 
             int boxWeight = (int) Math.round(box.getWeight() * qty);
-            int netWeight = grossWeight - boxWeight;
+            int netWeight = (int) (grossWeight - boxWeight - pallet.getWeight());
 
             totalNetWeight += netWeight;
         }

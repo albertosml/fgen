@@ -9,6 +9,7 @@ import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
+import container.application.Pallet;
 import deliverynote.application.DeliveryNote;
 import java.io.File;
 import java.io.FileInputStream;
@@ -160,9 +161,12 @@ public class DeliveryNoteGenerator {
      *
      * @param position Start position.
      * @param weighings Weighings to write.
-     * @param worksheet
+     * @param pallet The pallet to remove from the gross weight to calculate the
+     * net weight.
+     * @param worksheet The worksheet where we are going to write the delivery
+     * note data.
      */
-    private static void writeDeliveryNoteItems(String position, ArrayList<Weighing> weighings, ExcelWorksheet worksheet) {
+    private static void writeDeliveryNoteItems(String position, ArrayList<Weighing> weighings, Pallet pallet, ExcelWorksheet worksheet) {
         ExcelCell cell = worksheet.getCell(position);
         int rowIndex = cell.getRow().getIndex();
         int firstColumnIndex = cell.getColumn().getIndex();
@@ -178,7 +182,7 @@ public class DeliveryNoteGenerator {
 
             // Net weight.
             double boxWeight = weighing.getBox().getWeight();
-            int netWeight = (int) (weighing.getWeight() - (weighing.getQty() * boxWeight));
+            int netWeight = (int) (weighing.getWeight() - (weighing.getQty() * boxWeight) - pallet.getWeight());
             ExcelCell netWeightCell = worksheet.getCell(rowIndex, firstColumnIndex + 2);
             netWeightCell.setValue(netWeight);
 
@@ -243,7 +247,7 @@ public class DeliveryNoteGenerator {
             EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
             boolean shouldWriteDeliveryNoteItems = expressionEntityAttribute == EntityAttribute.DELIVERY_NOTE_ITEMS;
             if (shouldWriteDeliveryNoteItems) {
-                DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), worksheet);
+                DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), deliveryNote.getPallet(), worksheet);
                 continue;
             }
 
