@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fgen</groupId>
     <artifactId>fgen</artifactId>
-    <version>0.48.0</version>
+    <version>0.49.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,6 +44,22 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>at.swimmesberger</groupId>
+            <artifactId>swingx-autocomplete</artifactId>
+            <version>1.6.8</version>
+        </dependency>
+        <!-- Manually install the artifact which is located on the "lib" folder -->
+        <dependency>
+            <groupId>gembox-spreadsheet</groupId>
+            <artifactId>gembox-spreadsheet</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jhonnymertz</groupId>
+            <artifactId>java-wkhtmltopdf-wrapper</artifactId>
+            <version>1.1.15-RELEASE</version>
         </dependency>
     </dependencies>
 </project>

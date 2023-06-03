@@ -165,93 +165,69 @@ public enum LocalizationKey {
      */
     DUPLICATED_VARIABLE_MESSAGE,
     /**
-     * Sender customer code.
+     * Customer code.
      */
-    SENDER_CUSTOMER_CODE,
+    CUSTOMER_CODE,
     /**
-     * Sender customer name.
+     * Customer name.
      */
-    SENDER_CUSTOMER_NAME,
+    CUSTOMER_NAME,
     /**
-     * Sender customer TIN.
+     * Customer TIN.
      */
-    SENDER_CUSTOMER_TIN,
+    CUSTOMER_TIN,
     /**
-     * Sender customer address.
+     * Customer address.
      */
-    SENDER_CUSTOMER_ADDRESS,
+    CUSTOMER_ADDRESS,
     /**
-     * Sender customer city.
+     * Customer city.
      */
-    SENDER_CUSTOMER_CITY,
+    CUSTOMER_CITY,
     /**
-     * Sender customer province.
+     * Customer province.
      */
-    SENDER_CUSTOMER_PROVINCE,
+    CUSTOMER_PROVINCE,
     /**
-     * Sender customer ZIP code.
+     * Customer ZIP code.
      */
-    SENDER_CUSTOMER_ZIPCODE,
+    CUSTOMER_ZIPCODE,
     /**
-     * Sender customer IBAN.
+     * Customer IBAN.
      */
-    SENDER_CUSTOMER_IBAN,
+    CUSTOMER_IBAN,
     /**
-     * Recipient customer code.
+     * Product code.
      */
-    RECIPIENT_CUSTOMER_CODE,
+    PRODUCT_CODE,
     /**
-     * Recipient customer name.
+     * Product name.
      */
-    RECIPIENT_CUSTOMER_NAME,
+    PRODUCT_NAME,
     /**
-     * Recipient customer TIN.
+     * Product price.
      */
-    RECIPIENT_CUSTOMER_TIN,
+    PRODUCT_PRICE,
     /**
-     * Recipient customer address.
+     * Delivery note total weight.
      */
-    RECIPIENT_CUSTOMER_ADDRESS,
+    DELIVERY_NOTE_TOTAL_WEIGHT,
     /**
-     * Recipient customer city.
+     * Delivery note net weight.
      */
-    RECIPIENT_CUSTOMER_CITY,
+    DELIVERY_NOTE_NET_WEIGHT,
     /**
-     * Recipient customer province.
+     * Delivery note items.
      */
-    RECIPIENT_CUSTOMER_PROVINCE,
+    DELIVERY_NOTE_ITEMS,
     /**
-     * Recipient customer ZIP code.
+     * Delivery note code.
      */
-    RECIPIENT_CUSTOMER_ZIPCODE,
+    DELIVERY_NOTE_CODE,
     /**
-     * Recipient customer IBAN.
+     * Delivery note date time.
      */
-    RECIPIENT_CUSTOMER_IBAN,
-    /**
-     * Invoice code.
-     */
-    INVOICE_CODE,
-    /**
-     * Invoice generation date time.
-     */
-    INVOICE_GENERATION_DATETIME,
-    /**
-     * Invoice items.
-     */
-    INVOICE_ITEMS,
-    /**
-     * Invoice items total.
-     */
-    INVOICE_ITEMS_TOTAL,
-    /**
-     * Invoice Subtotal.
-     */
-    INVOICE_SUBTOTAL,
-    /**
-     * Invoice total.
-     */
-    INVOICE_TOTAL,
+    DELIVERY_NOTE_GENERATION_DATETIME,
     /**
      * Variables.
      */
@@ -414,6 +390,30 @@ public enum LocalizationKey {
      */
     INVALID_QTY_MESSAGE,
     /**
+     * Generated delivery note message.
+     */
+    GENERATED_DELIVERY_NOTE_MESSAGE,
+    /**
+     * Invalid customer message.
+     */
+    INVALID_CUSTOMER_MESSAGE,
+    /**
+     * Invalid product message.
+     */
+    INVALID_PRODUCT_MESSAGE,
+    /**
+     * Invalid template message.
+     */
+    INVALID_TEMPLATE_MESSAGE,
+    /**
+     * Invalid weighings message.
+     */
+    INVALID_WEIGHINGS_MESSAGE,
+    /**
+     * Not generated delivery note message.
+     */
+    NOT_GENERATED_DELIVERY_NOTE_MESSAGE,
+    /**
      * Whether the container is a box or a pallet.
      */
     IS_BOX,
@@ -441,4 +441,28 @@ public enum LocalizationKey {
      * Number of pallets.
      */
     NUM_PALLETS,
+    /**
+     * Invalid pallet message.
+     */
+    INVALID_PALLET_MESSAGE,
+    /**
+     * Invalid number of pallets message.
+     */
+    INVALID_NUM_PALLETS_MESSAGE,
+    /**
+     * Pallet.
+     */
+    PALLET,
+    /**
+     * Delivery note total number of pallets.
+     */
+    DELIVERY_NOTE_TOTAL_PALLETS,
+    /**
+     * Delivery note total number of boxes.
+     */
+    DELIVERY_NOTE_TOTAL_BOXES,
+    /**
+     * Delivery note total weight per box.
+     */
+    DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX,
 }

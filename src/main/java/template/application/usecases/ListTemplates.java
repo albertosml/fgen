@@ -26,10 +26,11 @@ public class ListTemplates {
     /**
      * List all templates.
      *
+     * @param includeRemoved Whether we should include removed templates or not.
      * @return A list with all templates.
      */
-    public ArrayList<Template> execute() {
-        return templateRepository.get();
+    public ArrayList<Template> execute(boolean includeRemoved) {
+        return templateRepository.get(includeRemoved);
     }
 
 }

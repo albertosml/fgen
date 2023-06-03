@@ -37,7 +37,7 @@ public class ListTemplatesPanel extends javax.swing.JPanel {
         try {
             MongoTemplateRepository templateRepository = new MongoTemplateRepository();
             ListTemplates listTemplates = new ListTemplates(templateRepository);
-            return listTemplates.execute();
+            return listTemplates.execute(true);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListTemplatesPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Templates cannot be shown because the database has not been found", ex);

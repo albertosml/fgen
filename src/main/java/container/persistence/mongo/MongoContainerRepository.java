@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters;
 import container.application.Box;
 import container.application.Container;
 import container.application.ContainerAttribute;
+import container.application.Pallet;
 import container.persistence.ContainerRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,6 +141,22 @@ public class MongoContainerRepository extends MongoRepository implements Contain
     @Override
     public ArrayList<Integer> getCodeList() {
         return super.distinct("code", Integer.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<Pallet> getPallets(boolean includeRemoved) {
+        ArrayList<Pallet> pallets = new ArrayList<>();
+
+        for (Container container : this.get(includeRemoved)) {
+            if (container instanceof Pallet) {
+                pallets.add((Pallet) container);
+            }
+        }
+
+        return pallets;
     }
 
     /**

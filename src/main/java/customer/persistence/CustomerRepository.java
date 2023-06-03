@@ -27,9 +27,10 @@ public interface CustomerRepository extends Repository {
      * Obtain all the customers registered on the system, even if they have been
      * removed after.
      *
+     * @param includeRemoved Whether we should include removed customers or not.
      * @return A list with all customers.
      */
-    public ArrayList<Customer> get();
+    public ArrayList<Customer> get(boolean includeRemoved);
 
     /**
      * Find the customer which matches with the given code.

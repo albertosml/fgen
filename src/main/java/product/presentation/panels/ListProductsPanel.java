@@ -37,7 +37,7 @@ public class ListProductsPanel extends javax.swing.JPanel {
         try {
             MongoProductRepository productRepository = new MongoProductRepository();
             ListProducts listProducts = new ListProducts(productRepository);
-            return listProducts.execute();
+            return listProducts.execute(true);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListProductsPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Products cannot be shown because the database has not been found", ex);

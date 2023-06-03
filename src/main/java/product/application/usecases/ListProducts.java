@@ -26,10 +26,11 @@ public class ListProducts {
     /**
      * List all products.
      *
+     * @param includeRemoved Whether we should include removed products or not.
      * @return A list with all available products.
      */
-    public ArrayList<Product> execute() {
-        return productRepository.get();
+    public ArrayList<Product> execute(boolean includeRemoved) {
+        return productRepository.get(includeRemoved);
     }
 
 }

@@ -21,9 +21,10 @@ public interface TemplateRepository extends Repository {
      * Obtain all the templates registered on the system, even if they have been
      * removed after.
      *
+     * @param includeRemoved Whether we should include removed templates or not.
      * @return A list with all templates.
      */
-    public ArrayList<Template> get();
+    public ArrayList<Template> get(boolean includeRemoved);
 
     /**
      * Find the template which matches with the given code.

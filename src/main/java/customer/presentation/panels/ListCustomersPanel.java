@@ -38,7 +38,7 @@ public class ListCustomersPanel extends javax.swing.JPanel {
         try {
             MongoCustomerRepository customerRepository = new MongoCustomerRepository();
             ListCustomers listCustomers = new ListCustomers(customerRepository);
-            return listCustomers.execute();
+            return listCustomers.execute(true);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListCustomersPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Customers cannot be shown because the database has not been found", ex);

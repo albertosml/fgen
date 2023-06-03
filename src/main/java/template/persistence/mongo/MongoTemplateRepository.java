@@ -130,12 +130,16 @@ public class MongoTemplateRepository extends MongoRepository implements Template
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Template> get() {
+    public ArrayList<Template> get(boolean includeRemoved) {
         ArrayList<Document> foundDocuments = super.find();
 
         ArrayList<Template> templates = new ArrayList<>();
         for (Document document : foundDocuments) {
-            templates.add(this.createTemplateFrom(document));
+            Template template = this.createTemplateFrom(document);
+
+            if (includeRemoved || !template.isDeleted()) {
+                templates.add(template);
+            }
         }
 
         return templates;

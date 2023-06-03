@@ -113,6 +113,14 @@ public class Template {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    /**
      * Create a template given its attribute values.
      *
      * @param attributes Map containing the value for each template attribute.

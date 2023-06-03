@@ -139,7 +139,7 @@ public class ListVariablesTableModel extends DefaultTableModel {
         // invoice subtotal.
         if (column == 3) {
             EntityAttribute entityAttribute = (EntityAttribute) super.getValueAt(row, 2);
-            return entityAttribute == EntityAttribute.INVOICE_SUBTOTAL;
+            return entityAttribute == EntityAttribute.SUBTOTAL;
         }
 
         // All columns can be edited except the first one (which contains the
@@ -160,9 +160,9 @@ public class ListVariablesTableModel extends DefaultTableModel {
             // remove the subtotal.
             EntityAttribute newEntityAttribute = (EntityAttribute) newValue;
             EntityAttribute oldEntityAttribute = (EntityAttribute) super.getValueAt(row, column);
-            if (oldEntityAttribute == EntityAttribute.INVOICE_SUBTOTAL && newEntityAttribute != EntityAttribute.INVOICE_SUBTOTAL) {
+            if (oldEntityAttribute == EntityAttribute.SUBTOTAL && newEntityAttribute != EntityAttribute.SUBTOTAL) {
                 super.setValueAt(null, row, 3);
-            } else if (newEntityAttribute == EntityAttribute.INVOICE_SUBTOTAL && oldEntityAttribute != EntityAttribute.INVOICE_SUBTOTAL) {
+            } else if (newEntityAttribute == EntityAttribute.SUBTOTAL && oldEntityAttribute != EntityAttribute.SUBTOTAL) {
                 // Set the first subtotal by default when choosing the invoice
                 // subtotal entity attribute.
                 Vector<Subtotal> nonRemovedSubtotals = new Vector<>();

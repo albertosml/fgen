@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.49.0] - 2023-06-03
+
+### Added
+
+- Added feature to generate a delivery note.
+
 ## [0.48.0] - 2023-05-21
 
 ### Added
@@ -24,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed the price from the product.
+>>>>>>> origin/main
 
 ## [0.45.0] - 2023-05-07
 

@@ -120,12 +120,16 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Customer> get() {
+    public ArrayList<Customer> get(boolean includeRemoved) {
         ArrayList<Document> foundDocuments = super.find();
 
         ArrayList<Customer> customers = new ArrayList<>();
         for (Document document : foundDocuments) {
-            customers.add(this.createCustomerFrom(document));
+            Customer customer = this.createCustomerFrom(document);
+
+            if (includeRemoved || !customer.isDeleted()) {
+                customers.add(customer);
+            }
         }
 
         return customers;

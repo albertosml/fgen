@@ -8,93 +8,81 @@ import shared.presentation.localization.LocalizationKey;
  */
 public enum EntityAttribute {
     /**
-     * Sender customer code.
+     * Customer code.
      */
-    SENDER_CUSTOMER_CODE,
+    CUSTOMER_CODE,
     /**
-     * Sender customer name.
+     * Customer name.
      */
-    SENDER_CUSTOMER_NAME,
+    CUSTOMER_NAME,
     /**
-     * Sender customer TIN.
+     * Customer TIN.
      */
-    SENDER_CUSTOMER_TIN,
+    CUSTOMER_TIN,
     /**
-     * Sender customer address.
+     * Customer address.
      */
-    SENDER_CUSTOMER_ADDRESS,
+    CUSTOMER_ADDRESS,
     /**
-     * Sender customer city.
+     * Customer city.
      */
-    SENDER_CUSTOMER_CITY,
+    CUSTOMER_CITY,
     /**
-     * Sender customer province.
+     * Customer province.
      */
-    SENDER_CUSTOMER_PROVINCE,
+    CUSTOMER_PROVINCE,
     /**
-     * Sender customer ZIP code.
+     * Customer ZIP code.
      */
-    SENDER_CUSTOMER_ZIPCODE,
+    CUSTOMER_ZIPCODE,
     /**
-     * Sender customer IBAN.
+     * Customer IBAN.
      */
-    SENDER_CUSTOMER_IBAN,
+    CUSTOMER_IBAN,
     /**
-     * Recipient customer code.
+     * Product code.
      */
-    RECIPIENT_CUSTOMER_CODE,
+    PRODUCT_CODE,
     /**
-     * Recipient customer name.
+     * Product name.
      */
-    RECIPIENT_CUSTOMER_NAME,
+    PRODUCT_NAME,
     /**
-     * Recipient customer TIN.
+     * Product price.
      */
-    RECIPIENT_CUSTOMER_TIN,
+    PRODUCT_PRICE,
     /**
-     * Recipient customer address.
+     * Delivery note net weight.
      */
-    RECIPIENT_CUSTOMER_ADDRESS,
+    DELIVERY_NOTE_NET_WEIGHT,
     /**
-     * Recipient customer city.
+     * Delivery note items.
      */
-    RECIPIENT_CUSTOMER_CITY,
+    DELIVERY_NOTE_ITEMS,
     /**
-     * Recipient customer province.
+     * Delivery note code.
      */
-    RECIPIENT_CUSTOMER_PROVINCE,
+    DELIVERY_NOTE_CODE,
     /**
-     * Recipient customer ZIP code.
+     * Delivery note date time.
      */
-    RECIPIENT_CUSTOMER_ZIPCODE,
+    DELIVERY_NOTE_GENERATION_DATETIME,
     /**
-     * Recipient customer IBAN.
+     * Subtotal.
      */
-    RECIPIENT_CUSTOMER_IBAN,
+    SUBTOTAL,
     /**
-     * Invoice code.
+     * Delivery note total number of pallets.
      */
-    INVOICE_CODE,
+    DELIVERY_NOTE_TOTAL_PALLETS,
     /**
-     * Invoice generation date time.
+     * Delivery note total number of boxes.
      */
-    INVOICE_GENERATION_DATETIME,
+    DELIVERY_NOTE_TOTAL_BOXES,
     /**
-     * Invoice items.
+     * Delivery note total weight per box.
      */
-    INVOICE_ITEMS,
-    /**
-     * Invoice items total.
-     */
-    INVOICE_ITEMS_TOTAL,
-    /**
-     * Invoice Subtotal.
-     */
-    INVOICE_SUBTOTAL,
-    /**
-     * Invoice total.
-     */
-    INVOICE_TOTAL;
+    DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX;
 
     /**
      * Gets the text to show for the corresponding enumeration value.

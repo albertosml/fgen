@@ -28,9 +28,10 @@ public interface ProductRepository extends Repository {
      * Obtain all the products registered on the system, even if they have been
      * removed after.
      *
+     * @param includeRemoved Whether we should include removed products or not.
      * @return A list with all products.
      */
-    public ArrayList<Product> get();
+    public ArrayList<Product> get(boolean includeRemoved);
 
     /**
      * Register the given product.

@@ -273,7 +273,7 @@ public class RegisterVariablePanel extends javax.swing.JPanel {
         EntityAttribute selectedAttribute = (EntityAttribute) attributeSelector.getSelectedItem();
         newVariableAttributes.put(VariableAttribute.ATTRIBUTE, selectedAttribute);
 
-        if (selectedAttribute == EntityAttribute.INVOICE_SUBTOTAL) {
+        if (selectedAttribute == EntityAttribute.SUBTOTAL) {
             newVariableAttributes.put(VariableAttribute.SUBTOTAL, subtotalSelector.getSelectedItem());
         }
 
@@ -287,7 +287,7 @@ public class RegisterVariablePanel extends javax.swing.JPanel {
         if (chosenAttribute != null) {
             // The subtotal label will be only shown when the entity attribute
             // is the invoice subtotal.
-            boolean isInvoiceSubtotal = chosenAttribute.equals(EntityAttribute.INVOICE_SUBTOTAL);
+            boolean isInvoiceSubtotal = chosenAttribute.equals(EntityAttribute.SUBTOTAL);
             this.configureSubtotalVisibility(isInvoiceSubtotal);
         }
     }//GEN-LAST:event_attributeSelectorActionPerformed
