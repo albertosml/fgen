@@ -11,6 +11,8 @@ import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 import container.application.Pallet;
 import deliverynote.application.DeliveryNote;
+import deliverynote.application.usecases.SaveDeliveryNote;
+import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
@@ -38,6 +42,32 @@ import weighing.application.Weighing;
  * Represents the class responsible of generating the delivery note.
  */
 public class DeliveryNoteGenerator {
+
+    /**
+     * Convert excel file to PDF.
+     *
+     * @param workbook The excel file to convert.
+     * @param date Date to set on the filename.
+     * @throws java.io.IOException if the file is not found.
+     * @throws java.lang.InterruptedException if the conversion is interrupted.
+     */
+    private static File convertToPdf(ExcelFile workbook, Date date) throws IOException, InterruptedException {
+        String timestamp = Long.toString(date.getTime());
+
+        File tmpHtmlFile = File.createTempFile(timestamp, ".html");
+        tmpHtmlFile.deleteOnExit();
+        OutputStream htmlStream = new FileOutputStream(tmpHtmlFile);
+        workbook.save(htmlStream, new HtmlSaveOptions());
+
+        String executable = WrapperConfig.findExecutable();
+        Pdf pdf = new Pdf(new WrapperConfig(executable));
+        pdf.addParam(new Param("--page-size", "A5"));
+        pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
+
+        File tmpPdfFile = File.createTempFile(timestamp, ".pdf");
+        tmpPdfFile.deleteOnExit();
+        return pdf.saveAs(tmpPdfFile.getAbsolutePath());
+    }
 
     /**
      * Obtain the value from the given entity attribute and delivery note.
@@ -133,27 +163,25 @@ public class DeliveryNoteGenerator {
     }
 
     /**
-     * Save the workbook (excel file) on the given file.
-     *
-     * Note that the saved file will be a PDF.
+     * Save delivery note on the database.
      *
      * @param workbook The excel file to save.
-     * @param file The file with the path where the file will be saved-
-     * @param date The date time when the file will be saved.
+     * @param deliveryNote The delivery note data.
      * @throws java.io.IOException if the file is not found.
      * @throws java.lang.InterruptedException if the conversion is interrupted.
      */
-    private static void saveWorkbookOnFile(ExcelFile workbook, File file, Date date) throws IOException, InterruptedException {
-        File tmpHtmlFile = File.createTempFile(Long.toString(date.getTime()), ".html");
-        tmpHtmlFile.deleteOnExit();
-        OutputStream htmlStream = new FileOutputStream(tmpHtmlFile);
-        workbook.save(htmlStream, new HtmlSaveOptions());
+    private static void save(ExcelFile workbook, DeliveryNote deliveryNote) throws IOException, InterruptedException {
+        File pdfFile = DeliveryNoteGenerator.convertToPdf(workbook, deliveryNote.getDate());
 
-        String executable = WrapperConfig.findExecutable();
-        Pdf pdf = new Pdf(new WrapperConfig(executable));
-        pdf.addParam(new Param("--page-size", "A5"));
-        pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
-        pdf.saveAs(file.getAbsolutePath());
+        // Call to use case.
+        try {
+            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+            SaveDeliveryNote saveDeliveryNote = new SaveDeliveryNote(deliveryNoteRepository);
+            saveDeliveryNote.execute(deliveryNote, pdfFile);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = DeliveryNoteGenerator.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Delivery note not saved because the database has not been found", ex);
+        }
     }
 
     /**
@@ -224,12 +252,11 @@ public class DeliveryNoteGenerator {
     /**
      * Generate the delivery note.
      *
-     * @param deliveryNote The delivery note.
-     * @param file The file where the invoice must be saved.
+     * @param deliveryNote The delivery note data.
      * @throws java.io.IOException if the file is not found.
      * @throws java.lang.InterruptedException if the conversion is interrupted.
      */
-    public static void generate(DeliveryNote deliveryNote, File file) throws IOException, InterruptedException {
+    public static void generate(DeliveryNote deliveryNote) throws IOException, InterruptedException {
         Template template = deliveryNote.getTemplate();
 
         ExcelFile workbook = DeliveryNoteGenerator.loadTemplate(template);
@@ -254,7 +281,7 @@ public class DeliveryNoteGenerator {
             DeliveryNoteGenerator.writeVariable(position, expression, variablesPattern, deliveryNote, variables, worksheet);
         }
 
-        DeliveryNoteGenerator.saveWorkbookOnFile(workbook, file, deliveryNote.getDate());
+        DeliveryNoteGenerator.save(workbook, deliveryNote);
     }
 
 }
