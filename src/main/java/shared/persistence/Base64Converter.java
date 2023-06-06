@@ -63,7 +63,9 @@ public class Base64Converter {
             byte[] contentBytes = Base64.getDecoder().decode(content);
             Path temp = Files.createTempFile(null, extension);
             Files.write(temp, contentBytes);
-            return temp.toFile();
+            File tmpFile = temp.toFile();
+            tmpFile.deleteOnExit();
+            return tmpFile;
         } catch (IOException ex) {
             Logger.getLogger(Base64Converter.class.getName()).log(Level.SEVERE, null, ex);
         }

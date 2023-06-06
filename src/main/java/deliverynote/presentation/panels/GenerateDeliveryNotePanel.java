@@ -422,15 +422,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         DeliveryNote deliveryNote = deliveryNotePair.getFirst();
         if (deliveryNote != null) {
-            File file = this.selectDeliveryNoteFile();
-
-            if (file == null) {
-                this.showInfoMessage(DeliveryNoteValidationState.INVALID);
-                return;
-            }
-
             try {
-                DeliveryNoteGenerator.generate(deliveryNote, file);
+                DeliveryNoteGenerator.generate(deliveryNote);
             } catch (IOException | InterruptedException ex) {
                 this.showInfoMessage(DeliveryNoteValidationState.INVALID);
                 return;
