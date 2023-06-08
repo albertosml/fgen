@@ -14,5 +14,6 @@ public enum CustomerAttribute {
     PROVINCE,
     ZIPCODE,
     IBAN,
-    ISDELETED;
+    ISDELETED,
+    ISSUPPLIER;
 }

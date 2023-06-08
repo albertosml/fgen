@@ -54,6 +54,11 @@ public class Customer {
     private String iban;
 
     /**
+     * Whether the customer is supplier or not.
+     */
+    private boolean isSupplier;
+
+    /**
      * Whether the customer is deleted or not.
      */
     private boolean isDeleted;
@@ -69,9 +74,10 @@ public class Customer {
      * @param province Customer province.
      * @param zipcode Customer ZIP code.
      * @param iban Customer IBAN.
+     * @param isSupplier Whether the customer is supplier or not.
      * @param isDeleted Whether the customer is deleted or not.
      */
-    private Customer(int code, String name, String tin, String address, String city, String province, String zipcode, String iban, boolean isDeleted) {
+    private Customer(int code, String name, String tin, String address, String city, String province, String zipcode, String iban, boolean isSupplier, boolean isDeleted) {
         this.code = code;
         this.name = name;
         this.tin = tin;
@@ -80,6 +86,7 @@ public class Customer {
         this.province = province;
         this.zipcode = zipcode;
         this.iban = iban;
+        this.isSupplier = isSupplier;
         this.isDeleted = isDeleted;
     }
 
@@ -156,6 +163,15 @@ public class Customer {
     }
 
     /**
+     * Whether the customer is supplier or not.
+     *
+     * @return true if the customer is supplier, otherwise false.
+     */
+    public boolean isSupplier() {
+        return this.isSupplier;
+    }
+
+    /**
      * Whether the customer is deleted from the system or not.
      *
      * @return true if the customer is removed, otherwise false.
@@ -198,9 +214,10 @@ public class Customer {
         String province = (String) attributes.getOrDefault(CustomerAttribute.PROVINCE, null);
         String zipcode = (String) attributes.getOrDefault(CustomerAttribute.ZIPCODE, null);
         String iban = (String) attributes.getOrDefault(CustomerAttribute.IBAN, null);
+        boolean isSupplier = (boolean) attributes.getOrDefault(CustomerAttribute.ISSUPPLIER, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(CustomerAttribute.ISDELETED, false);
 
-        return new Customer(code, name, tin, address, city, province, zipcode, iban, isDeleted);
+        return new Customer(code, name, tin, address, city, province, zipcode, iban, isSupplier, isDeleted);
     }
 
 }

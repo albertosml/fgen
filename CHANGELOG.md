@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.51.0] - 2023-06-09
+
+### Added
+
+- Added feature to indicate whether a customer is a supplier or not.
+
 ## [0.50.0] - 2023-06-07
 
 ### Added

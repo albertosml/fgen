@@ -44,6 +44,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
         document.append("province", customer.getProvince());
         document.append("zipcode", customer.getZipCode());
         document.append("iban", customer.getIban());
+        document.append("isSupplier", customer.isSupplier());
         document.append("isDeleted", customer.isDeleted());
 
         return document;
@@ -66,6 +67,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
         attributes.put(CustomerAttribute.PROVINCE, document.get("province"));
         attributes.put(CustomerAttribute.ZIPCODE, document.get("zipcode"));
         attributes.put(CustomerAttribute.IBAN, document.get("iban"));
+        attributes.put(CustomerAttribute.ISSUPPLIER, document.get("isSupplier"));
         attributes.put(CustomerAttribute.ISDELETED, document.get("isDeleted"));
 
         return Customer.from(attributes);
