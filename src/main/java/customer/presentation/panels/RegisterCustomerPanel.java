@@ -62,6 +62,7 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
         this.setLabelText(provinceLabel, LocalizationKey.PROVINCE);
         this.setLabelText(zipcodeLabel, LocalizationKey.ZIPCODE);
         this.setLabelText(ibanLabel, LocalizationKey.IBAN);
+        this.setLabelText(isSupplierLabel, LocalizationKey.IS_SUPPLIER);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
     }
 
@@ -95,6 +96,7 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
         this.provinceInput.setText("");
         this.zipcodeInput.setText("");
         this.ibanInput.setText("");
+        this.isSupplierInput.setSelected(false);
     }
 
     /**
@@ -138,6 +140,8 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
         ibanLabel = new javax.swing.JLabel();
         ibanInput = new javax.swing.JTextField();
         registerButton = new javax.swing.JButton();
+        isSupplierLabel = new javax.swing.JLabel();
+        isSupplierInput = new javax.swing.JCheckBox();
 
         nameLabel.setText("${NAME}:");
 
@@ -160,11 +164,13 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
             }
         });
 
+        isSupplierLabel.setText("${IS_SUPPLIER}:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(addressLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -173,18 +179,26 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
                     .addComponent(cityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(provinceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(zipcodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ibanLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ibanLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(isSupplierLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameInput)
-                    .addComponent(tinInput)
-                    .addComponent(addressInput)
-                    .addComponent(cityInput)
-                    .addComponent(provinceInput)
-                    .addComponent(zipcodeInput)
-                    .addComponent(ibanInput)
-                    .addComponent(registerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(61, 61, 61))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameInput, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                            .addComponent(tinInput)
+                            .addComponent(addressInput)
+                            .addComponent(cityInput)
+                            .addComponent(provinceInput)
+                            .addComponent(zipcodeInput)
+                            .addComponent(ibanInput))
+                        .addGap(61, 61, 61))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(isSupplierInput)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,9 +231,13 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ibanLabel)
                     .addComponent(ibanInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(isSupplierLabel)
+                    .addComponent(isSupplierInput))
+                .addGap(18, 18, 18)
                 .addComponent(registerButton)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -233,6 +251,7 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
         newCustomerAttributes.put(CustomerAttribute.PROVINCE, provinceInput.getText());
         newCustomerAttributes.put(CustomerAttribute.ZIPCODE, zipcodeInput.getText());
         newCustomerAttributes.put(CustomerAttribute.IBAN, ibanInput.getText());
+        newCustomerAttributes.put(CustomerAttribute.ISSUPPLIER, isSupplierInput.isSelected());
 
         this.registerCustomer(newCustomerAttributes);
     }//GEN-LAST:event_registerButtonActionPerformed
@@ -245,6 +264,8 @@ public class RegisterCustomerPanel extends javax.swing.JPanel {
     private javax.swing.JLabel cityLabel;
     private javax.swing.JTextField ibanInput;
     private javax.swing.JLabel ibanLabel;
+    private javax.swing.JCheckBox isSupplierInput;
+    private javax.swing.JLabel isSupplierLabel;
     private javax.swing.JTextField nameInput;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField provinceInput;

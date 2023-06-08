@@ -465,4 +465,8 @@ public enum LocalizationKey {
      * Delivery note total weight per box.
      */
     DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX,
+    /**
+     * Whether the customer is supplier.
+     */
+    IS_SUPPLIER,
 }

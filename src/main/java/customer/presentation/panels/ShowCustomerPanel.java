@@ -75,6 +75,7 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         this.setLabelText(provinceLabel, LocalizationKey.PROVINCE);
         this.setLabelText(zipcodeLabel, LocalizationKey.ZIPCODE);
         this.setLabelText(ibanLabel, LocalizationKey.IBAN);
+        this.setLabelText(isSupplierLabel, LocalizationKey.IS_SUPPLIER);
         this.setLabelText(isDeletedLabel, LocalizationKey.IS_DELETED);
         this.setButtonText(updateButton, LocalizationKey.UPDATE);
     }
@@ -112,6 +113,7 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         this.provinceInput.setText(customer.getProvince());
         this.zipcodeInput.setText(customer.getZipCode());
         this.ibanInput.setText(customer.getIban());
+        this.isSupplierCheckbox.setSelected(customer.isSupplier());
         this.isDeletedCheckbox.setSelected(customer.isDeleted());
     }
 
@@ -126,6 +128,7 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         this.provinceInput.setEditable(false);
         this.zipcodeInput.setEditable(false);
         this.ibanInput.setEditable(false);
+        this.isSupplierCheckbox.setEnabled(false);
     }
 
     /**
@@ -219,6 +222,8 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         codeLabel = new javax.swing.JLabel();
         updateButton = new javax.swing.JButton();
         codeInput = new javax.swing.JTextField();
+        isSupplierLabel = new javax.swing.JLabel();
+        isSupplierCheckbox = new javax.swing.JCheckBox();
         isDeletedLabel = new javax.swing.JLabel();
         isDeletedCheckbox = new javax.swing.JCheckBox();
 
@@ -247,6 +252,8 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
 
         codeInput.setEditable(false);
 
+        isSupplierLabel.setText("${IS_SUPPLIER}:");
+
         isDeletedLabel.setText("${IS_DELETED}:");
 
         isDeletedCheckbox.setEnabled(false);
@@ -266,7 +273,8 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
                     .addComponent(zipcodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ibanLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(codeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(isDeletedLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(isSupplierLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(isDeletedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -277,12 +285,14 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
                             .addComponent(cityInput)
                             .addComponent(provinceInput)
                             .addComponent(zipcodeInput)
-                            .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(ibanInput, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nameInput))
                         .addGap(61, 61, 61))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(isDeletedCheckbox)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(isSupplierCheckbox)
+                            .addComponent(isDeletedCheckbox))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -322,11 +332,15 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
                     .addComponent(ibanInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isSupplierLabel)
+                    .addComponent(isSupplierCheckbox))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(isDeletedLabel)
                     .addComponent(isDeletedCheckbox))
                 .addGap(18, 18, 18)
                 .addComponent(updateButton)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -340,6 +354,7 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
         customerAttributes.put(CustomerAttribute.CITY, this.cityInput.getText());
         customerAttributes.put(CustomerAttribute.ZIPCODE, this.zipcodeInput.getText());
         customerAttributes.put(CustomerAttribute.IBAN, this.ibanInput.getText());
+        customerAttributes.put(CustomerAttribute.ISSUPPLIER, this.isSupplierCheckbox.isSelected());
         customerAttributes.put(CustomerAttribute.ISDELETED, this.isDeletedCheckbox.isSelected());
 
         this.updateCustomer(customerAttributes);
@@ -357,6 +372,8 @@ public class ShowCustomerPanel extends javax.swing.JPanel {
     private javax.swing.JLabel ibanLabel;
     private javax.swing.JCheckBox isDeletedCheckbox;
     private javax.swing.JLabel isDeletedLabel;
+    private javax.swing.JCheckBox isSupplierCheckbox;
+    private javax.swing.JLabel isSupplierLabel;
     private javax.swing.JTextField nameInput;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField provinceInput;
