@@ -469,4 +469,16 @@ public enum LocalizationKey {
      * Whether the customer is supplier.
      */
     IS_SUPPLIER,
+    /**
+     * Date.
+     */
+    DATE,
+    /**
+     * Download action.
+     */
+    DOWNLOAD,
+    /**
+     * Print action.
+     */
+    PRINT,
 }

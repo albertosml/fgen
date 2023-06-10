@@ -129,6 +129,9 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_BOXES, "Número total de cajas");
         super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX, "Peso total por caja");
         super.setTranslation(LocalizationKey.IS_SUPPLIER, "¿Es proveedor?");
+        super.setTranslation(LocalizationKey.DATE, "Fecha");
+        super.setTranslation(LocalizationKey.DOWNLOAD, "Descargar");
+        super.setTranslation(LocalizationKey.PRINT, "Imprimir");
     }
 
 }

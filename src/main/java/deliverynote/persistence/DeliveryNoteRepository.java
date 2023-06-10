@@ -1,7 +1,9 @@
 package deliverynote.persistence;
 
 import deliverynote.application.DeliveryNote;
+import deliverynote.application.DeliveryNoteData;
 import java.io.File;
+import java.util.ArrayList;
 import shared.persistence.Repository;
 
 /**
@@ -16,5 +18,12 @@ public interface DeliveryNoteRepository extends Repository {
      * @param pdfFile A PDF file containing the delivery note data.
      */
     public void save(DeliveryNote deliveryNote, File pdfFile);
+
+    /**
+     * List all the delivery notes.
+     *
+     * @return A list with all delivery notes.
+     */
+    public ArrayList<DeliveryNoteData> get();
 
 }
