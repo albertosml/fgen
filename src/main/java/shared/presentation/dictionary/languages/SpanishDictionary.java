@@ -132,6 +132,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.DATE, "Fecha");
         super.setTranslation(LocalizationKey.DOWNLOAD, "Descargar");
         super.setTranslation(LocalizationKey.PRINT, "Imprimir");
+        super.setTranslation(LocalizationKey.DOWNLOADED_FILE_MESSAGE, "El archivo se ha descargado en");
     }
 
 }

@@ -481,4 +481,8 @@ public enum LocalizationKey {
      * Print action.
      */
     PRINT,
+    /**
+     * Downloaded file message.
+     */
+    DOWNLOADED_FILE_MESSAGE,
 }

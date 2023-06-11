@@ -3,8 +3,14 @@ package deliverynote.presentation.utils;
 import deliverynote.application.DeliveryNoteData;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileSystemView;
+import shared.presentation.localization.Localization;
+import shared.presentation.localization.LocalizationKey;
 
 /**
  * Mouse adapter for the list delivery notes panel, which includes a button to
@@ -55,9 +61,17 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
      * @param deliveryNoteData The delivery note data.
      */
     private void downloadDeliveryNote(DeliveryNoteData deliveryNoteData) {
-        // TODO: Add filter by product, customer and date
-        System.out.println(deliveryNoteData.getCode());
-        System.out.println("download delivery note");
+        String deliveryNoteName = Localization.getLocalization(LocalizationKey.DELIVERY_NOTE);
+        String documentsPath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
+        String filename = String.format("%s_%d.pdf", deliveryNoteName, deliveryNoteData.getCode());
+        File destFile = new File(documentsPath, filename);
+
+        File file = deliveryNoteData.getFile();
+        file.renameTo(destFile);
+
+        String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_FILE_MESSAGE);
+        String infoMessage = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
+        JOptionPane.showMessageDialog(table, infoMessage);
     }
 
     /**
