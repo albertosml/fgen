@@ -3,12 +3,23 @@ package deliverynote.presentation.utils;
 import deliverynote.application.DeliveryNoteData;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileSystemView;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.printing.PDFPageable;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 
@@ -82,6 +93,26 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
     private void printDeliveryNote(DeliveryNoteData deliveryNoteData) {
         System.out.println(deliveryNoteData.getCode());
         System.out.println("print delivery note");
+
+        try {
+            PDDocument pdfDocument = PDDocument.load(deliveryNoteData.getFile());
+            PDFPageable pageable = new PDFPageable(pdfDocument);
+
+            PrinterJob printer = PrinterJob.getPrinterJob();
+            printer.setCopies(2);
+            printer.setPageable(pageable);
+
+            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+            attributes.add(MediaSizeName.ISO_A5);
+            attributes.add(OrientationRequested.PORTRAIT);
+
+            printer.print(attributes);
+
+            String printedFileMessage = Localization.getLocalization(LocalizationKey.PRINTED_FILE_MESSAGE);
+            JOptionPane.showMessageDialog(table, printedFileMessage);
+        } catch (IOException | PrinterException ex) {
+            Logger.getLogger(ListDeliveryNotesMouseAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
