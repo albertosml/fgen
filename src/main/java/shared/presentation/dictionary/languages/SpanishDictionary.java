@@ -134,6 +134,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.PRINT, "Imprimir");
         super.setTranslation(LocalizationKey.DOWNLOADED_FILE_MESSAGE, "El archivo se ha descargado en");
         super.setTranslation(LocalizationKey.PRINTED_FILE_MESSAGE, "Archivo imprimido");
+        super.setTranslation(LocalizationKey.MONTH, "Mes");
+        super.setTranslation(LocalizationKey.YEAR, "Año");
     }
 
 }

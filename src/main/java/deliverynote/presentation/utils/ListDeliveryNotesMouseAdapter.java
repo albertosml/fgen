@@ -7,17 +7,20 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.DefaultTableModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
 import shared.presentation.localization.Localization;
@@ -35,7 +38,7 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
     private JTable table;
 
     /**
-     * Delivery notes data.
+     * Loaded delivery notes data.
      */
     private ArrayList<DeliveryNoteData> deliveryNotesData;
 
@@ -43,11 +46,9 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
      * Constructor.
      *
      * @param table The table associated to the mouse adapter.
-     * @param deliveryNotesData The delivery notes data.
      */
-    public ListDeliveryNotesMouseAdapter(JTable table, ArrayList<DeliveryNoteData> deliveryNotesData) {
+    public ListDeliveryNotesMouseAdapter(JTable table) {
         this.table = table;
-        this.deliveryNotesData = deliveryNotesData;
     }
 
     /**
@@ -133,6 +134,42 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
             this.downloadDeliveryNote(deliveryNoteData);
         } else if (column == 5) {
             this.printDeliveryNote(deliveryNoteData);
+        }
+    }
+
+    /**
+     * Add the delivery notes data to the table.
+     *
+     * @param deliveryNotesData The delivery notes data.
+     */
+    public void addDeliveryNotesData(ArrayList<DeliveryNoteData> deliveryNotesData) {
+        this.deliveryNotesData = deliveryNotesData;
+
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        for (DeliveryNoteData deliveryNoteData : this.deliveryNotesData) {
+            // Column 1: Delivery note data code.
+            int code = deliveryNoteData.getCode();
+
+            // Column 2: Delivery note data generation datetime.
+            String pattern = "dd-MM-yyyy HH:mm:ss";
+            DateFormat df = new SimpleDateFormat(pattern);
+            Date date = deliveryNoteData.getDate();
+            String formattedDate = df.format(date);
+
+            // Column 3: Delivery note data customer.
+            String customerCode = deliveryNoteData.getCustomer().toString();
+
+            // Column 4: Delivery note data product.
+            String productCode = deliveryNoteData.getProduct().toString();
+
+            // Column 5: Empty name. It will show a button to download the delivery note.
+            String downloadName = Localization.getLocalization(LocalizationKey.DOWNLOAD);
+
+            // Column 6: Empty name with a whitespace. It will show a button to
+            // print the delivery note.
+            String printName = Localization.getLocalization(LocalizationKey.PRINT);
+
+            tableModel.addRow(new Object[]{code, formattedDate, customerCode, productCode, downloadName, printName});
         }
     }
 

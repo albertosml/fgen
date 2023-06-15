@@ -489,4 +489,12 @@ public enum LocalizationKey {
      * Printed file message.
      */
     PRINTED_FILE_MESSAGE,
+    /**
+     * Month.
+     */
+    MONTH,
+    /**
+     * Year.
+     */
+    YEAR,
 }

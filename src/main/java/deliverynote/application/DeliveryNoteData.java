@@ -4,9 +4,6 @@ import customer.application.Customer;
 import customer.persistence.CustomerRepository;
 import customer.persistence.mongo.MongoCustomerRepository;
 import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
@@ -170,13 +167,6 @@ public class DeliveryNoteData {
         int code = (int) attributes.get(DeliveryNoteDataAttribute.CODE);
 
         Date date = (Date) attributes.get(DeliveryNoteDataAttribute.DATE);
-        /*try {
-            String dateString = (String) attributes.get(DeliveryNoteDataAttribute.DATE);
-            DateFormat iso8601DateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-            date = iso8601DateFormat.parse(dateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(DeliveryNoteData.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
 
         Map<String, String> fileAttributes = (Map<String, String>) attributes.get(DeliveryNoteDataAttribute.FILE);
         File file = Base64Converter.decode(fileAttributes);

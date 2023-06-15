@@ -1,21 +1,34 @@
 package deliverynote.presentation.panels;
 
 import customer.application.Customer;
-import customer.presentation.utils.ListCustomersMouseAdapter;
+import customer.application.usecases.ListCustomers;
+import customer.persistence.mongo.MongoCustomerRepository;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import deliverynote.presentation.utils.ListDeliveryNotesMouseAdapter;
+import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import product.application.Product;
+import product.application.usecases.ListProducts;
+import product.persistence.mongo.MongoProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -31,19 +44,110 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
      */
     public ListDeliveryNotesPanel() {
         initComponents();
+        initializeFormLabels();
+        initializeInputs();
         initializeTable();
+    }
+
+    /**
+     * Set the text for a label component.
+     *
+     * @param label The label component.
+     * @param key The localization key to use for getting the label text.
+     */
+    private void setLabelText(JLabel label, LocalizationKey key) {
+        String localization = Localization.getLocalization(key);
+        String labelText = String.format("%s:", localization);
+        label.setText(labelText);
+    }
+
+    /**
+     * Set the text for a button component.
+     *
+     * @param button The button component.
+     * @param key The localization key to use for getting the button text.
+     */
+    private void setButtonText(JButton button, LocalizationKey key) {
+        String localization = Localization.getLocalization(key);
+        button.setText(localization);
+    }
+
+    /**
+     * Initialize form labels.
+     */
+    private void initializeFormLabels() {
+        this.setLabelText(customerLabel, LocalizationKey.CUSTOMER);
+        this.setLabelText(productLabel, LocalizationKey.PRODUCT);
+        this.setLabelText(monthLabel, LocalizationKey.MONTH);
+        this.setLabelText(yearLabel, LocalizationKey.YEAR);
+        this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
+    }
+
+    /**
+     * Initialize inputs.
+     */
+    private void initializeInputs() {
+        // Customers input.
+        Vector<Customer> customers = new Vector<>(this.getCustomers());
+        customerInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Customer>(customers));
+        AutoCompleteDecorator.decorate(customerInput);
+
+        // Product input.
+        Vector<Product> products = new Vector<>(this.getProducts());
+        productInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Product>(products));
+        AutoCompleteDecorator.decorate(productInput);
+    }
+
+    /**
+     * Obtain all the non-removed customers data by executing the use case.
+     *
+     * @return A list with all non-removed customers on the system.
+     */
+    private ArrayList<Customer> getCustomers() {
+        try {
+            MongoCustomerRepository customerRepository = new MongoCustomerRepository();
+            ListCustomers listCustomers = new ListCustomers(customerRepository);
+            return listCustomers.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Customers cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Obtain all the non-removed products data by executing the use case.
+     *
+     * @return A list with all non-removed products on the system.
+     */
+    private ArrayList<Product> getProducts() {
+        try {
+            MongoProductRepository productRepository = new MongoProductRepository();
+            ListProducts listProducts = new ListProducts(productRepository);
+            return listProducts.execute(false);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = GenerateDeliveryNotePanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Products cannot be shown because the database has not been found", ex);
+        }
+
+        return new ArrayList<>();
     }
 
     /**
      * Obtain all the delivery notes data by executing the use case.
      *
+     * @param customer The customer to get the delivery notes.
+     * @param product The product to get the delivery notes.
+     * @param month The month to get the delivery notes.
+     * @param year The year to get the delivery notes.
      * @return A list with all available delivery notes data on the system.
      */
-    private ArrayList<DeliveryNoteData> getDeliveryNotesData() {
+    private ArrayList<DeliveryNoteData> getDeliveryNotesData(Customer customer, Product product, int month, int year) {
         try {
             MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
             ListDeliveryNotes listDeliveryNotes = new ListDeliveryNotes(deliveryNoteRepository);
-            return listDeliveryNotes.execute();
+            return listDeliveryNotes.execute(customer, product, month, year);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListDeliveryNotesPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Delivery notes cannot be shown because the database has not been found", ex);
@@ -74,77 +178,28 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Set the table data based on the given customers.
-     *
-     * @param deliveryNotesData An array list containing all the available
-     * delivery notes data on the system.
-     * @return A matrix containing all the table data.
-     */
-    private Vector<Vector<Object>> setTableData(ArrayList<DeliveryNoteData> deliveryNotesData) {
-        Vector<Vector<Object>> data = new Vector<>();
-
-        for (DeliveryNoteData deliveryNoteData : deliveryNotesData) {
-            Vector<Object> rowData = new Vector<>();
-
-            // Column 1: Delivery note data code.
-            int code = deliveryNoteData.getCode();
-            rowData.add(code);
-
-            // Column 2: Delivery note data generation datetime.
-            String pattern = "dd-MM-yyyy HH:mm:ss";
-            DateFormat df = new SimpleDateFormat(pattern);
-            Date date = deliveryNoteData.getDate();
-            rowData.add(df.format(date));
-
-            // Column 3: Delivery note data customer.
-            rowData.add(deliveryNoteData.getCustomer().toString());
-
-            // Column 4: Delivery note data product.
-            rowData.add(deliveryNoteData.getProduct().toString());
-
-            // Column 5: Empty name. It will show a button to download the delivery note.
-            String downloadName = Localization.getLocalization(LocalizationKey.DOWNLOAD);
-            rowData.add(downloadName);
-
-            // Column 6: Empty name with a whitespace. It will show a button to
-            // print the delivery note.
-            String printName = Localization.getLocalization(LocalizationKey.PRINT);
-            rowData.add(printName);
-
-            data.add(rowData);
-        }
-
-        return data;
-    }
-
-    /**
      * Initialize the table.
      */
     private void initializeTable() {
-        ArrayList<DeliveryNoteData> deliveryNotesData = this.getDeliveryNotesData();
+        Vector<String> columnNames = this.generateColumnNames();
 
-        if (deliveryNotesData != null) {
-            Vector<String> columnNames = this.generateColumnNames();
-            Vector<Vector<Object>> data = this.setTableData(deliveryNotesData);
+        TableModel dataModel = new DefaultTableModel(null, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-            TableModel dataModel = new DefaultTableModel(data, columnNames) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
+        table.setModel(dataModel);
 
-            table.setModel(dataModel);
+        table.addMouseListener(new ListDeliveryNotesMouseAdapter(table));
 
-            table.addMouseListener(new ListDeliveryNotesMouseAdapter(table, deliveryNotesData));
+        // Set a button renderer for the action buttons.
+        TableColumn downloadColumn = table.getColumn(columnNames.get(4));
+        downloadColumn.setCellRenderer(new ButtonRenderer());
 
-            // Set a button renderer for the action buttons.
-            TableColumn downloadColumn = table.getColumn(columnNames.get(4));
-            downloadColumn.setCellRenderer(new ButtonRenderer());
-
-            TableColumn printColumn = table.getColumn(columnNames.get(5));
-            printColumn.setCellRenderer(new ButtonRenderer());
-        }
+        TableColumn printColumn = table.getColumn(columnNames.get(5));
+        printColumn.setCellRenderer(new ButtonRenderer());
     }
 
     @SuppressWarnings("unchecked")
@@ -153,6 +208,15 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         scrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        customerInput = new javax.swing.JComboBox<>();
+        customerLabel = new javax.swing.JLabel();
+        productLabel = new javax.swing.JLabel();
+        productInput = new javax.swing.JComboBox<>();
+        monthInput = new com.toedter.calendar.JMonthChooser();
+        yearInput = new com.toedter.calendar.JYearChooser();
+        yearLabel = new javax.swing.JLabel();
+        monthLabel = new javax.swing.JLabel();
+        listDeliveryNotesButton = new javax.swing.JButton();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -188,27 +252,132 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(5).setResizable(false);
         }
 
+        customerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        customerLabel.setText("${CUSTOMER}:");
+
+        productLabel.setText("${PRODUCT}:");
+
+        productInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        yearLabel.setText("${YEAR}:");
+
+        monthLabel.setText("${MONTH}:");
+
+        listDeliveryNotesButton.setText("${LIST}");
+        listDeliveryNotesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listDeliveryNotesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
-                .addGap(14, 14, 14))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(productLabel)
+                            .addComponent(customerLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(productInput, 0, 213, Short.MAX_VALUE)
+                            .addComponent(customerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(monthLabel)
+                            .addComponent(yearLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(yearInput, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(monthInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(54, 54, 54)
+                        .addComponent(listDeliveryNotesButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(scrollPane)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(monthInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(yearInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(monthLabel)
+                                    .addComponent(customerLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(productLabel)
+                                    .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(yearLabel)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(listDeliveryNotesButton)))
+                .addGap(18, 18, 18)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void listDeliveryNotesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listDeliveryNotesButtonActionPerformed
+        Customer customer = (Customer) customerInput.getSelectedItem();
+        Product product = (Product) productInput.getSelectedItem();
+        int month = monthInput.getMonth();
+        int year = yearInput.getYear();
+
+        // TODO: GET UTC TIME
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date dateRepresentation = cal.getTime();
+        System.out.println(dateRepresentation);
+
+        /*GregorianCalendar g = new GregorianCalendar(year, month, 1);
+        g.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = g.getTime();
+        System.out.println(date);*/
+        /*try {
+            String dateString = (String) attributes.get(DeliveryNoteDataAttribute.DATE);
+            DateFormat iso8601DateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            date = iso8601DateFormat.parse(dateString);
+        } catch (ParseException ex) {
+            Logger.getLogger(DeliveryNoteData.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        //MouseListener[] mouseListeners = table.getMouseListeners();
+        //ListDeliveryNotesMouseAdapter mouseAdapter = (ListDeliveryNotesMouseAdapter) mouseListeners[0];
+        //mouseAdapter.addDeliveryNotesData(this.getDeliveryNotesData(customer, product, month, year));
+    }//GEN-LAST:event_listDeliveryNotesButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> customerInput;
+    private javax.swing.JLabel customerLabel;
+    private javax.swing.JButton listDeliveryNotesButton;
+    private com.toedter.calendar.JMonthChooser monthInput;
+    private javax.swing.JLabel monthLabel;
+    private javax.swing.JComboBox<String> productInput;
+    private javax.swing.JLabel productLabel;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTable table;
+    private com.toedter.calendar.JYearChooser yearInput;
+    private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }
