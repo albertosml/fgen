@@ -1,14 +1,19 @@
 package deliverynote.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
+import customer.application.Customer;
 import deliverynote.application.DeliveryNote;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.DeliveryNoteDataAttribute;
 import deliverynote.persistence.DeliveryNoteRepository;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import product.application.Product;
 import shared.persistence.Base64Converter;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
@@ -91,8 +96,14 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<DeliveryNoteData> get() {
-        ArrayList<Document> foundDocuments = super.find();
+    public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
+        Bson customerFilter = Filters.eq("customer", customer.getCode());
+        Bson productFilter = Filters.eq("product", product.getCode());
+        Bson fromDate = Filters.gte("date", from);
+        Bson toDate = Filters.lt("date", to);
+        Bson filters = Filters.and(customerFilter, productFilter, fromDate, toDate);
+
+        ArrayList<Document> foundDocuments = super.find(filters);
 
         ArrayList<DeliveryNoteData> deliveryNotes = new ArrayList<>();
         for (Document document : foundDocuments) {

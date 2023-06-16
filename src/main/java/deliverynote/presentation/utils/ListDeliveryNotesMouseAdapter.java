@@ -146,6 +146,8 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
         this.deliveryNotesData = deliveryNotesData;
 
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        tableModel.setRowCount(0); // Clean table data before adding the new data.
+
         for (DeliveryNoteData deliveryNoteData : this.deliveryNotesData) {
             // Column 1: Delivery note data code.
             int code = deliveryNoteData.getCode();

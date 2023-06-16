@@ -4,7 +4,9 @@ import customer.application.Customer;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.persistence.DeliveryNoteRepository;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import org.apache.commons.lang3.time.DateUtils;
 import product.application.Product;
 
 /**
@@ -36,10 +38,19 @@ public class ListDeliveryNotes {
      * @return A list with all delivery notes.
      */
     public ArrayList<DeliveryNoteData> execute(Customer customer, Product product, int month, int year) {
-        //Date startDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date startMonthDate = calendar.getTime();
 
-        //return deliveryNoteRepository.get(customer, product, startDate, endDate);
-        return new ArrayList<>();
+        Date startNextMonthDate = DateUtils.addMonths(startMonthDate, 1);
+
+        return deliveryNoteRepository.get(customer, product, startMonthDate, startNextMonthDate);
     }
 
 }

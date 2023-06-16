@@ -7,14 +7,7 @@ import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import deliverynote.presentation.utils.ListDeliveryNotesMouseAdapter;
-import java.awt.event.MouseListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +31,11 @@ import shared.presentation.utils.ButtonRenderer;
  * Panel which lists all the delivery notes.
  */
 public class ListDeliveryNotesPanel extends javax.swing.JPanel {
+
+    /**
+     * Mouse listener.
+     */
+    private ListDeliveryNotesMouseAdapter mouseListener;
 
     /**
      * Constructor.
@@ -192,7 +190,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         table.setModel(dataModel);
 
-        table.addMouseListener(new ListDeliveryNotesMouseAdapter(table));
+        this.mouseListener = new ListDeliveryNotesMouseAdapter(table);
+        table.addMouseListener(this.mouseListener);
 
         // Set a button renderer for the action buttons.
         TableColumn downloadColumn = table.getColumn(columnNames.get(4));
@@ -338,32 +337,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         int month = monthInput.getMonth();
         int year = yearInput.getYear();
 
-        // TODO: GET UTC TIME
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date dateRepresentation = cal.getTime();
-        System.out.println(dateRepresentation);
-
-        /*GregorianCalendar g = new GregorianCalendar(year, month, 1);
-        g.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date date = g.getTime();
-        System.out.println(date);*/
-        /*try {
-            String dateString = (String) attributes.get(DeliveryNoteDataAttribute.DATE);
-            DateFormat iso8601DateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-            date = iso8601DateFormat.parse(dateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(DeliveryNoteData.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        //MouseListener[] mouseListeners = table.getMouseListeners();
-        //ListDeliveryNotesMouseAdapter mouseAdapter = (ListDeliveryNotesMouseAdapter) mouseListeners[0];
-        //mouseAdapter.addDeliveryNotesData(this.getDeliveryNotesData(customer, product, month, year));
+        mouseListener.addDeliveryNotesData(this.getDeliveryNotesData(customer, product, month, year));
     }//GEN-LAST:event_listDeliveryNotesButtonActionPerformed
 
 
