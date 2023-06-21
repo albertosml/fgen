@@ -505,4 +505,8 @@ public enum LocalizationKey {
      * Download error message.
      */
     DOWNLOAD_ERROR_MESSAGE,
+    /**
+     * Net weight.
+     */
+    NET_WEIGHT,
 }

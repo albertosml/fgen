@@ -157,29 +157,32 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
         tableModel.setRowCount(0); // Clean table data before adding the new data.
 
         for (DeliveryNoteData deliveryNoteData : this.deliveryNotesData) {
-            // Column 1: Delivery note data code.
-            int code = deliveryNoteData.getCode();
-
-            // Column 2: Delivery note data generation datetime.
+            // Column 1: Delivery note data generation datetime.
             String pattern = "dd-MM-yyyy HH:mm:ss";
             DateFormat df = new SimpleDateFormat(pattern);
             Date date = deliveryNoteData.getDate();
             String formattedDate = df.format(date);
 
-            // Column 3: Delivery note data customer.
+            // Column 2: Delivery note data customer.
             String customerCode = deliveryNoteData.getCustomer().toString();
 
-            // Column 4: Delivery note data product.
+            // Column 3: Delivery note data product.
             String productCode = deliveryNoteData.getProduct().toString();
 
-            // Column 5: Empty name. It will show a button to download the delivery note.
+            // Column 4: Delivery note boxes quantity.
+            int numBoxes = deliveryNoteData.getNumBoxes();
+
+            // Column 5: Delivery note net weight.
+            int netWeight = deliveryNoteData.getNetWeight();
+
+            // Column 6: Empty name. It will show a button to download the delivery note.
             String downloadName = Localization.getLocalization(LocalizationKey.DOWNLOAD);
 
-            // Column 6: Empty name with a whitespace. It will show a button to
+            // Column 7: Empty name with a whitespace. It will show a button to
             // print the delivery note.
             String printName = Localization.getLocalization(LocalizationKey.PRINT);
 
-            tableModel.addRow(new Object[]{code, formattedDate, customerCode, productCode, downloadName, printName});
+            tableModel.addRow(new Object[]{formattedDate, customerCode, productCode, numBoxes, netWeight, downloadName, printName});
         }
     }
 

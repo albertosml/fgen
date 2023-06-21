@@ -161,10 +161,11 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
      */
     private Vector<String> generateColumnNames() {
         Vector<String> columnNames = new Vector<>();
-        columnNames.add(Localization.getLocalization(LocalizationKey.CODE));
         columnNames.add(Localization.getLocalization(LocalizationKey.DATE));
         columnNames.add(Localization.getLocalization(LocalizationKey.CUSTOMER));
         columnNames.add(Localization.getLocalization(LocalizationKey.PRODUCT));
+        columnNames.add(Localization.getLocalization(LocalizationKey.BOXES_QTY));
+        columnNames.add(Localization.getLocalization(LocalizationKey.NET_WEIGHT));
         // Both columns does not contain a name, so they will contain the same
         // identifier. However, they need a different identification for the
         // retrieval. To solve that problem, a different empty string will be
@@ -194,10 +195,10 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         table.addMouseListener(this.mouseListener);
 
         // Set a button renderer for the action buttons.
-        TableColumn downloadColumn = table.getColumn(columnNames.get(4));
+        TableColumn downloadColumn = table.getColumn(columnNames.get(5));
         downloadColumn.setCellRenderer(new ButtonRenderer());
 
-        TableColumn printColumn = table.getColumn(columnNames.get(5));
+        TableColumn printColumn = table.getColumn(columnNames.get(6));
         printColumn.setCellRenderer(new ButtonRenderer());
     }
 
@@ -222,14 +223,14 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "${CODE}", "${DATE}", "${CUSTOMER}", "${PRODUCT}", "", ""
+                "${DATE}", "${CUSTOMER}", "${PRODUCT}", "${BOXES_QTY}", "${NET_WEIGHT}", "", ""
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -249,6 +250,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(3).setResizable(false);
             table.getColumnModel().getColumn(4).setResizable(false);
             table.getColumnModel().getColumn(5).setResizable(false);
+            table.getColumnModel().getColumn(6).setResizable(false);
         }
 
         customerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
