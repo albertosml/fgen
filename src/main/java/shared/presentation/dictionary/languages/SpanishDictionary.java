@@ -139,6 +139,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.PRINT_ERROR_MESSAGE, "Error al imprimir");
         super.setTranslation(LocalizationKey.DOWNLOAD_ERROR_MESSAGE, "Error al descargar");
         super.setTranslation(LocalizationKey.NET_WEIGHT, "Peso neto (en kilos)");
+        super.setTranslation(LocalizationKey.TOTAL_NET_WEIGHT, "Peso neto total (en kilos)");
+        super.setTranslation(LocalizationKey.TOTAL_NUM_BOXES, "Número total de cajas");
     }
 
 }

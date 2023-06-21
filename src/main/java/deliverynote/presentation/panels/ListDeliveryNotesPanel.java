@@ -78,6 +78,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         this.setLabelText(productLabel, LocalizationKey.PRODUCT);
         this.setLabelText(monthLabel, LocalizationKey.MONTH);
         this.setLabelText(yearLabel, LocalizationKey.YEAR);
+        this.setLabelText(totalNetWeightLabel, LocalizationKey.TOTAL_NET_WEIGHT);
+        this.setLabelText(totalNumBoxesLabel, LocalizationKey.TOTAL_NUM_BOXES);
         this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
     }
 
@@ -217,6 +219,10 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         yearLabel = new javax.swing.JLabel();
         monthLabel = new javax.swing.JLabel();
         listDeliveryNotesButton = new javax.swing.JButton();
+        totalNetWeightLabel = new javax.swing.JLabel();
+        totalNetWeightValue = new javax.swing.JLabel();
+        totalNumBoxesLabel = new javax.swing.JLabel();
+        totalNumBoxesValue = new javax.swing.JLabel();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -272,6 +278,14 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             }
         });
 
+        totalNetWeightLabel.setText("${TOTAL_NET_WEIGHT} :");
+
+        totalNetWeightValue.setText("0");
+
+        totalNumBoxesLabel.setText("${TOTAL_NUM_BOXES} :");
+
+        totalNumBoxesValue.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -297,7 +311,17 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                             .addComponent(monthInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(54, 54, 54)
                         .addComponent(listDeliveryNotesButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(totalNetWeightLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(totalNetWeightValue))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(totalNumBoxesLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(totalNumBoxesValue)))
+                        .addGap(0, 77, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(scrollPane)))
@@ -323,7 +347,15 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(productLabel)
                                     .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(yearLabel)))))
+                                    .addComponent(yearLabel)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(totalNetWeightLabel)
+                                    .addComponent(totalNetWeightValue))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(totalNumBoxesLabel)
+                                    .addComponent(totalNumBoxesValue)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(listDeliveryNotesButton)))
@@ -339,7 +371,20 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         int month = monthInput.getMonth();
         int year = yearInput.getYear();
 
-        mouseListener.addDeliveryNotesData(this.getDeliveryNotesData(customer, product, month, year));
+        ArrayList<DeliveryNoteData> deliveryNotesData = this.getDeliveryNotesData(customer, product, month, year);
+
+        int totalNumBoxes = 0;
+        int totalNetWeight = 0;
+
+        for (DeliveryNoteData deliveryNoteData : deliveryNotesData) {
+            totalNumBoxes += deliveryNoteData.getNumBoxes();
+            totalNetWeight += deliveryNoteData.getNetWeight();
+        }
+
+        this.totalNetWeightValue.setText(Integer.toString(totalNetWeight));
+        this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
+
+        mouseListener.addDeliveryNotesData(deliveryNotesData);
     }//GEN-LAST:event_listDeliveryNotesButtonActionPerformed
 
 
@@ -353,6 +398,10 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private javax.swing.JLabel productLabel;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTable table;
+    private javax.swing.JLabel totalNetWeightLabel;
+    private javax.swing.JLabel totalNetWeightValue;
+    private javax.swing.JLabel totalNumBoxesLabel;
+    private javax.swing.JLabel totalNumBoxesValue;
     private com.toedter.calendar.JYearChooser yearInput;
     private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables

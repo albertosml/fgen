@@ -41,7 +41,20 @@
                       </Group>
                       <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                       <Component id="listDeliveryNotesButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="totalNetWeightLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="totalNetWeightValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="totalNumBoxesLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="totalNumBoxesValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="77" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -75,6 +88,17 @@
                                   <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="productInput" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="yearLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="totalNetWeightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="totalNetWeightValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="totalNumBoxesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="totalNumBoxesValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -219,6 +243,26 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listDeliveryNotesButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalNetWeightLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${TOTAL_NET_WEIGHT} :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalNetWeightValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalNumBoxesLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${TOTAL_NUM_BOXES} :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalNumBoxesValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

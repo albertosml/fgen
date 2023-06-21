@@ -509,4 +509,12 @@ public enum LocalizationKey {
      * Net weight.
      */
     NET_WEIGHT,
+    /**
+     * Total net weight.
+     */
+    TOTAL_NET_WEIGHT,
+    /**
+     * Total number of boxes.
+     */
+    TOTAL_NUM_BOXES,
 }
