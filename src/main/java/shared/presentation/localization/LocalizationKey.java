@@ -497,4 +497,12 @@ public enum LocalizationKey {
      * Year.
      */
     YEAR,
+    /**
+     * Print error message.
+     */
+    PRINT_ERROR_MESSAGE,
+    /**
+     * Download error message.
+     */
+    DOWNLOAD_ERROR_MESSAGE,
 }

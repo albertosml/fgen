@@ -7,6 +7,8 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,17 +75,24 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
      * @param deliveryNoteData The delivery note data.
      */
     private void downloadDeliveryNote(DeliveryNoteData deliveryNoteData) {
-        String deliveryNoteName = Localization.getLocalization(LocalizationKey.DELIVERY_NOTE);
-        String documentsPath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
-        String filename = String.format("%s_%d.pdf", deliveryNoteName, deliveryNoteData.getCode());
-        File destFile = new File(documentsPath, filename);
+        try {
+            String deliveryNoteName = Localization.getLocalization(LocalizationKey.DELIVERY_NOTE);
+            String documentsPath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
+            String filename = String.format("%s_%d.pdf", deliveryNoteName, deliveryNoteData.getCode());
+            File destFile = new File(documentsPath, filename);
 
-        File file = deliveryNoteData.getFile();
-        file.renameTo(destFile);
+            File file = deliveryNoteData.getFile();
 
-        String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_FILE_MESSAGE);
-        String infoMessage = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
-        JOptionPane.showMessageDialog(table, infoMessage);
+            Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_FILE_MESSAGE);
+            String infoMessage = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
+            JOptionPane.showMessageDialog(table, infoMessage);
+        } catch (IOException ex) {
+            Logger.getLogger(ListDeliveryNotesMouseAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            String downloadErrorMessage = Localization.getLocalization(LocalizationKey.DOWNLOAD_ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(table, downloadErrorMessage);
+        }
     }
 
     /**
@@ -92,9 +101,6 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
      * @param deliveryNoteData The delivery note data.
      */
     private void printDeliveryNote(DeliveryNoteData deliveryNoteData) {
-        System.out.println(deliveryNoteData.getCode());
-        System.out.println("print delivery note");
-
         try {
             PDDocument pdfDocument = PDDocument.load(deliveryNoteData.getFile());
             PDFPageable pageable = new PDFPageable(pdfDocument);
@@ -113,6 +119,8 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
             JOptionPane.showMessageDialog(table, printedFileMessage);
         } catch (IOException | PrinterException ex) {
             Logger.getLogger(ListDeliveryNotesMouseAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            String printErrorMessage = Localization.getLocalization(LocalizationKey.PRINT_ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(table, printErrorMessage);
         }
     }
 

@@ -254,34 +254,6 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         return new Pair<>(null, DeliveryNoteValidationState.INVALID);
     }
 
-    /**
-     * Select the file where the delivery note will be saved.
-     *
-     * Note that the generated file will be a PDF.
-     *
-     * @return The file where the delivery note will be generated.
-     */
-    private File selectDeliveryNoteFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setAcceptAllFileFilterUsed(false);
-
-        // Supported formats (PDF).
-        FileNameExtensionFilter pdfFilesFilter = new FileNameExtensionFilter("PDF files", "pdf");
-        fileChooser.setFileFilter(pdfFilesFilter);
-
-        int result = fileChooser.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFile();
-        }
-
-        return null;
-    }
-
-    public void generateDeliveryNote() {
-
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

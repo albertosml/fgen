@@ -136,6 +136,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.PRINTED_FILE_MESSAGE, "Archivo imprimido");
         super.setTranslation(LocalizationKey.MONTH, "Mes");
         super.setTranslation(LocalizationKey.YEAR, "Año");
+        super.setTranslation(LocalizationKey.PRINT_ERROR_MESSAGE, "Error al imprimir");
+        super.setTranslation(LocalizationKey.DOWNLOAD_ERROR_MESSAGE, "Error al descargar");
     }
 
 }

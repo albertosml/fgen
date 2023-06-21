@@ -170,6 +170,7 @@ public class DeliveryNoteData {
 
         Map<String, String> fileAttributes = (Map<String, String>) attributes.get(DeliveryNoteDataAttribute.FILE);
         File file = Base64Converter.decode(fileAttributes);
+        file.deleteOnExit();
 
         Customer customer = null;
         try {
