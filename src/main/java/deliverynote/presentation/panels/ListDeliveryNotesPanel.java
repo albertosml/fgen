@@ -7,7 +7,9 @@ import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import deliverynote.presentation.utils.ListDeliveryNotesMouseAdapter;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,8 +78,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private void initializeFormLabels() {
         this.setLabelText(customerLabel, LocalizationKey.CUSTOMER);
         this.setLabelText(productLabel, LocalizationKey.PRODUCT);
-        this.setLabelText(monthLabel, LocalizationKey.MONTH);
-        this.setLabelText(yearLabel, LocalizationKey.YEAR);
+        this.setLabelText(startDateLabel, LocalizationKey.START_DATE);
+        this.setLabelText(endDateLabel, LocalizationKey.END_DATE);
         this.setLabelText(totalNetWeightLabel, LocalizationKey.TOTAL_NET_WEIGHT);
         this.setLabelText(totalNumBoxesLabel, LocalizationKey.TOTAL_NUM_BOXES);
         this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
@@ -96,6 +98,11 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         Vector<Product> products = new Vector<>(this.getProducts());
         productInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Product>(products));
         AutoCompleteDecorator.decorate(productInput);
+
+        // Start and end date, which will be today.
+        Date todayDate = Date.from(Instant.now());
+        startDateInput.setDate(todayDate);
+        endDateInput.setDate(todayDate);
     }
 
     /**
@@ -139,15 +146,15 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
      *
      * @param customer The customer to get the delivery notes.
      * @param product The product to get the delivery notes.
-     * @param month The month to get the delivery notes.
-     * @param year The year to get the delivery notes.
+     * @param start The start date to get the delivery notes.
+     * @param end The end date to get the delivery notes.
      * @return A list with all available delivery notes data on the system.
      */
-    private ArrayList<DeliveryNoteData> getDeliveryNotesData(Customer customer, Product product, int month, int year) {
+    private ArrayList<DeliveryNoteData> getDeliveryNotesData(Customer customer, Product product, Date start, Date end) {
         try {
             MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
             ListDeliveryNotes listDeliveryNotes = new ListDeliveryNotes(deliveryNoteRepository);
-            return listDeliveryNotes.execute(customer, product, month, year);
+            return listDeliveryNotes.execute(customer, product, start, end);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = ListDeliveryNotesPanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Delivery notes cannot be shown because the database has not been found", ex);
@@ -214,15 +221,17 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         customerLabel = new javax.swing.JLabel();
         productLabel = new javax.swing.JLabel();
         productInput = new javax.swing.JComboBox<>();
-        monthInput = new com.toedter.calendar.JMonthChooser();
-        yearInput = new com.toedter.calendar.JYearChooser();
-        yearLabel = new javax.swing.JLabel();
-        monthLabel = new javax.swing.JLabel();
+        endDateLabel = new javax.swing.JLabel();
+        startDateLabel = new javax.swing.JLabel();
         listDeliveryNotesButton = new javax.swing.JButton();
         totalNetWeightLabel = new javax.swing.JLabel();
         totalNetWeightValue = new javax.swing.JLabel();
         totalNumBoxesLabel = new javax.swing.JLabel();
         totalNumBoxesValue = new javax.swing.JLabel();
+        startDateInput = new com.toedter.calendar.JDateChooser();
+        endDateInput = new com.toedter.calendar.JDateChooser();
+        isSelectedCustomer = new javax.swing.JCheckBox();
+        isSelectedProduct = new javax.swing.JCheckBox();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -267,9 +276,9 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         productInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        yearLabel.setText("${YEAR}:");
+        endDateLabel.setText("${END_DATE}:");
 
-        monthLabel.setText("${MONTH}:");
+        startDateLabel.setText("${START_DATE}:");
 
         listDeliveryNotesButton.setText("${LIST}");
         listDeliveryNotesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -286,6 +295,20 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         totalNumBoxesValue.setText("0");
 
+        isSelectedCustomer.setSelected(true);
+        isSelectedCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isSelectedCustomerActionPerformed(evt);
+            }
+        });
+
+        isSelectedProduct.setSelected(true);
+        isSelectedProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isSelectedProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -293,23 +316,29 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(isSelectedProduct)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(productLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(isSelectedCustomer)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(customerLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productLabel)
-                            .addComponent(customerLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(startDateLabel)
+                            .addComponent(endDateLabel))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(productInput, 0, 213, Short.MAX_VALUE)
-                            .addComponent(customerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(monthLabel)
-                            .addComponent(yearLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(yearInput, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(monthInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(54, 54, 54)
+                            .addComponent(startDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                            .addComponent(endDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(47, 47, 47)
                         .addComponent(listDeliveryNotesButton)
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,7 +350,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                                 .addComponent(totalNumBoxesLabel)
                                 .addGap(18, 18, 18)
                                 .addComponent(totalNumBoxesValue)))
-                        .addGap(0, 77, Short.MAX_VALUE))
+                        .addGap(0, 82, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(scrollPane)))
@@ -335,19 +364,22 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(monthInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(yearInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(monthLabel)
-                                    .addComponent(customerLabel))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(startDateLabel)
+                                        .addComponent(customerLabel)
+                                        .addComponent(isSelectedCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(startDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(productLabel)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(endDateLabel)
+                                        .addComponent(endDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(yearLabel)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(productLabel)
+                                        .addComponent(isSelectedProduct))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(totalNetWeightLabel)
@@ -359,19 +391,27 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(listDeliveryNotesButton)))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void listDeliveryNotesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listDeliveryNotesButtonActionPerformed
-        Customer customer = (Customer) customerInput.getSelectedItem();
-        Product product = (Product) productInput.getSelectedItem();
-        int month = monthInput.getMonth();
-        int year = yearInput.getYear();
+        Customer customer = null;
+        if (isSelectedCustomer.isSelected()) {
+            customer = (Customer) customerInput.getSelectedItem();
+        }
 
-        ArrayList<DeliveryNoteData> deliveryNotesData = this.getDeliveryNotesData(customer, product, month, year);
+        Product product = null;
+        if (isSelectedProduct.isSelected()) {
+            product = (Product) productInput.getSelectedItem();
+        }
+
+        Date startDate = startDateInput.getDate();
+        Date endDate = endDateInput.getDate();
+
+        ArrayList<DeliveryNoteData> deliveryNotesData = this.getDeliveryNotesData(customer, product, startDate, endDate);
 
         int totalNumBoxes = 0;
         int totalNetWeight = 0;
@@ -387,22 +427,32 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         mouseListener.addDeliveryNotesData(deliveryNotesData);
     }//GEN-LAST:event_listDeliveryNotesButtonActionPerformed
 
+    private void isSelectedCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedCustomerActionPerformed
+        customerInput.setEnabled(isSelectedCustomer.isSelected());
+    }//GEN-LAST:event_isSelectedCustomerActionPerformed
+
+    private void isSelectedProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedProductActionPerformed
+        productInput.setEnabled(isSelectedProduct.isSelected());
+    }//GEN-LAST:event_isSelectedProductActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> customerInput;
     private javax.swing.JLabel customerLabel;
+    private com.toedter.calendar.JDateChooser endDateInput;
+    private javax.swing.JLabel endDateLabel;
+    private javax.swing.JCheckBox isSelectedCustomer;
+    private javax.swing.JCheckBox isSelectedProduct;
     private javax.swing.JButton listDeliveryNotesButton;
-    private com.toedter.calendar.JMonthChooser monthInput;
-    private javax.swing.JLabel monthLabel;
     private javax.swing.JComboBox<String> productInput;
     private javax.swing.JLabel productLabel;
     private javax.swing.JScrollPane scrollPane;
+    private com.toedter.calendar.JDateChooser startDateInput;
+    private javax.swing.JLabel startDateLabel;
     private javax.swing.JTable table;
     private javax.swing.JLabel totalNetWeightLabel;
     private javax.swing.JLabel totalNetWeightValue;
     private javax.swing.JLabel totalNumBoxesLabel;
     private javax.swing.JLabel totalNumBoxesValue;
-    private com.toedter.calendar.JYearChooser yearInput;
-    private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }

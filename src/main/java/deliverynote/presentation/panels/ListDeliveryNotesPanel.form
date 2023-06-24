@@ -19,27 +19,34 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="productLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="customerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="isSelectedProduct" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="productLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="productInput" min="-2" pref="213" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="isSelectedCustomer" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="customerLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="customerInput" min="-2" pref="213" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="startDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="endDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="productInput" pref="213" max="32767" attributes="0"/>
-                          <Component id="customerInput" max="32767" attributes="0"/>
+                          <Component id="startDateInput" pref="117" max="32767" attributes="0"/>
+                          <Component id="endDateInput" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="monthLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="yearLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="yearInput" min="-2" pref="96" max="-2" attributes="0"/>
-                          <Component id="monthInput" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                       <Component id="listDeliveryNotesButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -54,7 +61,7 @@
                               <Component id="totalNumBoxesValue" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="77" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -73,21 +80,26 @@
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="monthInput" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="yearInput" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="customerInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="monthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="customerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="customerInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="customerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="isSelectedCustomer" alignment="1" min="-2" pref="24" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="startDateInput" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="productInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="yearLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="endDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="endDateInput" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="productInput" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="isSelectedProduct" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -108,7 +120,7 @@
                       <Component id="listDeliveryNotesButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Component id="scrollPane" pref="290" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -222,18 +234,14 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="com.toedter.calendar.JMonthChooser" name="monthInput">
-    </Component>
-    <Component class="com.toedter.calendar.JYearChooser" name="yearInput">
-    </Component>
-    <Component class="javax.swing.JLabel" name="yearLabel">
+    <Component class="javax.swing.JLabel" name="endDateLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${YEAR}:"/>
+        <Property name="text" type="java.lang.String" value="${END_DATE}:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="monthLabel">
+    <Component class="javax.swing.JLabel" name="startDateLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${MONTH}:"/>
+        <Property name="text" type="java.lang.String" value="${START_DATE}:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="listDeliveryNotesButton">
@@ -263,6 +271,26 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="startDateInput">
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="endDateInput">
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="isSelectedCustomer">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedCustomerActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="isSelectedProduct">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedProductActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

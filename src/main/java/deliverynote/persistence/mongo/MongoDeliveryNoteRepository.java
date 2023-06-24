@@ -97,11 +97,20 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      */
     @Override
     public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
-        Bson customerFilter = Filters.eq("customer", customer.getCode());
-        Bson productFilter = Filters.eq("product", product.getCode());
         Bson fromDate = Filters.gte("date", from);
         Bson toDate = Filters.lt("date", to);
-        Bson filters = Filters.and(customerFilter, productFilter, fromDate, toDate);
+
+        Bson filters = Filters.and(fromDate, toDate);
+
+        if (customer != null) {
+            Bson customerFilter = Filters.eq("customer", customer.getCode());
+            filters = Filters.and(filters, customerFilter);
+        }
+
+        if (product != null) {
+            Bson productFilter = Filters.eq("product", product.getCode());
+            filters = Filters.and(filters, productFilter);
+        }
 
         ArrayList<Document> foundDocuments = super.find(filters);
 

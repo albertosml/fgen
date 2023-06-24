@@ -25,6 +25,9 @@ public interface DeliveryNoteRepository extends Repository {
     /**
      * List all the delivery notes.
      *
+     * Note that if the customer or the product are null, they will not be
+     * included on the filters.
+     *
      * @param customer The customer to get the delivery notes.
      * @param product The product to get the delivery notes.
      * @param from The start date to get the delivery notes.

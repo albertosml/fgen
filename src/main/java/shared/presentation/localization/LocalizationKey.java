@@ -490,14 +490,6 @@ public enum LocalizationKey {
      */
     PRINTED_FILE_MESSAGE,
     /**
-     * Month.
-     */
-    MONTH,
-    /**
-     * Year.
-     */
-    YEAR,
-    /**
      * Print error message.
      */
     PRINT_ERROR_MESSAGE,
@@ -517,4 +509,12 @@ public enum LocalizationKey {
      * Total number of boxes.
      */
     TOTAL_NUM_BOXES,
+    /**
+     * Start date.
+     */
+    START_DATE,
+    /**
+     * End date.
+     */
+    END_DATE,
 }
