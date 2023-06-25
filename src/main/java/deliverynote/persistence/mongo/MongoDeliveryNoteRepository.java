@@ -98,7 +98,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     @Override
     public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
         Bson fromDate = Filters.gte("date", from);
-        Bson toDate = Filters.lt("date", to);
+        Bson toDate = Filters.lte("date", to);
 
         Bson filters = Filters.and(fromDate, toDate);
 

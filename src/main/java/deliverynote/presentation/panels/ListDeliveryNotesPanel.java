@@ -7,8 +7,8 @@ import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import deliverynote.presentation.utils.ListDeliveryNotesMouseAdapter;
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -99,10 +99,17 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         productInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Product>(products));
         AutoCompleteDecorator.decorate(productInput);
 
-        // Start and end date, which will be today.
-        Date todayDate = Date.from(Instant.now());
-        startDateInput.setDate(todayDate);
-        endDateInput.setDate(todayDate);
+        // End date, which will be now.
+        Calendar currentDate = Calendar.getInstance();
+        endDateInput.setDate(currentDate.getTime());
+
+        // Start date, which will be set at the start moment.
+        currentDate.set(Calendar.MILLISECOND, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+
+        startDateInput.setDate(currentDate.getTime());
     }
 
     /**
