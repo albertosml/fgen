@@ -194,7 +194,7 @@ public class Customer {
      */
     @Override
     public String toString() {
-        return String.format("%s (%s)", this.name, this.tin);
+        return String.format("%s (%d)", this.name, this.code);
     }
 
     /**

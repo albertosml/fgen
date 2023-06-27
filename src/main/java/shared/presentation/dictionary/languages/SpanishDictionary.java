@@ -129,6 +129,18 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_BOXES, "Número total de cajas");
         super.setTranslation(LocalizationKey.DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX, "Peso total por caja");
         super.setTranslation(LocalizationKey.IS_SUPPLIER, "¿Es proveedor?");
+        super.setTranslation(LocalizationKey.DATE, "Fecha");
+        super.setTranslation(LocalizationKey.DOWNLOAD, "Descargar");
+        super.setTranslation(LocalizationKey.PRINT, "Imprimir");
+        super.setTranslation(LocalizationKey.DOWNLOADED_FILE_MESSAGE, "El archivo se ha descargado en");
+        super.setTranslation(LocalizationKey.PRINTED_FILE_MESSAGE, "Archivo imprimido");
+        super.setTranslation(LocalizationKey.PRINT_ERROR_MESSAGE, "Error al imprimir");
+        super.setTranslation(LocalizationKey.DOWNLOAD_ERROR_MESSAGE, "Error al descargar");
+        super.setTranslation(LocalizationKey.NET_WEIGHT, "Peso neto (en kilos)");
+        super.setTranslation(LocalizationKey.TOTAL_NET_WEIGHT, "Peso neto total (en kilos)");
+        super.setTranslation(LocalizationKey.TOTAL_NUM_BOXES, "Número total de cajas");
+        super.setTranslation(LocalizationKey.START_DATE, "Fecha de inicio");
+        super.setTranslation(LocalizationKey.END_DATE, "Fecha de fin");
     }
 
 }

@@ -1,10 +1,19 @@
 package deliverynote.persistence.mongo;
 
+import com.mongodb.client.model.Filters;
+import customer.application.Customer;
 import deliverynote.application.DeliveryNote;
+import deliverynote.application.DeliveryNoteData;
+import deliverynote.application.DeliveryNoteDataAttribute;
 import deliverynote.persistence.DeliveryNoteRepository;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import product.application.Product;
 import shared.persistence.Base64Converter;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.persistence.mongo.MongoRepository;
@@ -43,13 +52,36 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("code", deliveryNote.getCode());
         document.append("date", deliveryNote.getDate());
         document.append("customer", deliveryNote.getCustomer().getCode());
-        document.append("product", deliveryNote.getProduct().getName());
+        document.append("product", deliveryNote.getProduct().getCode());
         document.append("file", fileAttributes);
         document.append("numBoxes", deliveryNote.calculateTotalBoxes());
         document.append("numPallets", deliveryNote.calculateTotalPallets());
         document.append("netWeight", deliveryNote.calculateNetWeight());
 
         return document;
+    }
+
+    /**
+     * It creates a delivery note from a Mongo document.
+     *
+     * @param document A document obtained from the Mongo collection.
+     * @return A delivery note object based on the data obtained from the given
+     * document.
+     */
+    private DeliveryNoteData createDeliveryNoteFrom(Document document) {
+        // Create a delivery note data entry.
+        // Filter by date interval, customer, product
+        Map<DeliveryNoteDataAttribute, Object> attributes = new HashMap<>();
+        attributes.put(DeliveryNoteDataAttribute.CODE, document.get("code"));
+        attributes.put(DeliveryNoteDataAttribute.DATE, document.get("date"));
+        attributes.put(DeliveryNoteDataAttribute.CUSTOMER, document.get("customer"));
+        attributes.put(DeliveryNoteDataAttribute.PRODUCT, document.get("product"));
+        attributes.put(DeliveryNoteDataAttribute.FILE, document.get("file"));
+        attributes.put(DeliveryNoteDataAttribute.NUM_BOXES, document.get("numBoxes"));
+        attributes.put(DeliveryNoteDataAttribute.NUM_PALLETS, document.get("numPallets"));
+        attributes.put(DeliveryNoteDataAttribute.NET_WEIGHT, document.get("netWeight"));
+
+        return DeliveryNoteData.from(attributes);
     }
 
     /**
@@ -60,6 +92,40 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         return super.count();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
+        Bson fromDate = Filters.gte("date", from);
+        Bson toDate = Filters.lte("date", to);
+
+        Bson filters = Filters.and(fromDate, toDate);
+
+        if (customer != null) {
+            Bson customerFilter = Filters.eq("customer", customer.getCode());
+            filters = Filters.and(filters, customerFilter);
+        }
+
+        if (product != null) {
+            Bson productFilter = Filters.eq("product", product.getCode());
+            filters = Filters.and(filters, productFilter);
+        }
+
+        ArrayList<Document> foundDocuments = super.find(filters);
+
+        ArrayList<DeliveryNoteData> deliveryNotes = new ArrayList<>();
+        for (Document document : foundDocuments) {
+            DeliveryNoteData deliveryNote = this.createDeliveryNoteFrom(document);
+            deliveryNotes.add(deliveryNote);
+        }
+
+        return deliveryNotes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(DeliveryNote deliveryNote, File pdfFile) {
         Document document = this.createDocumentFrom(deliveryNote, pdfFile);

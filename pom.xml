@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fgen</groupId>
     <artifactId>fgen</artifactId>
-    <version>0.51.0</version>
+    <version>0.52.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,6 +60,17 @@
             <groupId>com.github.jhonnymertz</groupId>
             <artifactId>java-wkhtmltopdf-wrapper</artifactId>
             <version>1.1.15-RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.24</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
 </project>

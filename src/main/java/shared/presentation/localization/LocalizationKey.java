@@ -469,4 +469,52 @@ public enum LocalizationKey {
      * Whether the customer is supplier.
      */
     IS_SUPPLIER,
+    /**
+     * Date.
+     */
+    DATE,
+    /**
+     * Download action.
+     */
+    DOWNLOAD,
+    /**
+     * Print action.
+     */
+    PRINT,
+    /**
+     * Downloaded file message.
+     */
+    DOWNLOADED_FILE_MESSAGE,
+    /**
+     * Printed file message.
+     */
+    PRINTED_FILE_MESSAGE,
+    /**
+     * Print error message.
+     */
+    PRINT_ERROR_MESSAGE,
+    /**
+     * Download error message.
+     */
+    DOWNLOAD_ERROR_MESSAGE,
+    /**
+     * Net weight.
+     */
+    NET_WEIGHT,
+    /**
+     * Total net weight.
+     */
+    TOTAL_NET_WEIGHT,
+    /**
+     * Total number of boxes.
+     */
+    TOTAL_NUM_BOXES,
+    /**
+     * Start date.
+     */
+    START_DATE,
+    /**
+     * End date.
+     */
+    END_DATE,
 }
