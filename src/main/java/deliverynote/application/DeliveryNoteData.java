@@ -61,6 +61,11 @@ public class DeliveryNoteData {
     private int netWeight;
 
     /**
+     * Whether the delivery note is deleted or not.
+     */
+    private boolean isDeleted;
+
+    /**
      * Constructor.
      *
      * @param code The delivery note data code.
@@ -72,8 +77,9 @@ public class DeliveryNoteData {
      * @param numPallets The delivery note data total pallets.
      * @param numBoxes The delivery note data total boxes.
      * @param netWeight The delivery note data net weight.
+     * @param isDeleted Whether the delivery note is deleted or not.
      */
-    private DeliveryNoteData(int code, Date date, Customer customer, Product product, File file, int numPallets, int numBoxes, int netWeight) {
+    private DeliveryNoteData(int code, Date date, Customer customer, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.customer = customer;
@@ -82,6 +88,7 @@ public class DeliveryNoteData {
         this.numPallets = numPallets;
         this.numBoxes = numBoxes;
         this.netWeight = netWeight;
+        this.isDeleted = isDeleted;
     }
 
     /**
@@ -157,6 +164,25 @@ public class DeliveryNoteData {
     }
 
     /**
+     * Whether the delivery note is deleted from the system or not.
+     *
+     * @return true if the delivery note is removed, otherwise false.
+     */
+    public boolean isDeleted() {
+        return this.isDeleted;
+    }
+
+    /**
+     * Update the deletion state for the delivery note.
+     *
+     * @param isDeleted Whether the delivery note is deleted from the system or
+     * not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Create a delivery note data given its attribute values.
      *
      * @param attributes Map containing the value for each delivery note data
@@ -196,7 +222,9 @@ public class DeliveryNoteData {
         int numBoxes = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NUM_BOXES, 0);
         int netWeight = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NET_WEIGHT, 0);
 
-        return new DeliveryNoteData(code, date, customer, product, file, numPallets, numBoxes, netWeight);
+        boolean isDeleted = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_DELETED, false);
+
+        return new DeliveryNoteData(code, date, customer, product, file, numPallets, numBoxes, netWeight, isDeleted);
     }
 
 }

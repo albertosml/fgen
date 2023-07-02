@@ -36,4 +36,12 @@ public interface DeliveryNoteRepository extends Repository {
      */
     public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to);
 
+    /**
+     * Update the given delivery note with its associated data.
+     *
+     * @param deliveryNoteData The delivery note data.
+     * @return Whether the delivery note has been updated or not.
+     */
+    public boolean update(DeliveryNoteData deliveryNoteData);
+
 }

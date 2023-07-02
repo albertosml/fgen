@@ -11,5 +11,6 @@ public enum DeliveryNoteDataAttribute {
     FILE,
     NUM_PALLETS,
     NUM_BOXES,
-    NET_WEIGHT;
+    NET_WEIGHT,
+    IS_DELETED;
 }

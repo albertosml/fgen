@@ -141,6 +141,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.TOTAL_NUM_BOXES, "Número total de cajas");
         super.setTranslation(LocalizationKey.START_DATE, "Fecha de inicio");
         super.setTranslation(LocalizationKey.END_DATE, "Fecha de fin");
+        super.setTranslation(LocalizationKey.REMOVED_DELIVERY_NOTE_MESSAGE, "Albarán eliminado con éxito");
+        super.setTranslation(LocalizationKey.REMOVED_DELIVERY_NOTE_ERROR_MESSAGE, "Error al eliminar el albarán");
     }
 
 }
