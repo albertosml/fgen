@@ -1,8 +1,8 @@
 package deliverynote.presentation.utils;
 
 import deliverynote.application.DeliveryNoteData;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import deliverynote.application.usecases.RemoveDeliveryNote;
+import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -25,19 +26,14 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
+import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
 
 /**
- * Mouse adapter for the list delivery notes panel, which includes a button to
- * download and print a delivery note.
+ * Table model for the list delivery notes panel.
  */
-public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
-
-    /**
-     * Table associated to the mouse adapter.
-     */
-    private JTable table;
+public class ListDeliveryNotesTableModel extends DefaultTableModel {
 
     /**
      * Loaded delivery notes data.
@@ -45,11 +41,19 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
     private ArrayList<DeliveryNoteData> deliveryNotesData;
 
     /**
+     * Table associated to the table model.
+     */
+    private JTable table;
+
+    /**
      * Constructor.
      *
-     * @param table The table associated to the mouse adapter.
+     * @param data Table data.
+     * @param columnNames Table column names.
+     * @param table The table associated to the table model.
      */
-    public ListDeliveryNotesMouseAdapter(JTable table) {
+    public ListDeliveryNotesTableModel(Vector<? extends Vector> data, Vector<?> columnNames, JTable table) {
+        super(data, columnNames);
         this.table = table;
     }
 
@@ -89,7 +93,7 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
             String infoMessage = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
             JOptionPane.showMessageDialog(table, infoMessage);
         } catch (IOException ex) {
-            Logger.getLogger(ListDeliveryNotesMouseAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ListDeliveryNotesTableModel.class.getName()).log(Level.SEVERE, null, ex);
             String downloadErrorMessage = Localization.getLocalization(LocalizationKey.DOWNLOAD_ERROR_MESSAGE);
             JOptionPane.showMessageDialog(table, downloadErrorMessage);
         }
@@ -118,31 +122,49 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
             String printedFileMessage = Localization.getLocalization(LocalizationKey.PRINTED_FILE_MESSAGE);
             JOptionPane.showMessageDialog(table, printedFileMessage);
         } catch (IOException | PrinterException ex) {
-            Logger.getLogger(ListDeliveryNotesMouseAdapter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ListDeliveryNotesTableModel.class.getName()).log(Level.SEVERE, null, ex);
             String printErrorMessage = Localization.getLocalization(LocalizationKey.PRINT_ERROR_MESSAGE);
             JOptionPane.showMessageDialog(table, printErrorMessage);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Remove the given delivery note.
+     *
+     * @param deliveryNoteData The delivery note data.
+     * @param tableRow The table row index.
      */
+    public void removeDeliveryNote(DeliveryNoteData deliveryNoteData, int tableRow) {
+        try {
+            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+            RemoveDeliveryNote removeDeliveryNote = new RemoveDeliveryNote(deliveryNoteRepository);
+            boolean isDeleted = removeDeliveryNote.execute(deliveryNoteData);
+
+            String message;
+            if (isDeleted) {
+                message = Localization.getLocalization(LocalizationKey.REMOVED_DELIVERY_NOTE_MESSAGE);
+
+                super.removeRow(tableRow);
+            } else {
+                message = Localization.getLocalization(LocalizationKey.REMOVED_DELIVERY_NOTE_ERROR_MESSAGE);
+            }
+
+            JOptionPane.showMessageDialog(table, message);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListDeliveryNotesTableModel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Delivery note not removed because the database has not been found", ex);
+        }
+    }
+
     @Override
-    public void mouseClicked(MouseEvent evt) {
-        int row = table.rowAtPoint(evt.getPoint());
-        int column = table.columnAtPoint(evt.getPoint());
+    public Class getColumnClass(int columnIndex) {
+        return Object.class;
+    }
 
-        int deliveryNoteCode = (int) table.getValueAt(row, 0);
-        DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
-        if (deliveryNoteData == null) {
-            return;
-        }
-
-        if (column == 4) {
-            this.downloadDeliveryNote(deliveryNoteData);
-        } else if (column == 5) {
-            this.printDeliveryNote(deliveryNoteData);
-        }
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        // Only edit the chosen action column.
+        return column == 5;
     }
 
     /**
@@ -153,8 +175,8 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
     public void addDeliveryNotesData(ArrayList<DeliveryNoteData> deliveryNotesData) {
         this.deliveryNotesData = deliveryNotesData;
 
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        tableModel.setRowCount(0); // Clean table data before adding the new data.
+        // Clean table data before adding the new data.
+        super.setRowCount(0);
 
         for (DeliveryNoteData deliveryNoteData : this.deliveryNotesData) {
             // Column 1: Delivery note data generation datetime.
@@ -175,14 +197,33 @@ public class ListDeliveryNotesMouseAdapter extends MouseAdapter {
             // Column 5: Delivery note net weight.
             int netWeight = deliveryNoteData.getNetWeight();
 
-            // Column 6: Empty name. It will show a button to download the delivery note.
-            String downloadName = Localization.getLocalization(LocalizationKey.DOWNLOAD);
+            // The last item indicates that we have to choose the action to execute.
+            this.addRow(new Object[]{formattedDate, customerCode, productCode, numBoxes, netWeight, null});
+        }
+    }
 
-            // Column 7: Empty name with a whitespace. It will show a button to
-            // print the delivery note.
-            String printName = Localization.getLocalization(LocalizationKey.PRINT);
 
-            tableModel.addRow(new Object[]{formattedDate, customerCode, productCode, numBoxes, netWeight, downloadName, printName});
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValueAt(Object newValue, int row, int column) {
+        super.setValueAt(newValue, row, column);
+
+        if (column == 5) {
+            int deliveryNoteCode = deliveryNotesData.get(row).getCode();
+            DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
+            if (deliveryNoteData != null) {
+                String chosenAction = (String) super.getValueAt(row, 5);
+
+                if (chosenAction.equals(Localization.getLocalization(LocalizationKey.DOWNLOAD))) {
+                    this.downloadDeliveryNote(deliveryNoteData);
+                } else if (chosenAction.equals(Localization.getLocalization(LocalizationKey.PRINT))) {
+                    this.printDeliveryNote(deliveryNoteData);
+                } else {
+                    this.removeDeliveryNote(deliveryNoteData, row);
+                }
+            }
         }
     }
 

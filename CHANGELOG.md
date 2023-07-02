@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.53.0] - 2023-07-02
+
+### Added
+
+- Added feature to delete a delivery note.
+
 ## [0.52.0] - 2023-06-27
 
 ### Added

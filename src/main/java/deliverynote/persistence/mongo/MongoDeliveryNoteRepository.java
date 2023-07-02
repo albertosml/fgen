@@ -34,6 +34,17 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     }
 
     /**
+     * Obtain the filter for the delivery note code.
+     *
+     * @param code The delivery note code.
+     * @return A filter indicating that the query must only obtain the delivery
+     * note which contains the given delivery note code.
+     */
+    private Bson getDeliveryNoteCodeFilter(int code) {
+        return Filters.eq("code", code);
+    }
+
+    /**
      * It creates a Mongo document from a delivery note and the PDF file.
      *
      * @param deliveryNote The delivery note entity.
@@ -57,6 +68,35 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("numBoxes", deliveryNote.calculateTotalBoxes());
         document.append("numPallets", deliveryNote.calculateTotalPallets());
         document.append("netWeight", deliveryNote.calculateNetWeight());
+        document.append("isDeleted", false);
+
+        return document;
+    }
+
+    /**
+     * It creates a Mongo document from a delivery note data.
+     *
+     * @param deliveryNoteData The delivery note data entity.
+     * @return A document with the given delivery note data if it has been
+     * created, otherwise null.
+     */
+    private Document createDocumentFrom(DeliveryNoteData deliveryNoteData) {
+        Document document = new Document();
+
+        Map<String, String> fileAttributes = Base64Converter.encode(deliveryNoteData.getFile());
+        if (fileAttributes == null) {
+            return null;
+        }
+
+        document.append("code", deliveryNoteData.getCode());
+        document.append("date", deliveryNoteData.getDate());
+        document.append("customer", deliveryNoteData.getCustomer().getCode());
+        document.append("product", deliveryNoteData.getProduct().getCode());
+        document.append("file", fileAttributes);
+        document.append("numBoxes", deliveryNoteData.getNumBoxes());
+        document.append("numPallets", deliveryNoteData.getNumPallets());
+        document.append("netWeight", deliveryNoteData.getNetWeight());
+        document.append("isDeleted", deliveryNoteData.isDeleted());
 
         return document;
     }
@@ -80,6 +120,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         attributes.put(DeliveryNoteDataAttribute.NUM_BOXES, document.get("numBoxes"));
         attributes.put(DeliveryNoteDataAttribute.NUM_PALLETS, document.get("numPallets"));
         attributes.put(DeliveryNoteDataAttribute.NET_WEIGHT, document.get("netWeight"));
+        attributes.put(DeliveryNoteDataAttribute.IS_DELETED, document.get("isDeleted"));
 
         return DeliveryNoteData.from(attributes);
     }
@@ -97,10 +138,11 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      */
     @Override
     public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
+        Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
         Bson fromDate = Filters.gte("date", from);
         Bson toDate = Filters.lte("date", to);
 
-        Bson filters = Filters.and(fromDate, toDate);
+        Bson filters = Filters.and(isNotDeletedFilter, fromDate, toDate);
 
         if (customer != null) {
             Bson customerFilter = Filters.eq("customer", customer.getCode());
@@ -130,6 +172,15 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     public void save(DeliveryNote deliveryNote, File pdfFile) {
         Document document = this.createDocumentFrom(deliveryNote, pdfFile);
         this.insertOne(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean update(DeliveryNoteData deliveryNoteData) {
+        Bson deliveryNoteCodeFilter = this.getDeliveryNoteCodeFilter(deliveryNoteData.getCode());
+        return super.replaceOne(deliveryNoteCodeFilter, this.createDocumentFrom(deliveryNoteData));
     }
 
 }

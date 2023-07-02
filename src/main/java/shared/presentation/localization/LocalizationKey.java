@@ -517,4 +517,12 @@ public enum LocalizationKey {
      * End date.
      */
     END_DATE,
+    /**
+     * Removed delivery note message.
+     */
+    REMOVED_DELIVERY_NOTE_MESSAGE,
+    /**
+     * Removed delivery note error message.
+     */
+    REMOVED_DELIVERY_NOTE_ERROR_MESSAGE,
 }

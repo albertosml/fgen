@@ -6,7 +6,7 @@ import customer.persistence.mongo.MongoCustomerRepository;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
-import deliverynote.presentation.utils.ListDeliveryNotesMouseAdapter;
+import deliverynote.presentation.utils.ListDeliveryNotesTableModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,8 +14,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -27,17 +29,11 @@ import product.persistence.mongo.MongoProductRepository;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
-import shared.presentation.utils.ButtonRenderer;
 
 /**
  * Panel which lists all the delivery notes.
  */
 public class ListDeliveryNotesPanel extends javax.swing.JPanel {
-
-    /**
-     * Mouse listener.
-     */
-    private ListDeliveryNotesMouseAdapter mouseListener;
 
     /**
      * Constructor.
@@ -182,12 +178,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         columnNames.add(Localization.getLocalization(LocalizationKey.PRODUCT));
         columnNames.add(Localization.getLocalization(LocalizationKey.BOXES_QTY));
         columnNames.add(Localization.getLocalization(LocalizationKey.NET_WEIGHT));
-        // Both columns does not contain a name, so they will contain the same
-        // identifier. However, they need a different identification for the
-        // retrieval. To solve that problem, a different empty string will be
-        // set for them.
         columnNames.add("");
-        columnNames.add(" ");
 
         return columnNames;
     }
@@ -198,24 +189,18 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private void initializeTable() {
         Vector<String> columnNames = this.generateColumnNames();
 
-        TableModel dataModel = new DefaultTableModel(null, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        table.setModel(new ListDeliveryNotesTableModel(null, columnNames, table));
 
-        table.setModel(dataModel);
+        // Actions.
+        String downloadAction = Localization.getLocalization(LocalizationKey.DOWNLOAD);
+        String printAction = Localization.getLocalization(LocalizationKey.PRINT);
+        String removeAction = Localization.getLocalization(LocalizationKey.REMOVE);
+        String[] actions = new String[]{downloadAction, printAction, removeAction};
 
-        this.mouseListener = new ListDeliveryNotesMouseAdapter(table);
-        table.addMouseListener(this.mouseListener);
-
-        // Set a button renderer for the action buttons.
-        TableColumn downloadColumn = table.getColumn(columnNames.get(5));
-        downloadColumn.setCellRenderer(new ButtonRenderer());
-
-        TableColumn printColumn = table.getColumn(columnNames.get(6));
-        printColumn.setCellRenderer(new ButtonRenderer());
+        // Set a combobox cell editor for the actions column.
+        TableColumn actionsColumn = table.getColumn(columnNames.get(5));
+        JComboBox comboBox = new JComboBox(actions);
+        actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
     }
 
     @SuppressWarnings("unchecked")
@@ -245,14 +230,14 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "${DATE}", "${CUSTOMER}", "${PRODUCT}", "${BOXES_QTY}", "${NET_WEIGHT}", "", ""
+                "${DATE}", "${CUSTOMER}", "${PRODUCT}", "${BOXES_QTY}", "${NET_WEIGHT}", ""
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -272,7 +257,6 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(3).setResizable(false);
             table.getColumnModel().getColumn(4).setResizable(false);
             table.getColumnModel().getColumn(5).setResizable(false);
-            table.getColumnModel().getColumn(6).setResizable(false);
         }
 
         customerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -372,17 +356,18 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(startDateLabel)
-                                        .addComponent(customerLabel)
-                                        .addComponent(isSelectedCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(isSelectedCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(customerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(startDateLabel)
+                                            .addComponent(customerLabel)))
                                     .addComponent(startDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(endDateLabel)
-                                        .addComponent(endDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(endDateInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(endDateLabel))
                                     .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(productLabel)
@@ -431,7 +416,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         this.totalNetWeightValue.setText(Integer.toString(totalNetWeight));
         this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
 
-        mouseListener.addDeliveryNotesData(deliveryNotesData);
+        ListDeliveryNotesTableModel tableModel = (ListDeliveryNotesTableModel) table.getModel();
+        tableModel.addDeliveryNotesData(deliveryNotesData);
     }//GEN-LAST:event_listDeliveryNotesButtonActionPerformed
 
     private void isSelectedCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedCustomerActionPerformed
