@@ -6,7 +6,8 @@ package deliverynote.application;
 public enum DeliveryNoteDataAttribute {
     CODE,
     DATE,
-    CUSTOMER,
+    FARMER,
+    SUPPLIER,
     PRODUCT,
     FILE,
     NUM_PALLETS,

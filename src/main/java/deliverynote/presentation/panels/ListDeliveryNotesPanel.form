@@ -19,24 +19,41 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                              <Component id="isSelectedSupplier" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                               <Component id="isSelectedProduct" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="productLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="productInput" min="-2" pref="213" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="isSelectedCustomer" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="customerLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="customerInput" min="-2" pref="213" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="supplierLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="isSelectedFarmer" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="farmerLabel" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="farmerInput" min="-2" pref="202" max="-2" attributes="0"/>
+                                  <Component id="supplierInput" min="-2" pref="205" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="productLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="productInput" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="startDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="endDateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -61,7 +78,7 @@
                               <Component id="totalNumBoxesValue" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="48" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -81,15 +98,13 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="isSelectedCustomer" alignment="1" min="-2" pref="24" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="customerInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="customerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="farmerInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="farmerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="startDateInput" min="-2" max="-2" attributes="0"/>
+                                  <Component id="isSelectedFarmer" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -97,10 +112,22 @@
                                       <Component id="endDateInput" alignment="1" min="-2" max="-2" attributes="0"/>
                                       <Component id="endDateLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="productInput" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="isSelectedProduct" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                              <Component id="supplierLabel" alignment="3" max="32767" attributes="0"/>
+                                              <Component id="supplierInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="isSelectedSupplier" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="isSelectedProduct" min="-2" pref="24" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="productInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -122,8 +149,8 @@
                       <Component id="listDeliveryNotesButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-              <Component id="scrollPane" pref="290" max="32767" attributes="0"/>
+              <EmptySpace type="separate" pref="24" max="32767" attributes="0"/>
+              <Component id="scrollPane" min="-2" pref="260" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -190,7 +217,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JComboBox" name="customerInput">
+    <Component class="javax.swing.JComboBox" name="farmerInput">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -205,9 +232,9 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="customerLabel">
+    <Component class="javax.swing.JLabel" name="farmerLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${CUSTOMER}:"/>
+        <Property name="text" type="java.lang.String" value="${FARMER}:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="productLabel">
@@ -272,12 +299,12 @@
     </Component>
     <Component class="com.toedter.calendar.JDateChooser" name="endDateInput">
     </Component>
-    <Component class="javax.swing.JCheckBox" name="isSelectedCustomer">
+    <Component class="javax.swing.JCheckBox" name="isSelectedFarmer">
       <Properties>
         <Property name="selected" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedCustomerActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedFarmerActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="isSelectedProduct">
@@ -287,6 +314,34 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedProductActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="supplierLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${SUPPLIER}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="isSelectedSupplier">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedSupplierActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="supplierInput">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

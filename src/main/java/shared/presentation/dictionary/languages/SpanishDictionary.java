@@ -52,14 +52,14 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.ATTRIBUTE, "Atributo");
         super.setTranslation(LocalizationKey.REGISTERED_VARIABLE_MESSAGE, "La variable ha sido registrada con éxito");
         super.setTranslation(LocalizationKey.DUPLICATED_VARIABLE_MESSAGE, "La variable a registrar tiene un nombre de una variable ya existente en el sistema.");
-        super.setTranslation(LocalizationKey.CUSTOMER_CODE, "Código del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_NAME, "Nombre del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_TIN, "DNI, NIE o CIF del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_ADDRESS, "Dirección del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_CITY, "Ciudad del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_PROVINCE, "Provincia del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_ZIPCODE, "Código postal del cliente");
-        super.setTranslation(LocalizationKey.CUSTOMER_IBAN, "IBAN del cliente");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_CODE, "Código del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_NAME, "Nombre del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_TIN, "DNI, NIE o CIF del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_ADDRESS, "Dirección del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_CITY, "Ciudad del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_PROVINCE, "Provincia del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_ZIPCODE, "Código postal del agricultor");
+        super.setTranslation(LocalizationKey.FARMER_CUSTOMER_IBAN, "IBAN del agricultor");
         super.setTranslation(LocalizationKey.PRODUCT_CODE, "Código del producto");
         super.setTranslation(LocalizationKey.PRODUCT_NAME, "Nombre del producto");
         super.setTranslation(LocalizationKey.PRODUCT_PRICE, "Precio del producto");
@@ -109,7 +109,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVALID_CONTAINER_MESSAGE, "El contenedor introducido es inválido");
         super.setTranslation(LocalizationKey.INVALID_QTY_MESSAGE, "La cantidad introducida es inválida");
         super.setTranslation(LocalizationKey.GENERATED_DELIVERY_NOTE_MESSAGE, "El albarán se ha generado con éxito");
-        super.setTranslation(LocalizationKey.INVALID_CUSTOMER_MESSAGE, "Cliente no válido");
+        super.setTranslation(LocalizationKey.INVALID_FARMER_CUSTOMER_MESSAGE, "Agricultor no válido");
+        super.setTranslation(LocalizationKey.INVALID_SUPPLIER_CUSTOMER_MESSAGE, "Proveedor no válido");
         super.setTranslation(LocalizationKey.INVALID_PRODUCT_MESSAGE, "Producto no válido");
         super.setTranslation(LocalizationKey.INVALID_TEMPLATE_MESSAGE, "Plantilla no válida");
         super.setTranslation(LocalizationKey.INVALID_WEIGHT_MESSAGE, "Peso no válido");
@@ -143,6 +144,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.END_DATE, "Fecha de fin");
         super.setTranslation(LocalizationKey.REMOVED_DELIVERY_NOTE_MESSAGE, "Albarán eliminado con éxito");
         super.setTranslation(LocalizationKey.REMOVED_DELIVERY_NOTE_ERROR_MESSAGE, "Error al eliminar el albarán");
+        super.setTranslation(LocalizationKey.FARMER, "Agricultor");
+        super.setTranslation(LocalizationKey.SUPPLIER, "Proveedor");
     }
 
 }

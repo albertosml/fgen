@@ -23,10 +23,16 @@ public class DeliveryNoteValidator {
      * @return The validation state for the delivery note.
      */
     public static DeliveryNoteValidationState isValid(DeliveryNote deliveryNote) {
-        Customer customer = deliveryNote.getCustomer();
-        if (customer == null) {
-            return DeliveryNoteValidationState.INVALID_CUSTOMER;
+        Customer farmer = deliveryNote.getFarmer();
+        if (farmer == null) {
+            return DeliveryNoteValidationState.INVALID_FARMER;
         }
+
+        Customer supplier = deliveryNote.getSupplier();
+        if (supplier == null) {
+            return DeliveryNoteValidationState.INVALID_SUPPLIER;
+        }
+
 
         Product product = deliveryNote.getProduct();
         if (product == null) {

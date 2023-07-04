@@ -185,20 +185,23 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             Date date = deliveryNoteData.getDate();
             String formattedDate = df.format(date);
 
-            // Column 2: Delivery note data customer.
-            String customerCode = deliveryNoteData.getCustomer().toString();
+            // Column 2: Delivery note data farmer.
+            String farmerCustomerCode = deliveryNoteData.getFarmer().toString();
 
-            // Column 3: Delivery note data product.
+            // Column 3: Delivery note data supplier.
+            String supplierCustomerCode = deliveryNoteData.getSupplier().toString();
+
+            // Column 4: Delivery note data product.
             String productCode = deliveryNoteData.getProduct().toString();
 
-            // Column 4: Delivery note boxes quantity.
+            // Column 5: Delivery note boxes quantity.
             int numBoxes = deliveryNoteData.getNumBoxes();
 
-            // Column 5: Delivery note net weight.
+            // Column 6: Delivery note net weight.
             int netWeight = deliveryNoteData.getNetWeight();
 
             // The last item indicates that we have to choose the action to execute.
-            this.addRow(new Object[]{formattedDate, customerCode, productCode, numBoxes, netWeight, null});
+            this.addRow(new Object[]{formattedDate, farmerCustomerCode, supplierCustomerCode, productCode, numBoxes, netWeight, null});
         }
     }
 

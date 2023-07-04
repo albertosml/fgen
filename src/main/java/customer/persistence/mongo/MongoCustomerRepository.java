@@ -149,6 +149,16 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
      * {@inheritDoc}
      */
     @Override
+    public ArrayList<Customer> obtain(boolean getSuppliers) {
+        ArrayList<Customer> customers = this.get(false);
+        customers.removeIf(customer -> customer.isSupplier() == getSuppliers);
+        return customers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void register(Customer customer) {
         Document document = this.createDocumentFrom(customer);
         super.insertOne(document);

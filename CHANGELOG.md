@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.54.0] - 2023-07-02
+
+### Added
+
+- Establish relationship between farmer and supplier customers.
+
 ## [0.53.0] - 2023-07-02
 
 ### Added

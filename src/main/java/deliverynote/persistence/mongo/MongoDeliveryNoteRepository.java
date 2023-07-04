@@ -62,7 +62,8 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
 
         document.append("code", deliveryNote.getCode());
         document.append("date", deliveryNote.getDate());
-        document.append("customer", deliveryNote.getCustomer().getCode());
+        document.append("farmer", deliveryNote.getFarmer().getCode());
+        document.append("supplier", deliveryNote.getSupplier().getCode());
         document.append("product", deliveryNote.getProduct().getCode());
         document.append("file", fileAttributes);
         document.append("numBoxes", deliveryNote.calculateTotalBoxes());
@@ -90,7 +91,8 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
 
         document.append("code", deliveryNoteData.getCode());
         document.append("date", deliveryNoteData.getDate());
-        document.append("customer", deliveryNoteData.getCustomer().getCode());
+        document.append("farmer", deliveryNoteData.getFarmer().getCode());
+        document.append("supplier", deliveryNoteData.getSupplier().getCode());
         document.append("product", deliveryNoteData.getProduct().getCode());
         document.append("file", fileAttributes);
         document.append("numBoxes", deliveryNoteData.getNumBoxes());
@@ -114,7 +116,8 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         Map<DeliveryNoteDataAttribute, Object> attributes = new HashMap<>();
         attributes.put(DeliveryNoteDataAttribute.CODE, document.get("code"));
         attributes.put(DeliveryNoteDataAttribute.DATE, document.get("date"));
-        attributes.put(DeliveryNoteDataAttribute.CUSTOMER, document.get("customer"));
+        attributes.put(DeliveryNoteDataAttribute.FARMER, document.get("farmer"));
+        attributes.put(DeliveryNoteDataAttribute.SUPPLIER, document.get("supplier"));
         attributes.put(DeliveryNoteDataAttribute.PRODUCT, document.get("product"));
         attributes.put(DeliveryNoteDataAttribute.FILE, document.get("file"));
         attributes.put(DeliveryNoteDataAttribute.NUM_BOXES, document.get("numBoxes"));
@@ -137,16 +140,21 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<DeliveryNoteData> get(Customer customer, Product product, Date from, Date to) {
+    public ArrayList<DeliveryNoteData> get(Customer farmer, Customer supplier, Product product, Date from, Date to) {
         Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
         Bson fromDate = Filters.gte("date", from);
         Bson toDate = Filters.lte("date", to);
 
         Bson filters = Filters.and(isNotDeletedFilter, fromDate, toDate);
 
-        if (customer != null) {
-            Bson customerFilter = Filters.eq("customer", customer.getCode());
-            filters = Filters.and(filters, customerFilter);
+        if (farmer != null) {
+            Bson farmerFilter = Filters.eq("farmer", farmer.getCode());
+            filters = Filters.and(filters, farmerFilter);
+        }
+
+        if (supplier != null) {
+            Bson supplierFilter = Filters.eq("supplier", supplier.getCode());
+            filters = Filters.and(filters, supplierFilter);
         }
 
         if (product != null) {
