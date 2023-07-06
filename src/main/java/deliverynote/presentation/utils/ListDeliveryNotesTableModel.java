@@ -164,7 +164,7 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // Only edit the chosen action column.
-        return column == 5;
+        return column == 6;
     }
 
     /**
@@ -213,11 +213,11 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     public void setValueAt(Object newValue, int row, int column) {
         super.setValueAt(newValue, row, column);
 
-        if (column == 5) {
+        if (column == 6) {
             int deliveryNoteCode = deliveryNotesData.get(row).getCode();
             DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
             if (deliveryNoteData != null) {
-                String chosenAction = (String) super.getValueAt(row, 5);
+                String chosenAction = (String) super.getValueAt(row, 6);
 
                 if (chosenAction.equals(Localization.getLocalization(LocalizationKey.DOWNLOAD))) {
                     this.downloadDeliveryNote(deliveryNoteData);

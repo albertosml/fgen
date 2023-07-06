@@ -151,7 +151,7 @@ public class MongoCustomerRepository extends MongoRepository implements Customer
     @Override
     public ArrayList<Customer> obtain(boolean getSuppliers) {
         ArrayList<Customer> customers = this.get(false);
-        customers.removeIf(customer -> customer.isSupplier() == getSuppliers);
+        customers.removeIf(customer -> customer.isSupplier() != getSuppliers);
         return customers;
     }
 
