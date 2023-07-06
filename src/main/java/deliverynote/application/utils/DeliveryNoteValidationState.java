@@ -9,9 +9,13 @@ public enum DeliveryNoteValidationState {
      */
     VALID,
     /**
-     * Invalid delivery note customer.
+     * Invalid delivery note farmer customer.
      */
-    INVALID_CUSTOMER,
+    INVALID_FARMER,
+    /**
+     * Invalid delivery note supplier customer.
+     */
+    INVALID_SUPPLIER,
     /**
      * Invalid delivery note product.
      */

@@ -165,37 +165,37 @@ public enum LocalizationKey {
      */
     DUPLICATED_VARIABLE_MESSAGE,
     /**
-     * Customer code.
+     * Farmer customer code.
      */
-    CUSTOMER_CODE,
+    FARMER_CUSTOMER_CODE,
     /**
-     * Customer name.
+     * Farmer customer name.
      */
-    CUSTOMER_NAME,
+    FARMER_CUSTOMER_NAME,
     /**
-     * Customer TIN.
+     * Farmer customer TIN.
      */
-    CUSTOMER_TIN,
+    FARMER_CUSTOMER_TIN,
     /**
-     * Customer address.
+     * Farmer customer address.
      */
-    CUSTOMER_ADDRESS,
+    FARMER_CUSTOMER_ADDRESS,
     /**
-     * Customer city.
+     * Farmer customer city.
      */
-    CUSTOMER_CITY,
+    FARMER_CUSTOMER_CITY,
     /**
-     * Customer province.
+     * Farmer customer province.
      */
-    CUSTOMER_PROVINCE,
+    FARMER_CUSTOMER_PROVINCE,
     /**
-     * Customer ZIP code.
+     * Farmer customer ZIP code.
      */
-    CUSTOMER_ZIPCODE,
+    FARMER_CUSTOMER_ZIPCODE,
     /**
-     * Customer IBAN.
+     * Farmer customer IBAN.
      */
-    CUSTOMER_IBAN,
+    FARMER_CUSTOMER_IBAN,
     /**
      * Product code.
      */
@@ -394,9 +394,13 @@ public enum LocalizationKey {
      */
     GENERATED_DELIVERY_NOTE_MESSAGE,
     /**
-     * Invalid customer message.
+     * Invalid farmer customer message.
      */
-    INVALID_CUSTOMER_MESSAGE,
+    INVALID_FARMER_CUSTOMER_MESSAGE,
+    /**
+     * Invalid supplier customer message.
+     */
+    INVALID_SUPPLIER_CUSTOMER_MESSAGE,
     /**
      * Invalid product message.
      */
@@ -525,4 +529,12 @@ public enum LocalizationKey {
      * Removed delivery note error message.
      */
     REMOVED_DELIVERY_NOTE_ERROR_MESSAGE,
+    /**
+     * Farmer.
+     */
+    FARMER,
+    /**
+     * Supplier.
+     */
+    SUPPLIER,
 }

@@ -79,22 +79,22 @@ public class DeliveryNoteGenerator {
      */
     private static Object getValue(EntityAttribute entityAttribute, DeliveryNote deliveryNote) {
         switch (entityAttribute) {
-            case CUSTOMER_CODE:
-                return deliveryNote.getCustomer().getCode();
-            case CUSTOMER_NAME:
-                return deliveryNote.getCustomer().getName();
-            case CUSTOMER_TIN:
-                return deliveryNote.getCustomer().getTin();
-            case CUSTOMER_ADDRESS:
-                return deliveryNote.getCustomer().getAddress();
-            case CUSTOMER_CITY:
-                return deliveryNote.getCustomer().getCity();
-            case CUSTOMER_PROVINCE:
-                return deliveryNote.getCustomer().getProvince();
-            case CUSTOMER_ZIPCODE:
-                return deliveryNote.getCustomer().getZipCode();
-            case CUSTOMER_IBAN:
-                return deliveryNote.getCustomer().getIban();
+            case FARMER_CUSTOMER_CODE:
+                return deliveryNote.getFarmer().getCode();
+            case FARMER_CUSTOMER_NAME:
+                return deliveryNote.getFarmer().getName();
+            case FARMER_CUSTOMER_TIN:
+                return deliveryNote.getFarmer().getTin();
+            case FARMER_CUSTOMER_ADDRESS:
+                return deliveryNote.getFarmer().getAddress();
+            case FARMER_CUSTOMER_CITY:
+                return deliveryNote.getFarmer().getCity();
+            case FARMER_CUSTOMER_PROVINCE:
+                return deliveryNote.getFarmer().getProvince();
+            case FARMER_CUSTOMER_ZIPCODE:
+                return deliveryNote.getFarmer().getZipCode();
+            case FARMER_CUSTOMER_IBAN:
+                return deliveryNote.getFarmer().getIban();
             case PRODUCT_CODE:
                 return deliveryNote.getProduct().getCode();
             case PRODUCT_NAME:

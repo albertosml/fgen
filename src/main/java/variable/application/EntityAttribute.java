@@ -8,37 +8,37 @@ import shared.presentation.localization.LocalizationKey;
  */
 public enum EntityAttribute {
     /**
-     * Customer code.
+     * Farmer customer code.
      */
-    CUSTOMER_CODE,
+    FARMER_CUSTOMER_CODE,
     /**
-     * Customer name.
+     * Farmer customer name.
      */
-    CUSTOMER_NAME,
+    FARMER_CUSTOMER_NAME,
     /**
-     * Customer TIN.
+     * Farmer customer TIN.
      */
-    CUSTOMER_TIN,
+    FARMER_CUSTOMER_TIN,
     /**
-     * Customer address.
+     * Farmer customer address.
      */
-    CUSTOMER_ADDRESS,
+    FARMER_CUSTOMER_ADDRESS,
     /**
-     * Customer city.
+     * Farmer customer city.
      */
-    CUSTOMER_CITY,
+    FARMER_CUSTOMER_CITY,
     /**
-     * Customer province.
+     * Farmer customer province.
      */
-    CUSTOMER_PROVINCE,
+    FARMER_CUSTOMER_PROVINCE,
     /**
-     * Customer ZIP code.
+     * Farmer customer ZIP code.
      */
-    CUSTOMER_ZIPCODE,
+    FARMER_CUSTOMER_ZIPCODE,
     /**
-     * Customer IBAN.
+     * Farmer customer IBAN.
      */
-    CUSTOMER_IBAN,
+    FARMER_CUSTOMER_IBAN,
     /**
      * Product code.
      */

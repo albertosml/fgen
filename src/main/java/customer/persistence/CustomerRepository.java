@@ -48,4 +48,12 @@ public interface CustomerRepository extends Repository {
      */
     public boolean update(Customer customer);
 
+    /**
+     * Obtain all customers.
+     *
+     * @param getSuppliers Whether we should get the supplier customers or not.
+     * @return A list with all obtained customers.
+     */
+    public ArrayList<Customer> obtain(boolean getSuppliers);
+
 }
