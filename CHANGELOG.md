@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.54.1] - 2023-07-08
+
+### Fixed
+
+- Fixed an error where the total net weight and boxes quantity are not updated when a delivery note is removed.
+
 ## [0.54.0] - 2023-07-06
 
 ### Added

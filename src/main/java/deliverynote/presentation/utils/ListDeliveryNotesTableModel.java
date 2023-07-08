@@ -3,6 +3,7 @@ package deliverynote.presentation.utils;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.RemoveDeliveryNote;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
+import deliverynote.presentation.panels.ListDeliveryNotesPanel;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -144,6 +145,7 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             if (isDeleted) {
                 message = Localization.getLocalization(LocalizationKey.REMOVED_DELIVERY_NOTE_MESSAGE);
 
+                this.deliveryNotesData.remove(tableRow); // Remove it before from here, so the listener has the updated data.
                 super.removeRow(tableRow);
             } else {
                 message = Localization.getLocalization(LocalizationKey.REMOVED_DELIVERY_NOTE_ERROR_MESSAGE);
@@ -205,6 +207,14 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
         }
     }
 
+    /**
+     * Retrieve the delivery notes data for the associated table.
+     *
+     * @return The delivery notes data.
+     */
+    public ArrayList<DeliveryNoteData> getDeliveryNotesData() {
+        return this.deliveryNotesData;
+    }
 
     /**
      * {@inheritDoc}

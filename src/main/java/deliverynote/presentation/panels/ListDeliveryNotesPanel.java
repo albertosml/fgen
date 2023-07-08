@@ -19,6 +19,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import product.application.Product;
@@ -197,7 +199,18 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private void initializeTable() {
         Vector<String> columnNames = this.generateColumnNames();
 
-        table.setModel(new ListDeliveryNotesTableModel(null, columnNames, table));
+        ListDeliveryNotesTableModel tableModel = new ListDeliveryNotesTableModel(null, columnNames, table);
+        table.setModel(tableModel);
+
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent event) {
+                int eventType = event.getType();
+                if (eventType == TableModelEvent.DELETE || eventType == TableModelEvent.UPDATE) {
+                    setTotalValues(tableModel.getDeliveryNotesData());
+                }
+            }
+        });
 
         // Actions.
         String downloadAction = Localization.getLocalization(LocalizationKey.DOWNLOAD);
@@ -209,6 +222,25 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         TableColumn actionsColumn = table.getColumn(columnNames.get(6));
         JComboBox comboBox = new JComboBox(actions);
         actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
+    }
+
+    /**
+     * Based on the given data, calculate the total net weight and total boxes
+     * quantity. Then, set the value on its corresponding panel field.
+     *
+     * @param deliveryNotesData The delivery notes data.
+     */
+    private void setTotalValues(ArrayList<DeliveryNoteData> deliveryNotesData) {
+        int totalNumBoxes = 0;
+        int totalNetWeight = 0;
+
+        for (DeliveryNoteData deliveryNoteData : deliveryNotesData) {
+            totalNumBoxes += deliveryNoteData.getNumBoxes();
+            totalNetWeight += deliveryNoteData.getNetWeight();
+        }
+
+        this.totalNetWeightValue.setText(Integer.toString(totalNetWeight));
+        this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
     }
 
     @SuppressWarnings("unchecked")
@@ -443,17 +475,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         Date endDate = endDateInput.getDate();
 
         ArrayList<DeliveryNoteData> deliveryNotesData = this.getDeliveryNotesData(farmer, supplier, product, startDate, endDate);
-
-        int totalNumBoxes = 0;
-        int totalNetWeight = 0;
-
-        for (DeliveryNoteData deliveryNoteData : deliveryNotesData) {
-            totalNumBoxes += deliveryNoteData.getNumBoxes();
-            totalNetWeight += deliveryNoteData.getNetWeight();
-        }
-
-        this.totalNetWeightValue.setText(Integer.toString(totalNetWeight));
-        this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
+        this.setTotalValues(deliveryNotesData);
 
         ListDeliveryNotesTableModel tableModel = (ListDeliveryNotesTableModel) table.getModel();
         tableModel.addDeliveryNotesData(deliveryNotesData);
