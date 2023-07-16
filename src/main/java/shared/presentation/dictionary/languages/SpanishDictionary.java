@@ -146,6 +146,21 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.REMOVED_DELIVERY_NOTE_ERROR_MESSAGE, "Error al eliminar el albarán");
         super.setTranslation(LocalizationKey.FARMER, "Agricultor");
         super.setTranslation(LocalizationKey.SUPPLIER, "Proveedor");
+        super.setTranslation(LocalizationKey.BILL, "Facturar");
+        super.setTranslation(LocalizationKey.PERIOD, "Periodo");
+        super.setTranslation(LocalizationKey.INVOICE_ITEMS, "Elementos de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_SUBTOTAL, "Subtotal de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_TOTAL, "Total de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_CODE, "Código de la factura");
+        super.setTranslation(LocalizationKey.INVOICE_GENERATION_DATETIME, "Fecha de generación de la factura");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_CODE, "Código del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_NAME, "Nombre del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_TIN, "DNI, NIE o CIF del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_ADDRESS, "Dirección del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_CITY, "Ciudad del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_PROVINCE, "Provincia del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_ZIPCODE, "Código postal del proveedor");
+        super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_IBAN, "IBAN del proveedor");
     }
 
 }

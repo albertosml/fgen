@@ -197,6 +197,38 @@ public enum LocalizationKey {
      */
     FARMER_CUSTOMER_IBAN,
     /**
+     * Supplier customer code.
+     */
+    SUPPLIER_CUSTOMER_CODE,
+    /**
+     * Supplier customer name.
+     */
+    SUPPLIER_CUSTOMER_NAME,
+    /**
+     * Supplier customer TIN.
+     */
+    SUPPLIER_CUSTOMER_TIN,
+    /**
+     * Supplier customer address.
+     */
+    SUPPLIER_CUSTOMER_ADDRESS,
+    /**
+     * Supplier customer city.
+     */
+    SUPPLIER_CUSTOMER_CITY,
+    /**
+     * Supplier customer province.
+     */
+    SUPPLIER_CUSTOMER_PROVINCE,
+    /**
+     * Supplier customer ZIP code.
+     */
+    SUPPLIER_CUSTOMER_ZIPCODE,
+    /**
+     * Supplier customer IBAN.
+     */
+    SUPPLIER_CUSTOMER_IBAN,
+    /**
      * Product code.
      */
     PRODUCT_CODE,
@@ -537,4 +569,32 @@ public enum LocalizationKey {
      * Supplier.
      */
     SUPPLIER,
+    /**
+     * Bill (verb).
+     */
+    BILL,
+    /**
+     * Period.
+     */
+    PERIOD,
+    /**
+     * Invoice items.
+     */
+    INVOICE_ITEMS,
+    /**
+     * Invoice subtotal.
+     */
+    INVOICE_SUBTOTAL,
+    /**
+     * Invoice subtotal.
+     */
+    INVOICE_TOTAL,
+    /**
+     * Invoice code.
+     */
+    INVOICE_CODE,
+    /**
+     * Invoice generation date time.
+     */
+    INVOICE_GENERATION_DATETIME;
 }

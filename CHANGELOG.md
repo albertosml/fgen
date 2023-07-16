@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.55.0] - 2023-07-17
+
+### Added
+
+- Added feature to generate an invoice.
+
 ## [0.54.1] - 2023-07-08
 
 ### Fixed

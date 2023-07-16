@@ -3,7 +3,6 @@ package deliverynote.presentation.utils;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.RemoveDeliveryNote;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
-import deliverynote.presentation.panels.ListDeliveryNotesPanel;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -56,6 +55,7 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     public ListDeliveryNotesTableModel(Vector<? extends Vector> data, Vector<?> columnNames, JTable table) {
         super(data, columnNames);
         this.table = table;
+        this.deliveryNotesData = new ArrayList<>();
     }
 
     /**
@@ -160,13 +160,18 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
 
     @Override
     public Class getColumnClass(int columnIndex) {
+        // Price column.
+        if (columnIndex == 6) {
+            return Float.class;
+        }
+
         return Object.class;
     }
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        // Only edit the chosen action column.
-        return column == 6;
+        // Only edit the chosen action column and the price.
+        return column >= 6;
     }
 
     /**
@@ -203,7 +208,8 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             int netWeight = deliveryNoteData.getNetWeight();
 
             // The last item indicates that we have to choose the action to execute.
-            this.addRow(new Object[]{formattedDate, farmerCustomerCode, supplierCustomerCode, productCode, numBoxes, netWeight, null});
+            // The price (next to last column) is not initialized.
+            this.addRow(new Object[]{formattedDate, farmerCustomerCode, supplierCustomerCode, productCode, numBoxes, netWeight, 0, null});
         }
     }
 
@@ -223,11 +229,11 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     public void setValueAt(Object newValue, int row, int column) {
         super.setValueAt(newValue, row, column);
 
-        if (column == 6) {
+        if (column == 7) {
             int deliveryNoteCode = deliveryNotesData.get(row).getCode();
             DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
             if (deliveryNoteData != null) {
-                String chosenAction = (String) super.getValueAt(row, 6);
+                String chosenAction = (String) super.getValueAt(row, 7);
 
                 if (chosenAction.equals(Localization.getLocalization(LocalizationKey.DOWNLOAD))) {
                     this.downloadDeliveryNote(deliveryNoteData);
@@ -237,6 +243,12 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
                     this.removeDeliveryNote(deliveryNoteData, row);
                 }
             }
+        } else if (column == 6) {
+            // Price column.
+            float newPrice = (float) super.getValueAt(row, column);
+
+            DeliveryNoteData deliveryNoteData = this.deliveryNotesData.get(row);
+            deliveryNoteData.setPrice(newPrice);
         }
     }
 

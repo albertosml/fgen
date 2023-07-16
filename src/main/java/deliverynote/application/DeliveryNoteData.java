@@ -66,6 +66,11 @@ public class DeliveryNoteData {
     private int netWeight;
 
     /**
+     * The price.
+     */
+    private float price;
+
+    /**
      * Whether the delivery note is deleted or not.
      */
     private boolean isDeleted;
@@ -96,6 +101,7 @@ public class DeliveryNoteData {
         this.numBoxes = numBoxes;
         this.netWeight = netWeight;
         this.isDeleted = isDeleted;
+        this.price = 0;
     }
 
     /**
@@ -180,12 +186,30 @@ public class DeliveryNoteData {
     }
 
     /**
+     * Retrieve the delivery note data price.
+     *
+     * @return The delivery note data net price.
+     */
+    public float getPrice() {
+        return this.price;
+    }
+
+    /**
      * Whether the delivery note is deleted from the system or not.
      *
      * @return true if the delivery note is removed, otherwise false.
      */
     public boolean isDeleted() {
         return this.isDeleted;
+    }
+
+    /**
+     * Update the delivery note data price.
+     *
+     * @param price The price.
+     */
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     /**
