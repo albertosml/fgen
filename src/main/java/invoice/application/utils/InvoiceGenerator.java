@@ -9,11 +9,8 @@ import com.gembox.spreadsheet.SpreadsheetInfo;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
-import container.application.Pallet;
-import deliverynote.application.DeliveryNote;
 import deliverynote.application.DeliveryNoteData;
-import deliverynote.application.usecases.SaveDeliveryNote;
-import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
+import invoice.application.Invoice;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,19 +28,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import template.application.Template;
 import template.application.usecases.ShowTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
 import variable.application.EntityAttribute;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_CODE;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_GENERATION_DATETIME;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_ITEMS;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_NET_WEIGHT;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_TOTAL_BOXES;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_TOTAL_PALLETS;
-import static variable.application.EntityAttribute.DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_ADDRESS;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_CITY;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_CODE;
@@ -57,12 +46,23 @@ import static variable.application.EntityAttribute.PRODUCT_NAME;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
-import weighing.application.Weighing;
 
 /**
  * Represents the class responsible of generating the invoice.
  */
 public class InvoiceGenerator {
+
+    /**
+     * Store the current invoice total.
+     */
+    private float total;
+
+    /**
+     * Constructor.
+     */
+    public InvoiceGenerator() {
+        this.total = 0;
+    }
 
     /**
      * Obtain the template associate to the given code by executing the use
@@ -92,7 +92,7 @@ public class InvoiceGenerator {
      * @throws java.io.IOException if the file is not found.
      * @throws java.lang.InterruptedException if the conversion is interrupted.
      */
-    private static File convertToPdf(ExcelFile workbook, Date date) throws IOException, InterruptedException {
+    private File convertToPdf(ExcelFile workbook, Date date) throws IOException, InterruptedException {
         String timestamp = Long.toString(date.getTime());
 
         File tmpHtmlFile = File.createTempFile(timestamp, ".html");
@@ -102,7 +102,7 @@ public class InvoiceGenerator {
 
         String executable = WrapperConfig.findExecutable();
         Pdf pdf = new Pdf(new WrapperConfig(executable));
-        pdf.addParam(new Param("--page-size", "A5"));
+        pdf.addParam(new Param("--page-size", "A4"));
         pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
 
         File tmpPdfFile = File.createTempFile(timestamp, ".pdf");
@@ -111,52 +111,60 @@ public class InvoiceGenerator {
     }
 
     /**
-     * Obtain the value from the given entity attribute and delivery note.
+     * Obtain the value from the given entity attribute and invoice.
      *
      * @param entityAttribtue The entity attribute used to get the value.
-     * @param deliveryNote The delivery note used to retrieve the value.
+     * @param invoice The invoice used to retrieve the value.
      * @return An object indicating the requested value, as the value can be a
      * string, a list, etc...
      */
-    private static Object getValue(EntityAttribute entityAttribute, DeliveryNote deliveryNote) {
+    private Object getValue(EntityAttribute entityAttribute, Invoice invoice) {
         switch (entityAttribute) {
             case FARMER_CUSTOMER_CODE:
-                return deliveryNote.getFarmer().getCode();
+                return invoice.getFarmer().getCode();
             case FARMER_CUSTOMER_NAME:
-                return deliveryNote.getFarmer().getName();
+                return invoice.getFarmer().getName();
             case FARMER_CUSTOMER_TIN:
-                return deliveryNote.getFarmer().getTin();
+                return invoice.getFarmer().getTin();
             case FARMER_CUSTOMER_ADDRESS:
-                return deliveryNote.getFarmer().getAddress();
+                return invoice.getFarmer().getAddress();
             case FARMER_CUSTOMER_CITY:
-                return deliveryNote.getFarmer().getCity();
+                return invoice.getFarmer().getCity();
             case FARMER_CUSTOMER_PROVINCE:
-                return deliveryNote.getFarmer().getProvince();
+                return invoice.getFarmer().getProvince();
             case FARMER_CUSTOMER_ZIPCODE:
-                return deliveryNote.getFarmer().getZipCode();
+                return invoice.getFarmer().getZipCode();
             case FARMER_CUSTOMER_IBAN:
-                return deliveryNote.getFarmer().getIban();
+                return invoice.getFarmer().getIban();
+            case SUPPLIER_CUSTOMER_CODE:
+                return invoice.getSupplier().getCode();
+            case SUPPLIER_CUSTOMER_NAME:
+                return invoice.getSupplier().getName();
+            case SUPPLIER_CUSTOMER_TIN:
+                return invoice.getSupplier().getTin();
+            case SUPPLIER_CUSTOMER_ADDRESS:
+                return invoice.getSupplier().getAddress();
+            case SUPPLIER_CUSTOMER_CITY:
+                return invoice.getSupplier().getCity();
+            case SUPPLIER_CUSTOMER_PROVINCE:
+                return invoice.getSupplier().getProvince();
+            case SUPPLIER_CUSTOMER_ZIPCODE:
+                return invoice.getSupplier().getZipCode();
+            case SUPPLIER_CUSTOMER_IBAN:
+                return invoice.getSupplier().getIban();
             case PRODUCT_CODE:
-                return deliveryNote.getProduct().getCode();
+                return invoice.getProduct().getCode();
             case PRODUCT_NAME:
-                return deliveryNote.getProduct().getName();
-            case DELIVERY_NOTE_ITEMS:
-                return deliveryNote.getWeighings();
-            case DELIVERY_NOTE_CODE:
-                return deliveryNote.getCode();
-            case DELIVERY_NOTE_GENERATION_DATETIME:
+                return invoice.getProduct().getName();
+            case INVOICE_ITEMS:
+                return invoice.getDeliveryNotes();
+            case INVOICE_CODE:
+                return invoice.getCode();
+            case INVOICE_GENERATION_DATETIME:
                 String pattern = "dd-MM-yyyy HH:mm:ss";
                 DateFormat df = new SimpleDateFormat(pattern);
-                Date date = deliveryNote.getDate();
+                Date date = invoice.getDate();
                 return df.format(date);
-            case DELIVERY_NOTE_NET_WEIGHT:
-                return deliveryNote.calculateNetWeight();
-            case DELIVERY_NOTE_TOTAL_PALLETS:
-                return deliveryNote.calculateTotalPallets();
-            case DELIVERY_NOTE_TOTAL_BOXES:
-                return deliveryNote.calculateTotalBoxes();
-            case DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX:
-                return deliveryNote.calculateTotalWeightPerBox();
         }
 
         return null;
@@ -167,7 +175,7 @@ public class InvoiceGenerator {
      *
      * @return A list with all variables on the system.
      */
-    private static Map<String, EntityAttribute> getVariables() {
+    private Map<String, EntityAttribute> getVariables() {
         ArrayList<Variable> variables = new ArrayList<>();
 
         try {
@@ -194,7 +202,7 @@ public class InvoiceGenerator {
      * @throws FileNotFoundException if the file is not found.
      * @throws IOException if the file cannot be read.
      */
-    private static ExcelFile loadTemplate(Template template) throws FileNotFoundException, IOException {
+    private ExcelFile loadTemplate(Template template) throws FileNotFoundException, IOException {
         SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
         SpreadsheetInfo.addFreeLimitReachedListener(args -> args.setFreeLimitReachedAction(FreeLimitReachedAction.CONTINUE_AS_TRIAL));
 
@@ -204,61 +212,34 @@ public class InvoiceGenerator {
     }
 
     /**
-     * Save delivery note on the database.
-     *
-     * @param workbook The excel file to save.
-     * @param deliveryNote The delivery note data.
-     * @throws java.io.IOException if the file is not found.
-     * @throws java.lang.InterruptedException if the conversion is interrupted.
-     */
-    private static void save(ExcelFile workbook, DeliveryNote deliveryNote) throws IOException, InterruptedException {
-        File pdfFile = DeliveryNoteGenerator.convertToPdf(workbook, deliveryNote.getDate());
-
-        // Call to use case.
-        try {
-            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
-            SaveDeliveryNote saveDeliveryNote = new SaveDeliveryNote(deliveryNoteRepository);
-            saveDeliveryNote.execute(deliveryNote, pdfFile);
-        } catch (NotDefinedDatabaseContextException ex) {
-            String className = DeliveryNoteGenerator.class.getName();
-            Logger.getLogger(className).log(Level.INFO, "Delivery note not saved because the database has not been found", ex);
-        }
-    }
-
-    /**
-     * Write delivery note items into the spreadsheet cells.
+     * Write invoice items into the spreadsheet cells.
      *
      * @param position Start position.
-     * @param weighings Weighings to write.
-     * @param pallet The pallet to remove from the gross weight to calculate the
-     * net weight.
+     * @param invoice The invoice.
      * @param worksheet The worksheet where we are going to write the delivery
      * note data.
      */
-    private static void writeDeliveryNoteItems(String position, ArrayList<Weighing> weighings, Pallet pallet, ExcelWorksheet worksheet) {
+    private void writeInvoiceItems(String position, Invoice invoice, ExcelWorksheet worksheet) {
         ExcelCell cell = worksheet.getCell(position);
         int rowIndex = cell.getRow().getIndex();
-        int firstColumnIndex = cell.getColumn().getIndex();
+        int columnIndex = cell.getColumn().getIndex();
 
-        for (Weighing weighing : weighings) {
-            // Number of pallets.
-            ExcelCell numPalletsCell = worksheet.getCell(rowIndex, firstColumnIndex);
-            numPalletsCell.setValue(1);
+        ExcelCell cellToWrite;
+        for (DeliveryNoteData deliveryNoteData : invoice.getDeliveryNotes()) {
+            Object[] dataToAdd = new Object[]{
+                deliveryNoteData.getDate(),
+                deliveryNoteData.getCode(),
+                deliveryNoteData.getNumBoxes(),
+                deliveryNoteData.getNetWeight(),
+                deliveryNoteData.getProduct(),
+                deliveryNoteData.getPrice(),
+                deliveryNoteData.getNetWeight() * deliveryNoteData.getPrice()
+            };
 
-            // Number of boxes.
-            ExcelCell numBoxesCell = worksheet.getCell(rowIndex, firstColumnIndex + 1);
-            numBoxesCell.setValue(weighing.getQty());
-
-            // Net weight.
-            double boxWeight = weighing.getBox().getWeight();
-            int netWeight = (int) (weighing.getWeight() - (weighing.getQty() * boxWeight) - pallet.getWeight());
-            ExcelCell netWeightCell = worksheet.getCell(rowIndex, firstColumnIndex + 2);
-            netWeightCell.setValue(netWeight);
-
-            // Weight per box.
-            double weightPerBox = (double) netWeight / weighing.getQty();
-            ExcelCell weightPerBoxCell = worksheet.getCell(rowIndex, firstColumnIndex + 3);
-            weightPerBoxCell.setValue(Math.round(weightPerBox * 100.0) / 100.0);
+            for (int i = 0; i < columnIndex; i++) {
+                cellToWrite = worksheet.getCell(rowIndex, columnIndex + i);
+                cellToWrite.setValue(dataToAdd[i]);
+            }
 
             // Move to next row.
             rowIndex++;
@@ -271,18 +252,18 @@ public class InvoiceGenerator {
      * @param position Position to write.
      * @param expression Expression to set.
      * @param pattern Pattern to detect variables.
-     * @param deliveryNote Delivery note.
+     * @param invoice The invoice.
      * @param variables Variables list.
      * @param worksheet Worksheet to write the variable.
      */
-    private static void writeVariable(String position, String expression, Pattern pattern, DeliveryNote deliveryNote, Map<String, EntityAttribute> variables, ExcelWorksheet worksheet) {
+    private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, EntityAttribute> variables, ExcelWorksheet worksheet) {
         Matcher matcher = pattern.matcher(expression);
         String replacedExpression = matcher.replaceAll(match -> {
             String variable = match.group();
             // Remove the "${" and "}" from the variable.
             String variableName = variable.substring(2, variable.length() - 1);
             EntityAttribute entityAttribute = variables.get(variableName);
-            Object variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote);
+            Object variableValue = this.getValue(entityAttribute, invoice);
             return variableValue.toString();
         });
 
@@ -290,48 +271,76 @@ public class InvoiceGenerator {
         cell.setValue(replacedExpression);
     }
 
-    private boolean generateFarmerInvoice() {
-        Template farmerInvoiceTemplate = this.getTemplate(3);
+    /**
+     * Create the invoice file.
+     *
+     * @param templateCode The code of the used template.
+     * @param invoice The invoice.
+     * @return The invoice file if created, otherwise null.
+     * @throws IOException if the template file is not found.
+     * @throws InterruptedException if the conversion is interrupted.
+     */
+    private File createInvoiceFile(int templateCode, Invoice invoice) throws IOException, InterruptedException {
+        Template template = this.getTemplate(templateCode);
 
-        if (farmerInvoiceTemplate == null) {
-            return false;
+        if (template == null) {
+            return null;
         }
 
-    }
-
-    /**
-     * Generate the invoices, one for the supplier and another for the farmer.
-     *
-     * @param deliveryNotesData The delivery notes data.
-     * @throws java.io.IOException if the file is not found.
-     * @throws java.lang.InterruptedException if the conversion is interrupted.
-     */
-    public void generate(ArrayList<DeliveryNoteData> deliveryNotesData, Date startPeriod, Date endPeriod) throws IOException, InterruptedException {
-        boolean isFarmerInvoiceGenerated = this.generateFarmerInvoice();
-
-        ExcelFile workbook = DeliveryNoteGenerator.loadTemplate(template);
+        ExcelFile workbook = this.loadTemplate(template);
         ExcelWorksheet worksheet = workbook.getWorksheet(0);
 
         Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
+        Map<String, EntityAttribute> variables = this.getVariables();
         Map<String, String> templateFields = template.getFields();
         for (Map.Entry<String, String> field : templateFields.entrySet()) {
             String position = field.getKey();
             String expression = field.getValue();
 
-            // Specific processing for the delivery note items.
+            // Specific processing for the invoice items.
             String expressionVariableName = expression.substring(2, expression.length() - 1);
             EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
-            boolean shouldWriteDeliveryNoteItems = expressionEntityAttribute == EntityAttribute.DELIVERY_NOTE_ITEMS;
-            if (shouldWriteDeliveryNoteItems) {
-                DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), deliveryNote.getPallet(), worksheet);
+            boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
+            if (shouldWriteInvoiceItems) {
+                this.writeInvoiceItems(position, invoice, worksheet);
                 continue;
             }
 
-            DeliveryNoteGenerator.writeVariable(position, expression, variablesPattern, deliveryNote, variables, worksheet);
+            this.writeVariable(position, expression, variablesPattern, invoice, variables, worksheet);
         }
 
-        DeliveryNoteGenerator.save(workbook, deliveryNote);
+        return this.convertToPdf(workbook, invoice.getDate());
+    }
+
+    /**
+     * Generate the invoices, one for the supplier and another for the farmer.
+     *
+     * @param invoice The invoice data.
+     * @throws IOException if the template file is not found.
+     * @throws InterruptedException if the conversion is interrupted.
+     *
+     * @return Whether the invoices have been generated or not.
+     */
+    public boolean generate(Invoice invoice) throws IOException, InterruptedException {
+        File supplierInvoice = this.createInvoiceFile(2, invoice);
+        if (supplierInvoice == null) {
+            return false;
+        }
+
+        File farmerInvoice = this.createInvoiceFile(3, invoice);
+        if (farmerInvoice == null) {
+            return false;
+        }
+
+        // Call to use case.
+        try {
+            MongoInvoiceRepository invoiceRepository = new MongoInvoiceRepository();
+            SaveInvoice saveInvoice = new SaveInvoice(invoiceRepository);
+            saveInvoice.execute(invoice, farmerInvoice, supplierInvoice);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = InvoiceGenerator.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Invoice not saved because the database has not been found", ex);
+        }
     }
 
 }
