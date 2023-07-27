@@ -161,6 +161,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_PROVINCE, "Provincia del proveedor");
         super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_ZIPCODE, "Código postal del proveedor");
         super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_IBAN, "IBAN del proveedor");
+        super.setTranslation(LocalizationKey.INVOICE_GENERATED_MESSAGE, "La factura ha sido generada con éxito");
+        super.setTranslation(LocalizationKey.INVOICE_NOT_GENERATED_MESSAGE, "Error al generar la factura");
     }
 
 }

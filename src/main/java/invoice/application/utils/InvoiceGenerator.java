@@ -11,6 +11,8 @@ import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 import deliverynote.application.DeliveryNoteData;
 import invoice.application.Invoice;
+import invoice.application.usecases.SaveInvoice;
+import invoice.persistence.mongo.MongoInvoiceRepository;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
+import subtotal.application.Subtotal;
 import template.application.Template;
 import template.application.usecases.ShowTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
@@ -41,8 +44,7 @@ import static variable.application.EntityAttribute.FARMER_CUSTOMER_NAME;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_PROVINCE;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_TIN;
 import static variable.application.EntityAttribute.FARMER_CUSTOMER_ZIPCODE;
-import static variable.application.EntityAttribute.PRODUCT_CODE;
-import static variable.application.EntityAttribute.PRODUCT_NAME;
+import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
 import variable.persistence.mongo.MongoVariableRepository;
@@ -115,10 +117,11 @@ public class InvoiceGenerator {
      *
      * @param entityAttribtue The entity attribute used to get the value.
      * @param invoice The invoice used to retrieve the value.
+     * @param subtotal The subtotal associated to the variable if required.
      * @return An object indicating the requested value, as the value can be a
      * string, a list, etc...
      */
-    private Object getValue(EntityAttribute entityAttribute, Invoice invoice) {
+    private Object getValue(EntityAttribute entityAttribute, Invoice invoice, Subtotal subtotal) {
         switch (entityAttribute) {
             case FARMER_CUSTOMER_CODE:
                 return invoice.getFarmer().getCode();
@@ -152,10 +155,6 @@ public class InvoiceGenerator {
                 return invoice.getSupplier().getZipCode();
             case SUPPLIER_CUSTOMER_IBAN:
                 return invoice.getSupplier().getIban();
-            case PRODUCT_CODE:
-                return invoice.getProduct().getCode();
-            case PRODUCT_NAME:
-                return invoice.getProduct().getName();
             case INVOICE_ITEMS:
                 return invoice.getDeliveryNotes();
             case INVOICE_CODE:
@@ -165,6 +164,28 @@ public class InvoiceGenerator {
                 DateFormat df = new SimpleDateFormat(pattern);
                 Date date = invoice.getDate();
                 return df.format(date);
+            case INVOICE_TOTAL:
+                return total;
+            case INVOICE_SUBTOTAL:
+                float value = subtotal.calculate(total);
+
+                // Update total
+                total += value;
+
+                return value;
+            case SUBTOTAL:
+                return invoice.calculateTotal();
+            case PERIOD:
+                Date start = invoice.getStartPeriod();
+                Date end = invoice.getEndPeriod();
+
+                String datePattern = "dd/MM/yyyy";
+                DateFormat dateFormat = new SimpleDateFormat(datePattern);
+
+                String formattedStartDate = dateFormat.format(start);
+                String formattedEndDate = dateFormat.format(end);
+
+                return String.format("%s - %s", formattedStartDate, formattedEndDate);
         }
 
         return null;
@@ -175,7 +196,7 @@ public class InvoiceGenerator {
      *
      * @return A list with all variables on the system.
      */
-    private Map<String, EntityAttribute> getVariables() {
+    private Map<String, Variable> getVariables() {
         ArrayList<Variable> variables = new ArrayList<>();
 
         try {
@@ -186,12 +207,12 @@ public class InvoiceGenerator {
             variables = new ArrayList<>();
         }
 
-        Map<String, EntityAttribute> entityAttributePerVariable = new HashMap<>();
+        Map<String, Variable> variablesMap = new HashMap<>();
         for (Variable variable : variables) {
-            entityAttributePerVariable.put(variable.getName(), variable.getAttribute());
+            variablesMap.put(variable.getName(), variable);
         }
 
-        return entityAttributePerVariable;
+        return variablesMap;
     }
 
     /**
@@ -256,14 +277,23 @@ public class InvoiceGenerator {
      * @param variables Variables list.
      * @param worksheet Worksheet to write the variable.
      */
-    private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, EntityAttribute> variables, ExcelWorksheet worksheet) {
+    private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, Variable> variables, ExcelWorksheet worksheet) {
         Matcher matcher = pattern.matcher(expression);
         String replacedExpression = matcher.replaceAll(match -> {
-            String variable = match.group();
+            String variableMatch = match.group();
             // Remove the "${" and "}" from the variable.
-            String variableName = variable.substring(2, variable.length() - 1);
-            EntityAttribute entityAttribute = variables.get(variableName);
-            Object variableValue = this.getValue(entityAttribute, invoice);
+            String variableName = variableMatch.substring(2, variableMatch.length() - 1);
+            Variable variable = variables.get(variableName);
+            EntityAttribute entityAttribute = variable.getAttribute();
+
+            Object variableValue;
+            if (entityAttribute == EntityAttribute.SUBTOTAL) {
+                SubtotalVariable subtotalVariable = (SubtotalVariable) variable;
+                variableValue = this.getValue(entityAttribute, invoice, subtotalVariable.getSubtotal());
+            } else {
+                variableValue = this.getValue(entityAttribute, invoice, null);
+            }
+
             return variableValue.toString();
         });
 
@@ -291,7 +321,7 @@ public class InvoiceGenerator {
         ExcelWorksheet worksheet = workbook.getWorksheet(0);
 
         Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, EntityAttribute> variables = this.getVariables();
+        Map<String, Variable> variables = this.getVariables();
         Map<String, String> templateFields = template.getFields();
         for (Map.Entry<String, String> field : templateFields.entrySet()) {
             String position = field.getKey();
@@ -299,7 +329,8 @@ public class InvoiceGenerator {
 
             // Specific processing for the invoice items.
             String expressionVariableName = expression.substring(2, expression.length() - 1);
-            EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
+            Variable variable = variables.get(expressionVariableName);
+            EntityAttribute expressionEntityAttribute = variable.getAttribute();
             boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
             if (shouldWriteInvoiceItems) {
                 this.writeInvoiceItems(position, invoice, worksheet);
@@ -341,6 +372,8 @@ public class InvoiceGenerator {
             String className = InvoiceGenerator.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Invoice not saved because the database has not been found", ex);
         }
+
+        return true;
     }
 
 }

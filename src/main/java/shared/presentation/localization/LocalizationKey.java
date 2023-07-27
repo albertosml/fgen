@@ -596,5 +596,13 @@ public enum LocalizationKey {
     /**
      * Invoice generation date time.
      */
-    INVOICE_GENERATION_DATETIME;
+    INVOICE_GENERATION_DATETIME,
+    /**
+     * Message shown when the invoice has been generated successfully.
+     */
+    INVOICE_GENERATED_MESSAGE,
+    /**
+     * Message shown when the invoice has not been generated.
+     */
+    INVOICE_NOT_GENERATED_MESSAGE;
 }

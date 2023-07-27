@@ -7,9 +7,17 @@ import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.ListDeliveryNotes;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import deliverynote.presentation.utils.ListDeliveryNotesTableModel;
+import invoice.application.Invoice;
+import invoice.application.InvoiceAttribute;
+import invoice.application.usecases.CreateInvoice;
+import invoice.application.utils.InvoiceGenerator;
+import invoice.persistence.mongo.MongoInvoiceRepository;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
@@ -26,6 +35,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
+import shared.application.Pair;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -512,7 +522,39 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         Date startPeriod = this.startDateInput.getDate();
         Date endPeriod = this.endDateInput.getDate();
-        
+
+        Customer farmer = (Customer) farmerInput.getSelectedItem();
+        Customer supplier = (Customer) supplierInput.getSelectedItem();
+
+        Map<InvoiceAttribute, Object> invoiceAttributes = new HashMap<>();
+        invoiceAttributes.put(InvoiceAttribute.DELIVERY_NOTES, deliveryNotesData);
+        invoiceAttributes.put(InvoiceAttribute.START_PERIOD, startPeriod);
+        invoiceAttributes.put(InvoiceAttribute.END_PERIOD, endPeriod);
+        invoiceAttributes.put(InvoiceAttribute.FARMER, farmer);
+        invoiceAttributes.put(InvoiceAttribute.SUPPLIER, supplier);
+
+        String message;
+        try {
+            MongoInvoiceRepository invoiceRepository = new MongoInvoiceRepository();
+            CreateInvoice createInvoice = new CreateInvoice(invoiceRepository);
+            Invoice invoice = createInvoice.execute(invoiceAttributes);
+
+            InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+            boolean areInvoicesGenerated = invoiceGenerator.generate(invoice);
+
+            if (areInvoicesGenerated) {
+                message = Localization.getLocalization(LocalizationKey.INVOICE_GENERATED_MESSAGE);
+            } else {
+                message = Localization.getLocalization(LocalizationKey.INVOICE_NOT_GENERATED_MESSAGE);
+            }
+        } catch (NotDefinedDatabaseContextException | IOException | InterruptedException ex) {
+            String className = ListDeliveryNotesPanel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Invoice not created because the database has not been found", ex);
+
+            message = Localization.getLocalization(LocalizationKey.INVOICE_NOT_GENERATED_MESSAGE);
+        }
+
+        JOptionPane.showMessageDialog(this, message);
     }//GEN-LAST:event_invoiceButtonActionPerformed
 
 
