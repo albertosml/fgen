@@ -1,5 +1,6 @@
 package invoice.persistence.mongo;
 
+import customer.application.Customer;
 import deliverynote.application.DeliveryNoteData;
 import invoice.application.Invoice;
 import invoice.persistence.InvoiceRepository;
@@ -35,14 +36,22 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
     private Document createDocumentFrom(Invoice invoice) {
         Document document = new Document();
 
-        Map<String, String> farmerInvoiceFileAttributes = Base64Converter.encode(invoice.getFarmerInvoice());
-        if (farmerInvoiceFileAttributes == null) {
-            return null;
+        Customer farmer = invoice.getFarmer();
+        Map<String, String> farmerInvoiceFileAttributes = null;
+        if (farmer != null) {
+            farmerInvoiceFileAttributes = Base64Converter.encode(invoice.getFarmerInvoice());
+            if (farmerInvoiceFileAttributes == null) {
+                return null;
+            }
         }
 
-        Map<String, String> supplierInvoiceFileAttributes = Base64Converter.encode(invoice.getSupplierInvoice());
-        if (supplierInvoiceFileAttributes == null) {
-            return null;
+        Customer supplier = invoice.getSupplier();
+        Map<String, String> supplierInvoiceFileAttributes = null;
+        if (supplier != null) {
+            supplierInvoiceFileAttributes = Base64Converter.encode(invoice.getSupplierInvoice());
+            if (supplierInvoiceFileAttributes == null) {
+                return null;
+            }
         }
 
         ArrayList<Integer> deliveryNoteCodes = new ArrayList<>();
@@ -55,9 +64,9 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         document.append("deliveryNotes", deliveryNoteCodes);
         document.append("startPeriod", invoice.getStartPeriod());
         document.append("endPeriod", invoice.getEndPeriod());
-        document.append("farmer", invoice.getFarmer().getCode());
+        document.append("farmer", farmer == null ? null : farmer.getCode());
         document.append("farmerInvoice", farmerInvoiceFileAttributes);
-        document.append("supplier", invoice.getSupplier().getCode());
+        document.append("supplier", supplier == null ? null : supplier.getCode());
         document.append("supplierInvoice", supplierInvoiceFileAttributes);
         document.append("isDeleted", invoice.isDeleted());
 

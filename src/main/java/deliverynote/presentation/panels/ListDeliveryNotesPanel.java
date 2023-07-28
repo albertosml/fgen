@@ -523,8 +523,15 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         Date startPeriod = this.startDateInput.getDate();
         Date endPeriod = this.endDateInput.getDate();
 
-        Customer farmer = (Customer) farmerInput.getSelectedItem();
-        Customer supplier = (Customer) supplierInput.getSelectedItem();
+        Customer farmer = null;
+        if (this.isSelectedFarmer.isSelected()) {
+            farmer = (Customer) farmerInput.getSelectedItem();
+        }
+
+        Customer supplier = null;
+        if (this.isSelectedSupplier.isSelected()) {
+            supplier = (Customer) supplierInput.getSelectedItem();
+        }
 
         Map<InvoiceAttribute, Object> invoiceAttributes = new HashMap<>();
         invoiceAttributes.put(InvoiceAttribute.DELIVERY_NOTES, deliveryNotesData);

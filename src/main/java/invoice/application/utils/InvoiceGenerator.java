@@ -166,14 +166,14 @@ public class InvoiceGenerator {
                 return df.format(date);
             case INVOICE_TOTAL:
                 return total;
-            case INVOICE_SUBTOTAL:
+            case SUBTOTAL:
                 float value = subtotal.calculate(total);
 
                 // Update total
                 total += value;
 
                 return value;
-            case SUBTOTAL:
+            case INVOICE_SUBTOTAL:
                 return invoice.calculateTotal();
             case PERIOD:
                 Date start = invoice.getStartPeriod();
@@ -245,19 +245,24 @@ public class InvoiceGenerator {
         int rowIndex = cell.getRow().getIndex();
         int columnIndex = cell.getColumn().getIndex();
 
+        String datePattern = "dd/MM/yyyy";
+        DateFormat dateFormat = new SimpleDateFormat(datePattern);
+
         ExcelCell cellToWrite;
         for (DeliveryNoteData deliveryNoteData : invoice.getDeliveryNotes()) {
+            String formattedDate = dateFormat.format(deliveryNoteData.getDate());
+
             Object[] dataToAdd = new Object[]{
-                deliveryNoteData.getDate(),
+                formattedDate,
                 deliveryNoteData.getCode(),
                 deliveryNoteData.getNumBoxes(),
                 deliveryNoteData.getNetWeight(),
-                deliveryNoteData.getProduct(),
+                deliveryNoteData.getProduct().getName(),
                 deliveryNoteData.getPrice(),
                 deliveryNoteData.getNetWeight() * deliveryNoteData.getPrice()
             };
 
-            for (int i = 0; i < columnIndex; i++) {
+            for (int i = 0; i < (columnIndex + dataToAdd.length); i++) {
                 cellToWrite = worksheet.getCell(rowIndex, columnIndex + i);
                 cellToWrite.setValue(dataToAdd[i]);
             }
@@ -322,6 +327,7 @@ public class InvoiceGenerator {
 
         Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
         Map<String, Variable> variables = this.getVariables();
+        // TODO: Sort fields by key, so we process them in order.
         Map<String, String> templateFields = template.getFields();
         for (Map.Entry<String, String> field : templateFields.entrySet()) {
             String position = field.getKey();
@@ -330,11 +336,14 @@ public class InvoiceGenerator {
             // Specific processing for the invoice items.
             String expressionVariableName = expression.substring(2, expression.length() - 1);
             Variable variable = variables.get(expressionVariableName);
-            EntityAttribute expressionEntityAttribute = variable.getAttribute();
-            boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
-            if (shouldWriteInvoiceItems) {
-                this.writeInvoiceItems(position, invoice, worksheet);
-                continue;
+
+            if (variable != null) {
+                EntityAttribute expressionEntityAttribute = variable.getAttribute();
+                boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
+                if (shouldWriteInvoiceItems) {
+                    this.writeInvoiceItems(position, invoice, worksheet);
+                    continue;
+                }
             }
 
             this.writeVariable(position, expression, variablesPattern, invoice, variables, worksheet);
@@ -353,14 +362,24 @@ public class InvoiceGenerator {
      * @return Whether the invoices have been generated or not.
      */
     public boolean generate(Invoice invoice) throws IOException, InterruptedException {
-        File supplierInvoice = this.createInvoiceFile(2, invoice);
-        if (supplierInvoice == null) {
+        if (invoice == null) {
             return false;
         }
 
-        File farmerInvoice = this.createInvoiceFile(3, invoice);
-        if (farmerInvoice == null) {
-            return false;
+        File supplierInvoice = null;
+        if (invoice.getSupplier() != null) {
+            supplierInvoice = this.createInvoiceFile(2, invoice);
+            if (supplierInvoice == null) {
+                return false;
+            }
+        }
+
+        File farmerInvoice = null;
+        if (invoice.getFarmer() != null) {
+            farmerInvoice = this.createInvoiceFile(3, invoice);
+            if (farmerInvoice == null) {
+                return false;
+            }
         }
 
         // Call to use case.

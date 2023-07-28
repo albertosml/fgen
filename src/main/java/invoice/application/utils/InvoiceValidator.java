@@ -21,12 +21,8 @@ public class InvoiceValidator {
      */
     public static InvoiceValidationState isValid(Invoice invoice) {
         Customer farmer = invoice.getFarmer();
-        if (farmer == null) {
-            return InvoiceValidationState.INVALID_FARMER;
-        }
-
         Customer supplier = invoice.getSupplier();
-        if (supplier == null) {
+        if (farmer == null && supplier == null) {
             return InvoiceValidationState.INVALID_SUPPLIER;
         }
 

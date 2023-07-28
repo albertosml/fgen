@@ -2,8 +2,8 @@ package template.application;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Template entity class.
@@ -85,7 +85,7 @@ public class Template {
      * @return The template fields.
      */
     public Map<String, String> getFields() {
-        Map<String, String> templateFields = new HashMap<>();
+        Map<String, String> templateFields = new TreeMap<>();
 
         for (TemplateField field : this.fields) {
             templateFields.put(field.getPosition(), field.getExpression());
