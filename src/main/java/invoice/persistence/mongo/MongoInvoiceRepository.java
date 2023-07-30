@@ -36,22 +36,14 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
     private Document createDocumentFrom(Invoice invoice) {
         Document document = new Document();
 
-        Customer farmer = invoice.getFarmer();
-        Map<String, String> farmerInvoiceFileAttributes = null;
-        if (farmer != null) {
-            farmerInvoiceFileAttributes = Base64Converter.encode(invoice.getFarmerInvoice());
-            if (farmerInvoiceFileAttributes == null) {
-                return null;
-            }
+        Customer customer = invoice.getCustomer();
+        if (customer == null) {
+            return null;
         }
 
-        Customer supplier = invoice.getSupplier();
-        Map<String, String> supplierInvoiceFileAttributes = null;
-        if (supplier != null) {
-            supplierInvoiceFileAttributes = Base64Converter.encode(invoice.getSupplierInvoice());
-            if (supplierInvoiceFileAttributes == null) {
-                return null;
-            }
+        Map<String, String> invoiceFileAttributes = Base64Converter.encode(invoice.getFile());
+        if (invoiceFileAttributes == null) {
+            return null;
         }
 
         ArrayList<Integer> deliveryNoteCodes = new ArrayList<>();
@@ -64,10 +56,9 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         document.append("deliveryNotes", deliveryNoteCodes);
         document.append("startPeriod", invoice.getStartPeriod());
         document.append("endPeriod", invoice.getEndPeriod());
-        document.append("farmer", farmer == null ? null : farmer.getCode());
-        document.append("farmerInvoice", farmerInvoiceFileAttributes);
-        document.append("supplier", supplier == null ? null : supplier.getCode());
-        document.append("supplierInvoice", supplierInvoiceFileAttributes);
+        document.append("customer", customer.getCode());
+        document.append("file", invoiceFileAttributes);
+        document.append("isSupplier", customer.isSupplier());
         document.append("isDeleted", invoice.isDeleted());
 
         return document;

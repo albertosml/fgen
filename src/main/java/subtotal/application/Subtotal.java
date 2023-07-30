@@ -144,7 +144,7 @@ public class Subtotal {
      * @return The result after calculating the subtotal.
      */
     public float calculate(float value) {
-        float percentageDecimal = this.percentage / 100;
+        float percentageDecimal = (float) (this.percentage / 100.0);
         float subtotalResult = value * percentageDecimal;
         return this.isDiscount ? -subtotalResult : subtotalResult;
     }

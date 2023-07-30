@@ -523,22 +523,27 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         Date startPeriod = this.startDateInput.getDate();
         Date endPeriod = this.endDateInput.getDate();
 
-        Customer farmer = null;
+        int templateCode = 0;
+        Customer customer = null;
         if (this.isSelectedFarmer.isSelected()) {
-            farmer = (Customer) farmerInput.getSelectedItem();
+            customer = (Customer) farmerInput.getSelectedItem();
+            templateCode = 3; // Identifies farmer invoice.
         }
 
-        Customer supplier = null;
         if (this.isSelectedSupplier.isSelected()) {
-            supplier = (Customer) supplierInput.getSelectedItem();
+            customer = (Customer) supplierInput.getSelectedItem();
+            if (customer.getCode() == 5) {
+                templateCode = 4; // Special supplier invoice.
+            } else {
+                templateCode = 2; // Identifies supplier invoice.
+            }
         }
 
         Map<InvoiceAttribute, Object> invoiceAttributes = new HashMap<>();
         invoiceAttributes.put(InvoiceAttribute.DELIVERY_NOTES, deliveryNotesData);
         invoiceAttributes.put(InvoiceAttribute.START_PERIOD, startPeriod);
         invoiceAttributes.put(InvoiceAttribute.END_PERIOD, endPeriod);
-        invoiceAttributes.put(InvoiceAttribute.FARMER, farmer);
-        invoiceAttributes.put(InvoiceAttribute.SUPPLIER, supplier);
+        invoiceAttributes.put(InvoiceAttribute.CUSTOMER, customer);
 
         String message;
         try {
@@ -547,7 +552,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             Invoice invoice = createInvoice.execute(invoiceAttributes);
 
             InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
-            boolean areInvoicesGenerated = invoiceGenerator.generate(invoice);
+            boolean areInvoicesGenerated = invoiceGenerator.generate(invoice, templateCode);
 
             if (areInvoicesGenerated) {
                 message = Localization.getLocalization(LocalizationKey.INVOICE_GENERATED_MESSAGE);

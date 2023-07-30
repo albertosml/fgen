@@ -39,24 +39,14 @@ public class Invoice {
     private Date endPeriod;
 
     /**
-     * The supplier customer.
+     * The customer, which can be either a farmer or a supplier.
      */
-    private Customer supplier;
+    private Customer customer;
 
     /**
-     * The farmer customer.
+     * A PDF file containing the invoice file.
      */
-    private Customer farmer;
-
-    /**
-     * A PDF file containing the farmer invoice file.
-     */
-    private File farmerInvoice;
-
-    /**
-     * A PDF file containing the supplier invoice file.
-     */
-    private File supplierInvoice;
+    private File file;
 
     /**
      * Whether the invoice is deleted or not.
@@ -71,18 +61,16 @@ public class Invoice {
      * @param deliveryNotes The invoice delivery notes.
      * @param startPeriod The invoice start period date.
      * @param endPeriod The invoice end period date.
-     * @param farmer The invoice farmer customer.
-     * @param supplier The invoice supplier customer.
+     * @param customer The invoice customer.
      * @param isDeleted Whether the invoice is deleted or not.
      */
-    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer farmer, Customer supplier, boolean isDeleted) {
+    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.deliveryNotes = deliveryNotes;
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
-        this.farmer = farmer;
-        this.supplier = supplier;
+        this.customer = customer;
         this.isDeleted = isDeleted;
     }
 
@@ -151,39 +139,21 @@ public class Invoice {
     }
 
     /**
-     * Retrieve the invoice farmer customer.
+     * Retrieve the invoice customer.
      *
-     * @return The invoice farmer customer.
+     * @return The invoice customer.
      */
-    public Customer getFarmer() {
-        return this.farmer;
+    public Customer getCustomer() {
+        return this.customer;
     }
 
     /**
-     * Retrieve the farmer invoice.
+     * Retrieve the invoice file.
      *
-     * @return A PDF file containing the farmer invoice.
+     * @return A PDF file containing the invoice file.
      */
-    public File getFarmerInvoice() {
-        return this.farmerInvoice;
-    }
-
-    /**
-     * Retrieve the invoice supplier customer.
-     *
-     * @return The invoice supplier customer.
-     */
-    public Customer getSupplier() {
-        return this.supplier;
-    }
-
-    /**
-     * Retrieve the supplier invoice.
-     *
-     * @return A PDF file containing the supplier invoice.
-     */
-    public File getSupplierInvoice() {
-        return this.supplierInvoice;
+    public File getFile() {
+        return this.file;
     }
 
     /**
@@ -196,21 +166,12 @@ public class Invoice {
     }
 
     /**
-     * Update the farmer invoice file.
+     * Update the invoice file.
      *
-     * @param farmerInvoice A PDF containing the farmer invoice file.
+     * @param file A PDF containing the invoice file.
      */
-    public void setFarmerFile(File farmerInvoice) {
-        this.farmerInvoice = farmerInvoice;
-    }
-
-    /**
-     * Update the supplier invoice file.
-     *
-     * @param supplierInvoice A PDF containing the supplier invoice file.
-     */
-    public void setSupplierFile(File supplierInvoice) {
-        this.supplierInvoice = supplierInvoice;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     /**
@@ -225,11 +186,10 @@ public class Invoice {
         ArrayList<DeliveryNoteData> deliveryNotes = (ArrayList<DeliveryNoteData>) attributes.get(InvoiceAttribute.DELIVERY_NOTES);
         Date startPeriod = (Date) attributes.get(InvoiceAttribute.START_PERIOD);
         Date endPeriod = (Date) attributes.get(InvoiceAttribute.END_PERIOD);
-        Customer farmer = (Customer) attributes.get(InvoiceAttribute.FARMER);
-        Customer supplier = (Customer) attributes.get(InvoiceAttribute.SUPPLIER);
+        Customer customer = (Customer) attributes.get(InvoiceAttribute.CUSTOMER);
         boolean isDeleted = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_DELETED, false);
 
-        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, farmer, supplier, isDeleted);
+        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, isDeleted);
     }
 
 }

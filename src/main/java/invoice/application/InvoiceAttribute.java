@@ -9,9 +9,7 @@ public enum InvoiceAttribute {
     DELIVERY_NOTES,
     START_PERIOD,
     END_PERIOD,
-    FARMER,
-    SUPPLIER,
-    FARMER_INVOICE,
-    SUPPLIER_INVOICE,
+    CUSTOMER,
+    FILE,
     IS_DELETED,
 }

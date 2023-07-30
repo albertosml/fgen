@@ -9,13 +9,9 @@ public enum InvoiceValidationState {
      */
     VALID,
     /**
-     * Invalid invoice farmer customer.
+     * Invalid invoice customer.
      */
-    INVALID_FARMER,
-    /**
-     * Invalid invoice supplier customer.
-     */
-    INVALID_SUPPLIER,
+    INVALID_CUSTOMER,
     /**
      * Invalid invoice start period date.
      */

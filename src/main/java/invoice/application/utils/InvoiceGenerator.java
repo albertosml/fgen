@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -36,14 +37,6 @@ import template.application.Template;
 import template.application.usecases.ShowTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
 import variable.application.EntityAttribute;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_ADDRESS;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_CITY;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_CODE;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_IBAN;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_NAME;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_PROVINCE;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_TIN;
-import static variable.application.EntityAttribute.FARMER_CUSTOMER_ZIPCODE;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
@@ -123,38 +116,22 @@ public class InvoiceGenerator {
      */
     private Object getValue(EntityAttribute entityAttribute, Invoice invoice, Subtotal subtotal) {
         switch (entityAttribute) {
-            case FARMER_CUSTOMER_CODE:
-                return invoice.getFarmer().getCode();
-            case FARMER_CUSTOMER_NAME:
-                return invoice.getFarmer().getName();
-            case FARMER_CUSTOMER_TIN:
-                return invoice.getFarmer().getTin();
-            case FARMER_CUSTOMER_ADDRESS:
-                return invoice.getFarmer().getAddress();
-            case FARMER_CUSTOMER_CITY:
-                return invoice.getFarmer().getCity();
-            case FARMER_CUSTOMER_PROVINCE:
-                return invoice.getFarmer().getProvince();
-            case FARMER_CUSTOMER_ZIPCODE:
-                return invoice.getFarmer().getZipCode();
-            case FARMER_CUSTOMER_IBAN:
-                return invoice.getFarmer().getIban();
-            case SUPPLIER_CUSTOMER_CODE:
-                return invoice.getSupplier().getCode();
-            case SUPPLIER_CUSTOMER_NAME:
-                return invoice.getSupplier().getName();
-            case SUPPLIER_CUSTOMER_TIN:
-                return invoice.getSupplier().getTin();
-            case SUPPLIER_CUSTOMER_ADDRESS:
-                return invoice.getSupplier().getAddress();
-            case SUPPLIER_CUSTOMER_CITY:
-                return invoice.getSupplier().getCity();
-            case SUPPLIER_CUSTOMER_PROVINCE:
-                return invoice.getSupplier().getProvince();
-            case SUPPLIER_CUSTOMER_ZIPCODE:
-                return invoice.getSupplier().getZipCode();
-            case SUPPLIER_CUSTOMER_IBAN:
-                return invoice.getSupplier().getIban();
+            case CUSTOMER_CODE:
+                return invoice.getCustomer().getCode();
+            case CUSTOMER_NAME:
+                return invoice.getCustomer().getName();
+            case CUSTOMER_TIN:
+                return invoice.getCustomer().getTin();
+            case CUSTOMER_ADDRESS:
+                return invoice.getCustomer().getAddress();
+            case CUSTOMER_CITY:
+                return invoice.getCustomer().getCity();
+            case CUSTOMER_PROVINCE:
+                return invoice.getCustomer().getProvince();
+            case CUSTOMER_ZIPCODE:
+                return invoice.getCustomer().getZipCode();
+            case CUSTOMER_IBAN:
+                return invoice.getCustomer().getIban();
             case INVOICE_ITEMS:
                 return invoice.getDeliveryNotes();
             case INVOICE_CODE:
@@ -168,13 +145,21 @@ public class InvoiceGenerator {
                 return total;
             case SUBTOTAL:
                 float value = subtotal.calculate(total);
+                value = (float) (Math.round(value * 100.0) / 100.0);
 
                 // Update total
                 total += value;
+                total = (float) (Math.round(total * 100.0) / 100.0);
 
                 return value;
             case INVOICE_SUBTOTAL:
-                return invoice.calculateTotal();
+                float invoiceTotal = invoice.calculateTotal();
+                invoiceTotal = (float) (Math.round(invoiceTotal * 100.0) / 100.0);
+
+                // First total will be the invoice total.
+                this.total = invoiceTotal;
+
+                return invoiceTotal;
             case PERIOD:
                 Date start = invoice.getStartPeriod();
                 Date end = invoice.getEndPeriod();
@@ -327,9 +312,8 @@ public class InvoiceGenerator {
 
         Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
         Map<String, Variable> variables = this.getVariables();
-        // TODO: Sort fields by key, so we process them in order.
-        Map<String, String> templateFields = template.getFields();
-        for (Map.Entry<String, String> field : templateFields.entrySet()) {
+        SortedMap<String, String> templateFields = template.getFields();
+        for (SortedMap.Entry<String, String> field : templateFields.entrySet()) {
             String position = field.getKey();
             String expression = field.getValue();
 
@@ -353,40 +337,33 @@ public class InvoiceGenerator {
     }
 
     /**
-     * Generate the invoices, one for the supplier and another for the farmer.
+     * Generate the invoice, using the template from the given code.
      *
      * @param invoice The invoice data.
+     * @param templateCode The code of the used template to generate the
+     * invoice.
      * @throws IOException if the template file is not found.
      * @throws InterruptedException if the conversion is interrupted.
      *
      * @return Whether the invoices have been generated or not.
      */
-    public boolean generate(Invoice invoice) throws IOException, InterruptedException {
+    public boolean generate(Invoice invoice, int templateCode) throws IOException, InterruptedException {
         if (invoice == null) {
             return false;
         }
 
-        File supplierInvoice = null;
-        if (invoice.getSupplier() != null) {
-            supplierInvoice = this.createInvoiceFile(2, invoice);
-            if (supplierInvoice == null) {
-                return false;
-            }
+        File invoiceFile = this.createInvoiceFile(templateCode, invoice);
+        if (invoiceFile == null) {
+            return false;
         }
 
-        File farmerInvoice = null;
-        if (invoice.getFarmer() != null) {
-            farmerInvoice = this.createInvoiceFile(3, invoice);
-            if (farmerInvoice == null) {
-                return false;
-            }
-        }
+        invoice.setFile(invoiceFile);
 
         // Call to use case.
         try {
             MongoInvoiceRepository invoiceRepository = new MongoInvoiceRepository();
             SaveInvoice saveInvoice = new SaveInvoice(invoiceRepository);
-            saveInvoice.execute(invoice, farmerInvoice, supplierInvoice);
+            saveInvoice.execute(invoice);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = InvoiceGenerator.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Invoice not saved because the database has not been found", ex);

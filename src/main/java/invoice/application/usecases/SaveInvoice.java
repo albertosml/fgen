@@ -27,14 +27,8 @@ public class SaveInvoice {
      * Execute the invoice save.
      *
      * @param invoice The invoice entity.
-     * @param farmerInvoice A PDF file containing the farmer invoice file.
-     * @param supplierInvoice A PDF file containing the supplier invoice file.
      */
-    public void execute(Invoice invoice, File farmerInvoice, File supplierInvoice) {
-        // Add files to invoice.
-        invoice.setFarmerFile(farmerInvoice);
-        invoice.setSupplierFile(supplierInvoice);
-
+    public void execute(Invoice invoice) {
         invoiceRepository.save(invoice);
     }
 }

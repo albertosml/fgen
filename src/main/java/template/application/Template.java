@@ -3,6 +3,7 @@ package template.application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -84,8 +85,8 @@ public class Template {
      *
      * @return The template fields.
      */
-    public Map<String, String> getFields() {
-        Map<String, String> templateFields = new TreeMap<>();
+    public SortedMap<String, String> getFields() {
+        SortedMap<String, String> templateFields = new TreeMap<>();
 
         for (TemplateField field : this.fields) {
             templateFields.put(field.getPosition(), field.getExpression());

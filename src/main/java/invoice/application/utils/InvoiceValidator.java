@@ -20,10 +20,9 @@ public class InvoiceValidator {
      * @return Whether the invoice is valid or not.
      */
     public static InvoiceValidationState isValid(Invoice invoice) {
-        Customer farmer = invoice.getFarmer();
-        Customer supplier = invoice.getSupplier();
-        if (farmer == null && supplier == null) {
-            return InvoiceValidationState.INVALID_SUPPLIER;
+        Customer customer = invoice.getCustomer();
+        if (customer == null) {
+            return InvoiceValidationState.INVALID_CUSTOMER;
         }
 
         Date startPeriod = invoice.getStartPeriod();

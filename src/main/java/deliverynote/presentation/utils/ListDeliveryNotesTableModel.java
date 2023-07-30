@@ -234,6 +234,9 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
             if (deliveryNoteData != null) {
                 String chosenAction = (String) super.getValueAt(row, 7);
+                if (chosenAction == null) {
+                    return;
+                }
 
                 if (chosenAction.equals(Localization.getLocalization(LocalizationKey.DOWNLOAD))) {
                     this.downloadDeliveryNote(deliveryNoteData);
