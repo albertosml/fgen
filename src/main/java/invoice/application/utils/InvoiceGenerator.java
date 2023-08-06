@@ -37,6 +37,14 @@ import template.application.Template;
 import template.application.usecases.ShowTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
 import variable.application.EntityAttribute;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_ADDRESS;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_CITY;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_CODE;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_IBAN;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_NAME;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_PROVINCE;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_TIN;
+import static variable.application.EntityAttribute.FARMER_CUSTOMER_ZIPCODE;
 import variable.application.SubtotalVariable;
 import variable.application.Variable;
 import variable.application.usecases.ListVariables;
@@ -116,21 +124,37 @@ public class InvoiceGenerator {
      */
     private Object getValue(EntityAttribute entityAttribute, Invoice invoice, Subtotal subtotal) {
         switch (entityAttribute) {
-            case CUSTOMER_CODE:
+            case FARMER_CUSTOMER_CODE:
                 return invoice.getCustomer().getCode();
-            case CUSTOMER_NAME:
+            case FARMER_CUSTOMER_NAME:
                 return invoice.getCustomer().getName();
-            case CUSTOMER_TIN:
+            case FARMER_CUSTOMER_TIN:
                 return invoice.getCustomer().getTin();
-            case CUSTOMER_ADDRESS:
+            case FARMER_CUSTOMER_ADDRESS:
                 return invoice.getCustomer().getAddress();
-            case CUSTOMER_CITY:
+            case FARMER_CUSTOMER_CITY:
                 return invoice.getCustomer().getCity();
-            case CUSTOMER_PROVINCE:
+            case FARMER_CUSTOMER_PROVINCE:
                 return invoice.getCustomer().getProvince();
-            case CUSTOMER_ZIPCODE:
+            case FARMER_CUSTOMER_ZIPCODE:
                 return invoice.getCustomer().getZipCode();
-            case CUSTOMER_IBAN:
+            case FARMER_CUSTOMER_IBAN:
+                return invoice.getCustomer().getIban();
+            case SUPPLIER_CUSTOMER_CODE:
+                return invoice.getCustomer().getCode();
+            case SUPPLIER_CUSTOMER_NAME:
+                return invoice.getCustomer().getName();
+            case SUPPLIER_CUSTOMER_TIN:
+                return invoice.getCustomer().getTin();
+            case SUPPLIER_CUSTOMER_ADDRESS:
+                return invoice.getCustomer().getAddress();
+            case SUPPLIER_CUSTOMER_CITY:
+                return invoice.getCustomer().getCity();
+            case SUPPLIER_CUSTOMER_PROVINCE:
+                return invoice.getCustomer().getProvince();
+            case SUPPLIER_CUSTOMER_ZIPCODE:
+                return invoice.getCustomer().getZipCode();
+            case SUPPLIER_CUSTOMER_IBAN:
                 return invoice.getCustomer().getIban();
             case INVOICE_ITEMS:
                 return invoice.getDeliveryNotes();
@@ -237,19 +261,24 @@ public class InvoiceGenerator {
         for (DeliveryNoteData deliveryNoteData : invoice.getDeliveryNotes()) {
             String formattedDate = dateFormat.format(deliveryNoteData.getDate());
 
-            Object[] dataToAdd = new Object[]{
-                formattedDate,
-                deliveryNoteData.getCode(),
-                deliveryNoteData.getNumBoxes(),
-                deliveryNoteData.getNetWeight(),
-                deliveryNoteData.getProduct().getName(),
-                deliveryNoteData.getPrice(),
-                deliveryNoteData.getNetWeight() * deliveryNoteData.getPrice()
-            };
+            float price = deliveryNoteData.getPrice();
+            float total = deliveryNoteData.getNetWeight() * price;
 
-            for (int i = 0; i < (columnIndex + dataToAdd.length); i++) {
-                cellToWrite = worksheet.getCell(rowIndex, columnIndex + i);
-                cellToWrite.setValue(dataToAdd[i]);
+            Map<Integer, Object> valueToWriteByPosition = new HashMap<>();
+            valueToWriteByPosition.put(0, formattedDate);
+            valueToWriteByPosition.put(1, deliveryNoteData.getCode());
+            valueToWriteByPosition.put(2, deliveryNoteData.getNumBoxes());
+            valueToWriteByPosition.put(4, deliveryNoteData.getNetWeight());
+            valueToWriteByPosition.put(6, deliveryNoteData.getProduct().getName());
+            valueToWriteByPosition.put(10, price);
+            valueToWriteByPosition.put(11, String.format("%s €", total));
+
+            for (Map.Entry<Integer, Object> entry : valueToWriteByPosition.entrySet()) {
+                int offset = entry.getKey();
+                Object valueToWrite = entry.getValue();
+
+                cellToWrite = worksheet.getCell(rowIndex, columnIndex + offset);
+                cellToWrite.setValue(valueToWrite);
             }
 
             // Move to next row.
