@@ -604,5 +604,9 @@ public enum LocalizationKey {
     /**
      * Message shown when the invoice has not been generated.
      */
-    INVOICE_NOT_GENERATED_MESSAGE;
+    INVOICE_NOT_GENERATED_MESSAGE,
+    /**
+     * Total.
+     */
+    TOTAL;
 }
