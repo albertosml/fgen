@@ -140,6 +140,22 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      * {@inheritDoc}
      */
     @Override
+    public DeliveryNoteData find(int code) {
+        Bson deliveryNoteCodeFilter = this.getDeliveryNoteCodeFilter(code);
+        ArrayList<Document> foundDeliveryNoteDocuments = super.find(deliveryNoteCodeFilter);
+
+        if (foundDeliveryNoteDocuments.isEmpty()) {
+            return null;
+        } else {
+            Document foundDeliveryNoteDocument = foundDeliveryNoteDocuments.get(0);
+            return this.createDeliveryNoteFrom(foundDeliveryNoteDocument);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ArrayList<DeliveryNoteData> get(Customer farmer, Customer supplier, Product product, Date from, Date to) {
         Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
         Bson fromDate = Filters.gte("date", from);

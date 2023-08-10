@@ -388,6 +388,8 @@ public class InvoiceGenerator {
 
         invoice.setFile(invoiceFile);
 
+        invoice.setTotal(this.total);
+
         // Call to use case.
         try {
             MongoInvoiceRepository invoiceRepository = new MongoInvoiceRepository();

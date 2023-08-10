@@ -7,6 +7,7 @@ import customer.presentation.panels.RegisterCustomerPanel;
 import customer.presentation.panels.ShowCustomerPanel;
 import deliverynote.presentation.panels.GenerateDeliveryNotePanel;
 import deliverynote.presentation.panels.ListDeliveryNotesPanel;
+import invoice.presentation.panels.ListInvoicesPanel;
 import java.awt.Container;
 import javax.swing.JPanel;
 import product.presentation.panels.ListProductsPanel;
@@ -65,6 +66,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.listProducts.setText(listName);
         this.listContainers.setText(listName);
         this.listDeliveryNotes.setText(listName);
+        this.listInvoices.setText(listName);
 
         String generateName = Localization.getLocalization(LocalizationKey.GENERATE);
         this.generateDeliveryNote.setText(generateName);
@@ -86,6 +88,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         String deliveryNoteName = Localization.getLocalization(LocalizationKey.DELIVERY_NOTE);
         this.deliveryNote.setText(deliveryNoteName);
+
+        String invoiceName = Localization.getLocalization(LocalizationKey.INVOICE);
+        this.invoice.setText(invoiceName);
     }
 
     /**
@@ -300,11 +305,23 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ListDeliveryNotesPanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the list invoices panel.
+     */
+    public void redirectToListInvoices() {
+        String listName = Localization.getLocalization(LocalizationKey.LIST);
+        String invoiceName = Localization.getLocalization(LocalizationKey.INVOICE);
+        String panelTitle = String.format("%s %s", listName, invoiceName);
+        this.redirectTo(new ListInvoicesPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         menuBar = new javax.swing.JMenuBar();
+        invoice = new javax.swing.JMenu();
+        listInvoices = new javax.swing.JMenuItem();
         deliveryNote = new javax.swing.JMenu();
         generateDeliveryNote = new javax.swing.JMenuItem();
         listDeliveryNotes = new javax.swing.JMenuItem();
@@ -330,6 +347,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
+
+        invoice.setText("${INVOICE}");
+
+        listInvoices.setText("${LIST}");
+        listInvoices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listInvoicesActionPerformed(evt);
+            }
+        });
+        invoice.add(listInvoices);
+
+        menuBar.add(invoice);
 
         deliveryNote.setText("${DELIVERY_NOTE}");
 
@@ -544,15 +573,21 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListDeliveryNotes();
     }//GEN-LAST:event_listDeliveryNotesActionPerformed
 
+    private void listInvoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listInvoicesActionPerformed
+        this.redirectToListInvoices();
+    }//GEN-LAST:event_listInvoicesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu container;
     private javax.swing.JMenu customer;
     private javax.swing.JMenu deliveryNote;
     private javax.swing.JMenuItem generateDeliveryNote;
+    private javax.swing.JMenu invoice;
     private javax.swing.JMenuItem listContainers;
     private javax.swing.JMenuItem listCustomers;
     private javax.swing.JMenuItem listDeliveryNotes;
+    private javax.swing.JMenuItem listInvoices;
     private javax.swing.JMenuItem listProducts;
     private javax.swing.JMenuItem listSubtotals;
     private javax.swing.JMenuItem listTemplates;

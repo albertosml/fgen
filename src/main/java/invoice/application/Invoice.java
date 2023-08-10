@@ -49,6 +49,11 @@ public class Invoice {
     private File file;
 
     /**
+     * The invoice total.
+     */
+    private float total;
+
+    /**
      * Whether the invoice is deleted or not.
      */
     private boolean isDeleted;
@@ -62,15 +67,17 @@ public class Invoice {
      * @param startPeriod The invoice start period date.
      * @param endPeriod The invoice end period date.
      * @param customer The invoice customer.
+     * @param total The invoice total.
      * @param isDeleted Whether the invoice is deleted or not.
      */
-    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, boolean isDeleted) {
+    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, float total, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.deliveryNotes = deliveryNotes;
         this.startPeriod = startPeriod;
         this.endPeriod = endPeriod;
         this.customer = customer;
+        this.total = total;
         this.isDeleted = isDeleted;
     }
 
@@ -157,6 +164,15 @@ public class Invoice {
     }
 
     /**
+     * Retrieve the invoice total.
+     *
+     * @return The invoice total.
+     */
+    public float getTotal() {
+        return this.total;
+    }
+
+    /**
      * Whether the invoice is deleted from the system or not.
      *
      * @return true if the invoice is removed, otherwise false.
@@ -175,6 +191,24 @@ public class Invoice {
     }
 
     /**
+     * Update the invoice total.
+     *
+     * @param total The invoice total.
+     */
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    /**
+     * Update the deletion state for the invoice.
+     *
+     * @param isDeleted Whether the invoice is deleted from the system or not.
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
      * Create an invoice given its attribute values.
      *
      * @param attributes Map containing the value for each invoice attribute.
@@ -187,9 +221,10 @@ public class Invoice {
         Date startPeriod = (Date) attributes.get(InvoiceAttribute.START_PERIOD);
         Date endPeriod = (Date) attributes.get(InvoiceAttribute.END_PERIOD);
         Customer customer = (Customer) attributes.get(InvoiceAttribute.CUSTOMER);
+        float total = (float) attributes.getOrDefault(InvoiceAttribute.TOTAL, 0.0);
         boolean isDeleted = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_DELETED, false);
 
-        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, isDeleted);
+        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, total, isDeleted);
     }
 
 }

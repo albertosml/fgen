@@ -1,6 +1,8 @@
 package invoice.presentation.utils;
 
 import invoice.application.Invoice;
+import invoice.application.usecases.RemoveInvoice;
+import invoice.persistence.mongo.MongoInvoiceRepository;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -88,7 +90,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
 
             Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_INVOICE_MESSAGE);
+            String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_FILE_MESSAGE);
             String infoMessage = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
             JOptionPane.showMessageDialog(table, infoMessage);
         } catch (IOException ex) {
@@ -177,7 +179,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
      *
      * @param invoices The invoices to add.
      */
-    public void addInvoices(ArrayList<Invoice> invoices) {
+    public void setInvoices(ArrayList<Invoice> invoices) {
         this.invoices = invoices;
 
         // Clean table data before adding the new data.
@@ -209,7 +211,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
             String period = String.format("%s - %s", formattedStartDate, formattedEndDate);
 
             // Column 5: Invoice total.
-            int invoiceTotal = invoice.getTotal();
+            float invoiceTotal = invoice.getTotal();
 
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.

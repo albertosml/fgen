@@ -15,6 +15,14 @@ import shared.persistence.Repository;
 public interface DeliveryNoteRepository extends Repository {
 
     /**
+     * Find the delivery note which matches with the given code.
+     *
+     * @param code The code of the delivery note to find.
+     * @return The found delivery note, otherwise null.
+     */
+    public DeliveryNoteData find(int code);
+
+    /**
      * Save the delivery note data.
      *
      * @param deliveryNote The delivery note entity.

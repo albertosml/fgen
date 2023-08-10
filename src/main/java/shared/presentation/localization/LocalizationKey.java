@@ -608,5 +608,13 @@ public enum LocalizationKey {
     /**
      * Total.
      */
-    TOTAL;
+    TOTAL,
+    /**
+     * Removed invoice message.
+     */
+    REMOVED_INVOICE_MESSAGE,
+    /**
+     * Removed invoice error message.
+     */
+    REMOVED_INVOICE_ERROR_MESSAGE;
 }

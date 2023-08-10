@@ -5,6 +5,7 @@ import customer.application.Customer;
 import customer.application.usecases.ObtainCustomers;
 import customer.persistence.mongo.MongoCustomerRepository;
 import invoice.application.Invoice;
+import invoice.application.usecases.ListInvoices;
 import invoice.persistence.mongo.MongoInvoiceRepository;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -175,7 +176,7 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         String[] actions = new String[]{downloadAction, printAction, removeAction};
 
         // Set a combobox cell editor for the actions column.
-        TableColumn actionsColumn = table.getColumn(columnNames.get(7));
+        TableColumn actionsColumn = table.getColumn(columnNames.get(5));
         JComboBox comboBox = new JComboBox(actions);
         actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
     }
