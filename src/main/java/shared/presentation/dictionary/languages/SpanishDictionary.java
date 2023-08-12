@@ -163,6 +163,9 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.SUPPLIER_CUSTOMER_IBAN, "IBAN del proveedor");
         super.setTranslation(LocalizationKey.INVOICE_GENERATED_MESSAGE, "La factura ha sido generada con éxito");
         super.setTranslation(LocalizationKey.INVOICE_NOT_GENERATED_MESSAGE, "Error al generar la factura");
+        super.setTranslation(LocalizationKey.TOTAL, "Total");
+        super.setTranslation(LocalizationKey.REMOVED_INVOICE_MESSAGE, "Factura eliminada con éxito");
+        super.setTranslation(LocalizationKey.REMOVED_INVOICE_ERROR_MESSAGE, "Error al eliminar la factura");
     }
 
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.56.0] - 2023-08-13
+
+### Added
+
+- Added feature to list and delete invoices.
+
 ## [0.55.0] - 2023-08-06
 
 ### Added

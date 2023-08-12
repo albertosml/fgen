@@ -4,6 +4,21 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
+        <Menu class="javax.swing.JMenu" name="invoice">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="${INVOICE}"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="listInvoices">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="${LIST}"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listInvoicesActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="deliveryNote">
           <Properties>
             <Property name="text" type="java.lang.String" value="${DELIVERY_NOTE}"/>
