@@ -211,7 +211,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
             String period = String.format("%s - %s", formattedStartDate, formattedEndDate);
 
             // Column 5: Invoice total.
-            float invoiceTotal = invoice.getTotal();
+            double invoiceTotal = invoice.getTotal();
 
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.

@@ -2,12 +2,15 @@ package invoice.persistence.mongo;
 
 import com.mongodb.client.model.Filters;
 import customer.application.Customer;
+import customer.application.usecases.ShowCustomer;
+import customer.persistence.mongo.MongoCustomerRepository;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.FindDeliveryNote;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import invoice.application.Invoice;
 import invoice.application.InvoiceAttribute;
 import invoice.persistence.InvoiceRepository;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -101,6 +104,11 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
             }
         }
 
+        Customer customer = this.findCustomer((int) document.get("customer"));
+
+        Map<String, String> fileAttributes = (Map<String, String>) document.get("file");
+        File file = Base64Converter.decode(fileAttributes);
+
         // Create an invoice entry.
         Map<InvoiceAttribute, Object> attributes = new HashMap<>();
         attributes.put(InvoiceAttribute.CODE, document.get("code"));
@@ -108,8 +116,8 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         attributes.put(InvoiceAttribute.DELIVERY_NOTES, deliveryNotes);
         attributes.put(InvoiceAttribute.START_PERIOD, document.get("startPeriod"));
         attributes.put(InvoiceAttribute.END_PERIOD, document.get("endPeriod"));
-        attributes.put(InvoiceAttribute.CUSTOMER, document.get("customer"));
-        attributes.put(InvoiceAttribute.FILE, document.get("file"));
+        attributes.put(InvoiceAttribute.CUSTOMER, customer);
+        attributes.put(InvoiceAttribute.FILE, file);
         attributes.put(InvoiceAttribute.TOTAL, document.get("total"));
         attributes.put(InvoiceAttribute.IS_DELETED, document.get("isDeleted"));
 
@@ -135,6 +143,24 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
     }
 
     /**
+     * Find customer associated with the given code.
+     *
+     * @param code The code of the customer to find.
+     * @return The found customer, otherwise null.
+     */
+    private Customer findCustomer(int code) {
+        try {
+            MongoCustomerRepository customerRepository = new MongoCustomerRepository();
+            ShowCustomer showCustomer = new ShowCustomer(customerRepository);
+            return showCustomer.execute(code);
+        } catch (NotDefinedDatabaseContextException ex) {
+            Logger.getLogger(MongoInvoiceRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -154,12 +180,12 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         Bson filters = Filters.and(isNotDeletedFilter, fromDate, toDate);
 
         if (farmer != null) {
-            Bson farmerFilter = Filters.eq("farmer", farmer.getCode());
+            Bson farmerFilter = Filters.eq("customer", farmer.getCode());
             filters = Filters.and(filters, farmerFilter);
         }
 
         if (supplier != null) {
-            Bson supplierFilter = Filters.eq("supplier", supplier.getCode());
+            Bson supplierFilter = Filters.eq("customer", supplier.getCode());
             filters = Filters.and(filters, supplierFilter);
         }
 
