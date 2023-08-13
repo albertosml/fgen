@@ -19,8 +19,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import shared.application.configuration.ApplicationConfiguration;
+import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -71,6 +75,9 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         this.setLabelText(supplierLabel, LocalizationKey.SUPPLIER);
         this.setLabelText(startDateLabel, LocalizationKey.START_DATE);
         this.setLabelText(endDateLabel, LocalizationKey.END_DATE);
+        this.setLabelText(invoicesTotalLabel, LocalizationKey.TOTAL);
+        this.setLabelText(companyCommissionLabel, LocalizationKey.COMPANY_COMMISSION);
+        this.setLabelText(individualCommissionLabel, LocalizationKey.INDIVIDUAL_COMMISSION);
         this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
     }
 
@@ -169,6 +176,16 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         ListInvoicesTableModel tableModel = new ListInvoicesTableModel(null, columnNames, table);
         table.setModel(tableModel);
 
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent event) {
+                int eventType = event.getType();
+                if (eventType == TableModelEvent.DELETE || eventType == TableModelEvent.UPDATE) {
+                    setTotalAndCommissionsFor(tableModel.getInvoices());
+                }
+            }
+        });
+
         // Actions.
         String downloadAction = Localization.getLocalization(LocalizationKey.DOWNLOAD);
         String printAction = Localization.getLocalization(LocalizationKey.PRINT);
@@ -179,6 +196,37 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         TableColumn actionsColumn = table.getColumn(columnNames.get(5));
         JComboBox comboBox = new JComboBox(actions);
         actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
+    }
+
+    /**
+     * Based on the given data, calculate the total invoices and commissions for
+     * company and individual. Then, set the value on its corresponding panel
+     * field.
+     *
+     * @param invoices The invoices.
+     */
+    private void setTotalAndCommissionsFor(ArrayList<Invoice> invoices) {
+        double total = 0;
+
+        for (Invoice invoice : invoices) {
+            total += invoice.getTotal();
+        }
+
+        // Invoice total.
+        String formattedTotal = String.format("%.2f €", total);
+        this.invoicesTotalValue.setText(formattedTotal);
+
+        // Company commission.
+        double companyCommissionPercentage = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE);
+        double companyCommission = total * (companyCommissionPercentage / 100.0);
+        String formattedCompanyCommissionValue = String.format("%.2f €", companyCommission);
+        this.companyCommissionValue.setText(formattedCompanyCommissionValue);
+
+        // Individual commission.
+        double individualCommissionPercentage = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.INDIVIDUAL_COMMISSION_PERCENTAGE);
+        double individualCommission = total * (individualCommissionPercentage / 100.0);
+        String formattedIndividualCommissionValue = String.format("%.2f €", individualCommission);
+        this.individualCommissionValue.setText(formattedIndividualCommissionValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -198,6 +246,12 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         supplierLabel = new javax.swing.JLabel();
         isSelectedSupplier = new javax.swing.JCheckBox();
         supplierInput = new javax.swing.JComboBox<>();
+        invoicesTotalLabel = new javax.swing.JLabel();
+        invoicesTotalValue = new javax.swing.JLabel();
+        companyCommissionLabel = new javax.swing.JLabel();
+        companyCommissionValue = new javax.swing.JLabel();
+        individualCommissionValue = new javax.swing.JLabel();
+        individualCommissionLabel = new javax.swing.JLabel();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -266,6 +320,18 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
         supplierInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        invoicesTotalLabel.setText("${TOTAL}:");
+
+        invoicesTotalValue.setText("0€");
+
+        companyCommissionLabel.setText("${COMPANY_COMMISSION}:");
+
+        companyCommissionValue.setText("0€");
+
+        individualCommissionValue.setText("0€");
+
+        individualCommissionLabel.setText("${INDIVIDUAL_COMMISSION}:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -293,9 +359,23 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(startDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                             .addComponent(endDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 39, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(listDeliveryNotesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(296, 296, 296))
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(invoicesTotalLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(invoicesTotalValue))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(individualCommissionLabel)
+                                    .addComponent(companyCommissionLabel))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(individualCommissionValue)
+                                    .addComponent(companyCommissionValue))))
+                        .addGap(139, 139, 139))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(scrollPane)))
@@ -306,27 +386,35 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(farmerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(startDateLabel)
-                                .addComponent(farmerLabel))
-                            .addComponent(startDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(isSelectedFarmer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(endDateInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(endDateLabel))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(supplierLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(supplierInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(isSelectedSupplier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(listDeliveryNotesButton))
-                .addGap(18, 18, 18)
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(farmerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(startDateLabel)
+                        .addComponent(farmerLabel))
+                    .addComponent(startDateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(isSelectedFarmer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(listDeliveryNotesButton)
+                        .addComponent(invoicesTotalLabel)
+                        .addComponent(invoicesTotalValue)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(companyCommissionLabel)
+                        .addComponent(companyCommissionValue))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(endDateInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(endDateLabel))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(supplierLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(supplierInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(isSelectedSupplier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(individualCommissionValue)
+                    .addComponent(individualCommissionLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -346,6 +434,7 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         Date endDate = endDateInput.getDate();
 
         ArrayList<Invoice> invoices = this.getInvoices(farmer, supplier, startDate, endDate);
+        this.setTotalAndCommissionsFor(invoices);
 
         ListInvoicesTableModel tableModel = (ListInvoicesTableModel) table.getModel();
         tableModel.setInvoices(invoices);
@@ -361,10 +450,16 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel companyCommissionLabel;
+    private javax.swing.JLabel companyCommissionValue;
     private com.toedter.calendar.JDateChooser endDateInput;
     private javax.swing.JLabel endDateLabel;
     private javax.swing.JComboBox<String> farmerInput;
     private javax.swing.JLabel farmerLabel;
+    private javax.swing.JLabel individualCommissionLabel;
+    private javax.swing.JLabel individualCommissionValue;
+    private javax.swing.JLabel invoicesTotalLabel;
+    private javax.swing.JLabel invoicesTotalValue;
     private javax.swing.JCheckBox isSelectedFarmer;
     private javax.swing.JCheckBox isSelectedSupplier;
     private javax.swing.JButton listDeliveryNotesButton;

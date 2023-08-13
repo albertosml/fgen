@@ -166,6 +166,8 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.TOTAL, "Total");
         super.setTranslation(LocalizationKey.REMOVED_INVOICE_MESSAGE, "Factura eliminada con éxito");
         super.setTranslation(LocalizationKey.REMOVED_INVOICE_ERROR_MESSAGE, "Error al eliminar la factura");
+        super.setTranslation(LocalizationKey.COMPANY_COMMISSION, "Comisión de la empresa (4%)");
+        super.setTranslation(LocalizationKey.INDIVIDUAL_COMMISSION, "Comisión del particular (2%)");
     }
 
 }
