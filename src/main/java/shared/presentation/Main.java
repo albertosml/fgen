@@ -37,9 +37,11 @@ public class Main {
         MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.56.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.57.0");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE, 4.0);
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.INDIVIDUAL_COMMISSION_PERCENTAGE, 2.0);
 
         // Open the main frame on full screen mode.
         MainFrame mf = new MainFrame();

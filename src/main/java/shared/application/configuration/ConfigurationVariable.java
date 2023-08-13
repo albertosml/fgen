@@ -15,5 +15,13 @@ public enum ConfigurationVariable {
     /**
      * Project URL.
      */
-    PROJECT_URL
+    PROJECT_URL,
+    /**
+     * Company commission percentage.
+     */
+    COMPANY_COMMISSION_PERCENTAGE,
+    /**
+     * Individual commission percentage.
+     */
+    INDIVIDUAL_COMMISSION_PERCENTAGE
 }

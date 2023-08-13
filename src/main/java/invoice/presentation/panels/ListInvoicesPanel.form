@@ -44,9 +44,28 @@
                           <Component id="startDateInput" pref="117" max="32767" attributes="0"/>
                           <Component id="endDateInput" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       <Component id="listDeliveryNotesButton" min="-2" pref="142" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="296" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="invoicesTotalLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="invoicesTotalValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="individualCommissionLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="companyCommissionLabel" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="individualCommissionValue" min="-2" max="-2" attributes="0"/>
+                                  <Component id="companyCommissionValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -62,35 +81,44 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="farmerInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="farmerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="startDateInput" min="-2" max="-2" attributes="0"/>
-                          <Component id="isSelectedFarmer" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="endDateInput" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="endDateLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                  <Component id="supplierLabel" alignment="3" max="32767" attributes="0"/>
-                                  <Component id="supplierInput" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="isSelectedSupplier" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="farmerInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="startDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="farmerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="listDeliveryNotesButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="startDateInput" min="-2" max="-2" attributes="0"/>
+                  <Component id="isSelectedFarmer" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="listDeliveryNotesButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="invoicesTotalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="invoicesTotalValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="scrollPane" pref="312" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="companyCommissionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="companyCommissionValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="endDateInput" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="endDateLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="supplierLabel" alignment="3" max="32767" attributes="0"/>
+                          <Component id="supplierInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="isSelectedSupplier" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="individualCommissionValue" min="-2" max="-2" attributes="0"/>
+                  <Component id="individualCommissionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="scrollPane" pref="300" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -234,6 +262,36 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="invoicesTotalLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${TOTAL}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="invoicesTotalValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0&#x20ac;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="companyCommissionLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${COMPANY_COMMISSION}:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="companyCommissionValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0&#x20ac;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="individualCommissionValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0&#x20ac;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="individualCommissionLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${INDIVIDUAL_COMMISSION}:"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -616,5 +616,13 @@ public enum LocalizationKey {
     /**
      * Removed invoice error message.
      */
-    REMOVED_INVOICE_ERROR_MESSAGE;
+    REMOVED_INVOICE_ERROR_MESSAGE,
+    /**
+     * Company commission.
+     */
+    COMPANY_COMMISSION,
+    /**
+     * Individual commission.
+     */
+    INDIVIDUAL_COMMISSION;
 }
