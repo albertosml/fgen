@@ -54,6 +54,11 @@ public class Invoice {
     private double total;
 
     /**
+     * Whether the invoice is closed or not.
+     */
+    private boolean isClosed;
+
+    /**
      * Whether the invoice is deleted or not.
      */
     private boolean isDeleted;
@@ -69,9 +74,10 @@ public class Invoice {
      * @param customer The invoice customer.
      * @param file The invoice file.
      * @param total The invoice total.
+     * @param isClosed Whether the invoice is closed or not.
      * @param isDeleted Whether the invoice is deleted or not.
      */
-    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, File file, double total, boolean isDeleted) {
+    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, File file, double total, boolean isClosed, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.deliveryNotes = deliveryNotes;
@@ -80,6 +86,7 @@ public class Invoice {
         this.customer = customer;
         this.file = file;
         this.total = total;
+        this.isClosed = isClosed;
         this.isDeleted = isDeleted;
     }
 
@@ -175,6 +182,15 @@ public class Invoice {
     }
 
     /**
+     * Whether the invoice is closed from the system or not.
+     *
+     * @return true if the invoice is closed, otherwise false.
+     */
+    public boolean isClosed() {
+        return this.isClosed;
+    }
+
+    /**
      * Whether the invoice is deleted from the system or not.
      *
      * @return true if the invoice is removed, otherwise false.
@@ -202,6 +218,15 @@ public class Invoice {
     }
 
     /**
+     * Update the closed state for the invoice.
+     *
+     * @param isClosed Whether the invoice is closed from the system or not.
+     */
+    public void setIsClosed(boolean isClosed) {
+        this.isClosed = isClosed;
+    }
+
+    /**
      * Update the deletion state for the invoice.
      *
      * @param isDeleted Whether the invoice is deleted from the system or not.
@@ -225,9 +250,10 @@ public class Invoice {
         Customer customer = (Customer) attributes.get(InvoiceAttribute.CUSTOMER);
         File file = (File) attributes.get(InvoiceAttribute.FILE);
         double total = (double) attributes.getOrDefault(InvoiceAttribute.TOTAL, 0.0);
+        boolean isClosed = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_CLOSED, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_DELETED, false);
 
-        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, file, total, isDeleted);
+        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, file, total, isClosed, isDeleted);
     }
 
 }

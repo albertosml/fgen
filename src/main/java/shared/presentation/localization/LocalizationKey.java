@@ -624,5 +624,17 @@ public enum LocalizationKey {
     /**
      * Individual commission.
      */
-    INDIVIDUAL_COMMISSION;
+    INDIVIDUAL_COMMISSION,
+    /**
+     * Close action.
+     */
+    CLOSE,
+    /**
+     * Closed invoice message.
+     */
+    CLOSED_INVOICE_MESSAGE,
+    /**
+     * Closed invoice error message.
+     */
+    CLOSED_INVOICE_ERROR_MESSAGE;
 }

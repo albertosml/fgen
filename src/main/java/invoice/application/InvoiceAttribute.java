@@ -12,5 +12,6 @@ public enum InvoiceAttribute {
     CUSTOMER,
     FILE,
     TOTAL,
+    IS_CLOSED,
     IS_DELETED,
 }

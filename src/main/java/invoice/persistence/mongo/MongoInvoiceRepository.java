@@ -50,6 +50,16 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
     }
 
     /**
+     * Obtain the filter for non-closed invoices.
+     *
+     * @return A filter indicating that the query must only obtain the invoices
+     * which are not closed.
+     */
+    private Bson isNotClosedFilter() {
+        return Filters.eq("isClosed", false);
+    }
+
+    /**
      * It creates a Mongo document from an invoice.
      *
      * @param invoice The invoice.
@@ -82,6 +92,7 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         document.append("customer", customer.getCode());
         document.append("file", invoiceFileAttributes);
         document.append("total", invoice.getTotal());
+        document.append("isClosed", invoice.isClosed());
         document.append("isDeleted", invoice.isDeleted());
 
         return document;
@@ -119,6 +130,7 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         attributes.put(InvoiceAttribute.CUSTOMER, customer);
         attributes.put(InvoiceAttribute.FILE, file);
         attributes.put(InvoiceAttribute.TOTAL, document.get("total"));
+        attributes.put(InvoiceAttribute.IS_CLOSED, document.get("isClosed"));
         attributes.put(InvoiceAttribute.IS_DELETED, document.get("isDeleted"));
 
         return Invoice.from(attributes);
@@ -174,10 +186,11 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
     @Override
     public ArrayList<Invoice> get(Customer farmer, Customer supplier, Date from, Date to) {
         Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
+        Bson isNotClosedFilter = this.isNotClosedFilter();
         Bson fromDate = Filters.gte("date", from);
         Bson toDate = Filters.lte("date", to);
 
-        Bson filters = Filters.and(isNotDeletedFilter, fromDate, toDate);
+        Bson filters = Filters.and(isNotDeletedFilter, isNotClosedFilter, fromDate, toDate);
 
         if (farmer != null) {
             Bson farmerFilter = Filters.eq("customer", farmer.getCode());

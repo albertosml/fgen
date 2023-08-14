@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.58.0] - 2023-08-14
+
+### Added
+
+- Added feature to close an invoice.
+
 ## [0.57.0] - 2023-08-13
 
 ### Added

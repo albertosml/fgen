@@ -13,5 +13,6 @@ public enum DeliveryNoteDataAttribute {
     NUM_PALLETS,
     NUM_BOXES,
     NET_WEIGHT,
+    IS_CLOSED,
     IS_DELETED;
 }
