@@ -12,7 +12,7 @@ public class DescriptionValidator {
      * @return true if the description is not empty or null, otherwise false.
      */
     public static boolean isValid(String description) {
-        return !(description == null || description.isBlank());
+        return !(description == null || description.trim().isEmpty());
     }
 
 }

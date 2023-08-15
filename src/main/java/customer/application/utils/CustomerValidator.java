@@ -38,13 +38,13 @@ public class CustomerValidator {
         }
 
         String customerZipCode = customer.getZipCode();
-        boolean isEmptyZipCode = customerZipCode == null || customerZipCode.isBlank();
+        boolean isEmptyZipCode = customerZipCode == null || customerZipCode.trim().isEmpty();
         if (!(isEmptyZipCode || ZipCodeValidator.isValid(customerZipCode))) {
             return CustomerValidationState.INVALID_ZIPCODE;
         }
 
         String customerIban = customer.getIban();
-        boolean isEmptyIban = customerIban == null || customerIban.isBlank();
+        boolean isEmptyIban = customerIban == null || customerIban.trim().isEmpty();
         if (!(isEmptyIban || IbanValidator.isValid(customerIban))) {
             return CustomerValidationState.INVALID_IBAN;
         }
