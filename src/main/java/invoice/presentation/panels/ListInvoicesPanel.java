@@ -190,7 +190,8 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         String downloadAction = Localization.getLocalization(LocalizationKey.DOWNLOAD);
         String printAction = Localization.getLocalization(LocalizationKey.PRINT);
         String removeAction = Localization.getLocalization(LocalizationKey.REMOVE);
-        String[] actions = new String[]{downloadAction, printAction, removeAction};
+        String closeAction = Localization.getLocalization(LocalizationKey.CLOSE);
+        String[] actions = new String[]{downloadAction, printAction, removeAction, closeAction};
 
         // Set a combobox cell editor for the actions column.
         TableColumn actionsColumn = table.getColumn(columnNames.get(5));

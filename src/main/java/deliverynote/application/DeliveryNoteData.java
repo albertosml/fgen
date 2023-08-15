@@ -71,6 +71,11 @@ public class DeliveryNoteData {
     private float price;
 
     /**
+     * Whether the delivery note is closed or not.
+     */
+    private boolean isClosed;
+
+    /**
      * Whether the delivery note is deleted or not.
      */
     private boolean isDeleted;
@@ -88,9 +93,10 @@ public class DeliveryNoteData {
      * @param numPallets The delivery note data total pallets.
      * @param numBoxes The delivery note data total boxes.
      * @param netWeight The delivery note data net weight.
+     * @param isClosed Whether the delivery note is closed or not.
      * @param isDeleted Whether the delivery note is deleted or not.
      */
-    private DeliveryNoteData(int code, Date date, Customer farmer, Customer supplier, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isDeleted) {
+    private DeliveryNoteData(int code, Date date, Customer farmer, Customer supplier, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isClosed, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.farmer = farmer;
@@ -100,6 +106,7 @@ public class DeliveryNoteData {
         this.numPallets = numPallets;
         this.numBoxes = numBoxes;
         this.netWeight = netWeight;
+        this.isClosed = isClosed;
         this.isDeleted = isDeleted;
         this.price = 0;
     }
@@ -195,6 +202,15 @@ public class DeliveryNoteData {
     }
 
     /**
+     * Whether the delivery note is closed from the system or not.
+     *
+     * @return true if the delivery note is closed, otherwise false.
+     */
+    public boolean isClosed() {
+        return this.isClosed;
+    }
+
+    /**
      * Whether the delivery note is deleted from the system or not.
      *
      * @return true if the delivery note is removed, otherwise false.
@@ -210,6 +226,16 @@ public class DeliveryNoteData {
      */
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    /**
+     * Update the closed state for the delivery note.
+     *
+     * @param isClosed Whether the delivery note is closed from the system or
+     * not.
+     */
+    public void setIsClosed(boolean isClosed) {
+        this.isClosed = isClosed;
     }
 
     /**
@@ -266,9 +292,10 @@ public class DeliveryNoteData {
         int numBoxes = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NUM_BOXES, 0);
         int netWeight = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NET_WEIGHT, 0);
 
+        boolean isClosed = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_CLOSED, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_DELETED, false);
 
-        return new DeliveryNoteData(code, date, farmer, supplier, product, file, numPallets, numBoxes, netWeight, isDeleted);
+        return new DeliveryNoteData(code, date, farmer, supplier, product, file, numPallets, numBoxes, netWeight, isClosed, isDeleted);
     }
 
 }

@@ -45,6 +45,16 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     }
 
     /**
+     * Obtain the filter for non-closed invoices.
+     *
+     * @return A filter indicating that the query must only obtain the delivery
+     * notes which are not closed.
+     */
+    private Bson isNotClosedFilter() {
+        return Filters.eq("isClosed", false);
+    }
+
+    /**
      * It creates a Mongo document from a delivery note and the PDF file.
      *
      * @param deliveryNote The delivery note entity.
@@ -69,6 +79,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("numBoxes", deliveryNote.calculateTotalBoxes());
         document.append("numPallets", deliveryNote.calculateTotalPallets());
         document.append("netWeight", deliveryNote.calculateNetWeight());
+        document.append("isClosed", false);
         document.append("isDeleted", false);
 
         return document;
@@ -98,6 +109,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("numBoxes", deliveryNoteData.getNumBoxes());
         document.append("numPallets", deliveryNoteData.getNumPallets());
         document.append("netWeight", deliveryNoteData.getNetWeight());
+        document.append("isClosed", deliveryNoteData.isClosed());
         document.append("isDeleted", deliveryNoteData.isDeleted());
 
         return document;
@@ -123,6 +135,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         attributes.put(DeliveryNoteDataAttribute.NUM_BOXES, document.get("numBoxes"));
         attributes.put(DeliveryNoteDataAttribute.NUM_PALLETS, document.get("numPallets"));
         attributes.put(DeliveryNoteDataAttribute.NET_WEIGHT, document.get("netWeight"));
+        attributes.put(DeliveryNoteDataAttribute.IS_CLOSED, document.get("isClosed"));
         attributes.put(DeliveryNoteDataAttribute.IS_DELETED, document.get("isDeleted"));
 
         return DeliveryNoteData.from(attributes);
@@ -142,7 +155,10 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     @Override
     public DeliveryNoteData find(int code) {
         Bson deliveryNoteCodeFilter = this.getDeliveryNoteCodeFilter(code);
-        ArrayList<Document> foundDeliveryNoteDocuments = super.find(deliveryNoteCodeFilter);
+        Bson isNotClosedFilter = this.isNotClosedFilter();
+        Bson filters = Filters.and(deliveryNoteCodeFilter, isNotClosedFilter);
+
+        ArrayList<Document> foundDeliveryNoteDocuments = super.find(filters);
 
         if (foundDeliveryNoteDocuments.isEmpty()) {
             return null;
@@ -158,10 +174,11 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
     @Override
     public ArrayList<DeliveryNoteData> get(Customer farmer, Customer supplier, Product product, Date from, Date to) {
         Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
+        Bson isNotClosedFilter = this.isNotClosedFilter();
         Bson fromDate = Filters.gte("date", from);
         Bson toDate = Filters.lte("date", to);
 
-        Bson filters = Filters.and(isNotDeletedFilter, fromDate, toDate);
+        Bson filters = Filters.and(isNotDeletedFilter, isNotClosedFilter, fromDate, toDate);
 
         if (farmer != null) {
             Bson farmerFilter = Filters.eq("farmer", farmer.getCode());

@@ -1,6 +1,8 @@
 package invoice.presentation.utils;
 
+import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import invoice.application.Invoice;
+import invoice.application.usecases.CloseInvoice;
 import invoice.application.usecases.RemoveInvoice;
 import invoice.persistence.mongo.MongoInvoiceRepository;
 import java.awt.print.PrinterException;
@@ -158,6 +160,38 @@ public class ListInvoicesTableModel extends DefaultTableModel {
         }
     }
 
+    /**
+     * Close the given invoice.
+     *
+     * @param invoice The invoice.
+     * @param tableRow The table row index.
+     */
+    public void closeInvoice(Invoice invoice, int tableRow) {
+        try {
+            MongoInvoiceRepository invoiceRepository = new MongoInvoiceRepository();
+            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+            CloseInvoice closeInvoice = new CloseInvoice(invoiceRepository, deliveryNoteRepository);
+            boolean isDeleted = closeInvoice.execute(invoice);
+
+            String message;
+            if (isDeleted) {
+                message = Localization.getLocalization(LocalizationKey.CLOSED_INVOICE_MESSAGE);
+
+                // Remove it before from here, so the listener has the updated data.
+                // Closed invoices must disappear.
+                this.invoices.remove(tableRow);
+                super.removeRow(tableRow);
+            } else {
+                message = Localization.getLocalization(LocalizationKey.CLOSED_INVOICE_ERROR_MESSAGE);
+            }
+
+            JOptionPane.showMessageDialog(table, message);
+        } catch (NotDefinedDatabaseContextException ex) {
+            String className = ListInvoicesTableModel.class.getName();
+            Logger.getLogger(className).log(Level.INFO, "Invoice not closed because the database has not been found", ex);
+        }
+    }
+
     @Override
     public Class getColumnClass(int columnIndex) {
         // Total column.
@@ -233,6 +267,10 @@ public class ListInvoicesTableModel extends DefaultTableModel {
      */
     @Override
     public void setValueAt(Object newValue, int row, int column) {
+        if (row == this.invoices.size()) {
+            return;
+        }
+
         super.setValueAt(newValue, row, column);
 
         if (column == 5) {
@@ -248,8 +286,10 @@ public class ListInvoicesTableModel extends DefaultTableModel {
                     this.downloadInvoice(invoice);
                 } else if (chosenAction.equals(Localization.getLocalization(LocalizationKey.PRINT))) {
                     this.printInvoice(invoice);
-                } else {
+                } else if (chosenAction.equals(Localization.getLocalization(LocalizationKey.REMOVE))) {
                     this.removeInvoice(invoice, row);
+                } else {
+                    this.closeInvoice(invoice, row);
                 }
             }
         }
