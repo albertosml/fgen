@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.59.0] - 2023-08-15
+
+### Added
+
+- Migrate code from Java 11 to Java 8.
+
 ## [0.58.0] - 2023-08-14
 
 ### Added

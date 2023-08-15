@@ -12,7 +12,7 @@ public class NameValidator {
      * @return true if the name is not empty or null, otherwise false.
      */
     public static boolean isValid(String name) {
-        return !(name == null || name.isBlank());
+        return !(name == null || name.trim().isEmpty());
     }
 
 }

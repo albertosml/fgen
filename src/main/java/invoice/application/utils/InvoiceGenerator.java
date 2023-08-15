@@ -298,8 +298,9 @@ public class InvoiceGenerator {
      */
     private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, Variable> variables, ExcelWorksheet worksheet) {
         Matcher matcher = pattern.matcher(expression);
-        String replacedExpression = matcher.replaceAll(match -> {
-            String variableMatch = match.group();
+        String cellText = expression;
+        while (matcher.find()) {
+            String variableMatch = matcher.group();
             // Remove the "${" and "}" from the variable.
             String variableName = variableMatch.substring(2, variableMatch.length() - 1);
             Variable variable = variables.get(variableName);
@@ -313,11 +314,12 @@ public class InvoiceGenerator {
                 variableValue = this.getValue(entityAttribute, invoice, null);
             }
 
-            return variableValue.toString();
-        });
+            String variableValueText = variableValue.toString();
+            cellText = cellText.replace(variableMatch, variableValueText);
+        }
 
         ExcelCell cell = worksheet.getCell(position);
-        cell.setValue(replacedExpression);
+        cell.setValue(cellText);
     }
 
     /**

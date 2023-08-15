@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
@@ -236,17 +237,18 @@ public class DeliveryNoteGenerator {
      */
     private static void writeVariable(String position, String expression, Pattern pattern, DeliveryNote deliveryNote, Map<String, EntityAttribute> variables, ExcelWorksheet worksheet) {
         Matcher matcher = pattern.matcher(expression);
-        String replacedExpression = matcher.replaceAll(match -> {
-            String variable = match.group();
+        String cellText = expression;
+        while (matcher.find()) {
+            String variable = matcher.group();
             // Remove the "${" and "}" from the variable.
             String variableName = variable.substring(2, variable.length() - 1);
             EntityAttribute entityAttribute = variables.get(variableName);
-            Object variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote);
-            return variableValue.toString();
-        });
+            String variableValue = DeliveryNoteGenerator.getValue(entityAttribute, deliveryNote).toString();
+            cellText = cellText.replace(variable, variableValue);
+        }
 
         ExcelCell cell = worksheet.getCell(position);
-        cell.setValue(replacedExpression);
+        cell.setValue(cellText);
     }
 
     /**
