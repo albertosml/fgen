@@ -113,7 +113,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
             PDFPageable pageable = new PDFPageable(pdfDocument);
 
             PrinterJob printer = PrinterJob.getPrinterJob();
-            printer.setCopies(2);
+            printer.setCopies(1);
             printer.setPageable(pageable);
 
             PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
