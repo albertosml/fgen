@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.61.0] - 2023-08-19
+## [0.62.0] - 2023-08-20
+
+### Added
+
+- Added feature to check a password.
+
+## [0.61.0] - 2023-08-20
 
 ### Added
 
