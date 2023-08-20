@@ -171,6 +171,11 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.CLOSE, "Cerrar");
         super.setTranslation(LocalizationKey.CLOSED_INVOICE_MESSAGE, "Factura cerrada con éxito");
         super.setTranslation(LocalizationKey.CLOSED_INVOICE_ERROR_MESSAGE, "Error al cerrar la factura");
+        super.setTranslation(LocalizationKey.NEW_PASSWORD, "Nueva contraseña");
+        super.setTranslation(LocalizationKey.ESTABLISH, "Establecer");
+        super.setTranslation(LocalizationKey.PASSWORD_ESTABLISHED_MESSAGE, "Contraseña establecida");
+        super.setTranslation(LocalizationKey.PASSWORD_NOT_ESTABLISHED_MESSAGE, "Error al establecer la contraseña");
+        super.setTranslation(LocalizationKey.PASSWORD, "Contraseña");
     }
 
 }

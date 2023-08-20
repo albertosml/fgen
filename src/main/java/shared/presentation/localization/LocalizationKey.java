@@ -636,5 +636,26 @@ public enum LocalizationKey {
     /**
      * Closed invoice error message.
      */
-    CLOSED_INVOICE_ERROR_MESSAGE;
+    CLOSED_INVOICE_ERROR_MESSAGE,
+    /**
+     * New password.
+     */
+    NEW_PASSWORD,
+    /**
+     * Establish.
+     */
+    ESTABLISH,
+    /**
+     * Password established message.
+     */
+    PASSWORD_ESTABLISHED_MESSAGE,
+    /**
+     * Password not established message.
+     */
+    PASSWORD_NOT_ESTABLISHED_MESSAGE,
+    /**
+     * Password.
+     */
+    PASSWORD;
+;
 }
