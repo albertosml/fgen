@@ -10,6 +10,7 @@ import deliverynote.presentation.panels.ListDeliveryNotesPanel;
 import invoice.presentation.panels.ListInvoicesPanel;
 import java.awt.Container;
 import javax.swing.JPanel;
+import password.presentation.panels.EstablishPasswordPanel;
 import product.presentation.panels.ListProductsPanel;
 import product.presentation.panels.RegisterProductPanel;
 import shared.application.configuration.ApplicationConfiguration;
@@ -91,6 +92,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         String invoiceName = Localization.getLocalization(LocalizationKey.INVOICE);
         this.invoice.setText(invoiceName);
+
+        String passwordName = Localization.getLocalization(LocalizationKey.PASSWORD);
+        this.password.setText(passwordName);
+
+        String establishName = Localization.getLocalization(LocalizationKey.ESTABLISH);
+        this.establishPassword.setText(establishName);
     }
 
     /**
@@ -315,6 +322,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectTo(new ListInvoicesPanel(), panelTitle);
     }
 
+    /**
+     * Redirect to the establish password panel.
+     */
+    public void redirectToEstablishPassword() {
+        String establishName = Localization.getLocalization(LocalizationKey.ESTABLISH);
+        String passwordName = Localization.getLocalization(LocalizationKey.PASSWORD);
+        String panelTitle = String.format("%s %s", establishName, passwordName);
+        this.redirectTo(new EstablishPasswordPanel(), panelTitle);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -343,6 +360,8 @@ public class MainFrame extends javax.swing.JFrame {
         variable = new javax.swing.JMenu();
         registerVariable = new javax.swing.JMenuItem();
         listVariables = new javax.swing.JMenuItem();
+        password = new javax.swing.JMenu();
+        establishPassword = new javax.swing.JMenuItem();
         aboutButton = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -500,6 +519,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuBar.add(variable);
 
+        password.setText("${PASSWORD}");
+
+        establishPassword.setText("${ESTABLISH}");
+        establishPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                establishPasswordActionPerformed(evt);
+            }
+        });
+        password.add(establishPassword);
+
+        menuBar.add(password);
+
         aboutButton.setText("${ABOUT}");
         aboutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -577,11 +608,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.redirectToListInvoices();
     }//GEN-LAST:event_listInvoicesActionPerformed
 
+    private void establishPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_establishPasswordActionPerformed
+        this.redirectToEstablishPassword();
+    }//GEN-LAST:event_establishPasswordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutButton;
     private javax.swing.JMenu container;
     private javax.swing.JMenu customer;
     private javax.swing.JMenu deliveryNote;
+    private javax.swing.JMenuItem establishPassword;
     private javax.swing.JMenuItem generateDeliveryNote;
     private javax.swing.JMenu invoice;
     private javax.swing.JMenuItem listContainers;
@@ -593,6 +629,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem listTemplates;
     private javax.swing.JMenuItem listVariables;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu password;
     private javax.swing.JMenu product;
     private javax.swing.JMenuItem registerContainer;
     private javax.swing.JMenuItem registerCustomer;

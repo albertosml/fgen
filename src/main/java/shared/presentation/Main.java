@@ -21,7 +21,7 @@ public class Main {
      * argument is missing.
      */
     public static void main(String[] args) throws MissingSystemArgumentsContextException {
-        if (args.length < 4) {
+        if (args.length < 6) {
             throw new MissingSystemArgumentsContextException("The system is expecting four arguments, which are used to connect to the Mongo database: the database user name, the database password, the database host and the database name");
         }
 
@@ -29,6 +29,8 @@ public class Main {
         String dbPassword = args[1];
         String dbHost = args[2];
         String dbName = args[3];
+        String username = args[4];
+        String salt = args[5];
 
         // Set the localization for the Spanish language.
         Localization.load(new SpanishDictionary());
@@ -37,11 +39,13 @@ public class Main {
         MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.60.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.61.0");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE, 4.0);
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.INDIVIDUAL_COMMISSION_PERCENTAGE, 2.0);
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.USERNAME, username);
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PASSWORD_SALT, salt);
 
         // Open the main frame on full screen mode.
         MainFrame mf = new MainFrame();

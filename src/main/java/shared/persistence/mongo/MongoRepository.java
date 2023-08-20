@@ -4,6 +4,7 @@ import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import org.bson.Document;
@@ -123,4 +124,20 @@ public abstract class MongoRepository {
         return updateResult.getModifiedCount() == 1;
     }
 
+    /**
+     * Upserts the document which matches the filters.
+     *
+     * @param filters The query filters.
+     * @param document The document to update.
+     * @return Whether the document has been upserted or not.
+     */
+    protected boolean upsertOne(Bson filters, Document document) {
+        ReplaceOptions options = new ReplaceOptions().upsert(true);
+        UpdateResult updateReplaceResult = collection.replaceOne(filters, document, options);
+
+        boolean hasBeenInserted = updateReplaceResult.getUpsertedId() != null;
+        boolean hasBeenModified = updateReplaceResult.getModifiedCount() == 1;
+
+        return hasBeenInserted || hasBeenModified;
+    }
 }

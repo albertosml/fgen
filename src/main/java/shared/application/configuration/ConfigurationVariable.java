@@ -23,5 +23,13 @@ public enum ConfigurationVariable {
     /**
      * Individual commission percentage.
      */
-    INDIVIDUAL_COMMISSION_PERCENTAGE
+    INDIVIDUAL_COMMISSION_PERCENTAGE,
+    /**
+     * Password salt.
+     */
+    PASSWORD_SALT,
+    /**
+     * User name.
+     */
+    USERNAME
 }
