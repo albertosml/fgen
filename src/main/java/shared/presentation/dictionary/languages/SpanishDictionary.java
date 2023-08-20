@@ -176,6 +176,10 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.PASSWORD_ESTABLISHED_MESSAGE, "Contraseña establecida");
         super.setTranslation(LocalizationKey.PASSWORD_NOT_ESTABLISHED_MESSAGE, "Error al establecer la contraseña");
         super.setTranslation(LocalizationKey.PASSWORD, "Contraseña");
+        super.setTranslation(LocalizationKey.INTRODUCE_PASSWORD_MESSAGE, "Introduzca la contraseña");
+        super.setTranslation(LocalizationKey.CORRECT_PASSWORD_MESSAGE, "La contraseña introducida es correcta");
+        super.setTranslation(LocalizationKey.INCORRECT_PASSWORD_MESSAGE, "Contraseña incorrecta. Inténtelo otra vez.");
+        super.setTranslation(LocalizationKey.NON_INTRODUCED_PASSWORD_MESSAGE, "Contraseña no introducida correctamente después de los intentos. Saliendo de la aplicación. Contacte con el administrador si quiere restaurar la contraseña.");
     }
 
 }

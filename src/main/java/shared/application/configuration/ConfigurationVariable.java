@@ -31,5 +31,9 @@ public enum ConfigurationVariable {
     /**
      * User name.
      */
-    USERNAME
+    USERNAME,
+    /**
+     * Number of retries to introduce the password.
+     */
+    NUM_PASSWORD_RETRIES
 }

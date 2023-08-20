@@ -656,6 +656,23 @@ public enum LocalizationKey {
     /**
      * Password.
      */
-    PASSWORD;
+    PASSWORD,
+    /**
+     * Message which suggests to introduce the password.
+     */
+    INTRODUCE_PASSWORD_MESSAGE,
+    /**
+     * Correct password message.
+     */
+    CORRECT_PASSWORD_MESSAGE,
+    /**
+     * Incorrect password message.
+     */
+    INCORRECT_PASSWORD_MESSAGE,
+    /**
+     * Message shown when password has not been introduced correctly after all
+     * the retries.
+     */
+    NON_INTRODUCED_PASSWORD_MESSAGE;
 ;
 }
