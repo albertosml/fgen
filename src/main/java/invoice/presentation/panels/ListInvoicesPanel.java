@@ -75,9 +75,10 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         this.setLabelText(supplierLabel, LocalizationKey.SUPPLIER);
         this.setLabelText(startDateLabel, LocalizationKey.START_DATE);
         this.setLabelText(endDateLabel, LocalizationKey.END_DATE);
-        this.setLabelText(invoicesTotalLabel, LocalizationKey.TOTAL);
+        this.setLabelText(invoicesTotalAmountLabel, LocalizationKey.TOTAL_AMOUNT);
         this.setLabelText(companyCommissionLabel, LocalizationKey.COMPANY_COMMISSION);
         this.setLabelText(individualCommissionLabel, LocalizationKey.INDIVIDUAL_COMMISSION);
+        this.setLabelText(invoicesTotalWeightLabel, LocalizationKey.TOTAL_WEIGHT);
         this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
     }
 
@@ -161,7 +162,8 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         columnNames.add(Localization.getLocalization(LocalizationKey.DATE));
         columnNames.add(Localization.getLocalization(LocalizationKey.CUSTOMER));
         columnNames.add(Localization.getLocalization(LocalizationKey.PERIOD));
-        columnNames.add(Localization.getLocalization(LocalizationKey.TOTAL));
+        columnNames.add(Localization.getLocalization(LocalizationKey.TOTAL_WEIGHT));
+        columnNames.add(Localization.getLocalization(LocalizationKey.TOTAL_AMOUNT));
         columnNames.add("");
 
         return columnNames;
@@ -181,7 +183,7 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
             public void tableChanged(TableModelEvent event) {
                 int eventType = event.getType();
                 if (eventType == TableModelEvent.DELETE || eventType == TableModelEvent.UPDATE) {
-                    setTotalAndCommissionsFor(tableModel.getInvoices());
+                    setTotalsAndCommissionsFor(tableModel.getInvoices());
                 }
             }
         });
@@ -194,40 +196,50 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         String[] actions = new String[]{downloadAction, printAction, removeAction, closeAction};
 
         // Set a combobox cell editor for the actions column.
-        TableColumn actionsColumn = table.getColumn(columnNames.get(5));
+        TableColumn actionsColumn = table.getColumn(columnNames.get(6));
         JComboBox comboBox = new JComboBox(actions);
         actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+        // Resize first column.
+        TableColumn codeColumn = table.getColumn(columnNames.get(0));
+        codeColumn.setPreferredWidth(3);
     }
 
     /**
-     * Based on the given data, calculate the total invoices and commissions for
-     * company and individual. Then, set the value on its corresponding panel
-     * field.
+     * Based on the given data, calculate the total amount, total weight and
+     * commissions for company and individual. Then, set the value on its
+     * corresponding panel field.
      *
      * @param invoices The invoices.
      */
-    private void setTotalAndCommissionsFor(ArrayList<Invoice> invoices) {
-        double total = 0;
+    private void setTotalsAndCommissionsFor(ArrayList<Invoice> invoices) {
+        double totalAmount = 0;
+        int totalWeight = 0;
 
         for (Invoice invoice : invoices) {
-            total += invoice.getTotal();
+            totalAmount += invoice.getTotal();
+            totalWeight += invoice.getTotalWeight();
         }
 
-        // Invoice total.
-        String formattedTotal = String.format("%.2f €", total);
-        this.invoicesTotalValue.setText(formattedTotal);
+        // Invoices total amount.
+        String formattedTotalAmount = String.format("%.2f €", totalAmount);
+        this.invoicesTotalAmountValue.setText(formattedTotalAmount);
 
         // Company commission.
         double companyCommissionPercentage = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE);
-        double companyCommission = total * (companyCommissionPercentage / 100.0);
+        double companyCommission = totalAmount * (companyCommissionPercentage / 100.0);
         String formattedCompanyCommissionValue = String.format("%.2f €", companyCommission);
         this.companyCommissionValue.setText(formattedCompanyCommissionValue);
 
         // Individual commission.
         double individualCommissionPercentage = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.INDIVIDUAL_COMMISSION_PERCENTAGE);
-        double individualCommission = total * (individualCommissionPercentage / 100.0);
+        double individualCommission = totalAmount * (individualCommissionPercentage / 100.0);
         String formattedIndividualCommissionValue = String.format("%.2f €", individualCommission);
         this.individualCommissionValue.setText(formattedIndividualCommissionValue);
+
+        // Invoices total weight.
+        String formattedTotalWeight = String.format("%d Kgs", totalWeight);
+        this.invoicesTotalWeightValue.setText(formattedTotalWeight);
     }
 
     @SuppressWarnings("unchecked")
@@ -247,26 +259,28 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         supplierLabel = new javax.swing.JLabel();
         isSelectedSupplier = new javax.swing.JCheckBox();
         supplierInput = new javax.swing.JComboBox<>();
-        invoicesTotalLabel = new javax.swing.JLabel();
-        invoicesTotalValue = new javax.swing.JLabel();
+        invoicesTotalAmountLabel = new javax.swing.JLabel();
+        invoicesTotalAmountValue = new javax.swing.JLabel();
         companyCommissionLabel = new javax.swing.JLabel();
         companyCommissionValue = new javax.swing.JLabel();
         individualCommissionValue = new javax.swing.JLabel();
         individualCommissionLabel = new javax.swing.JLabel();
+        invoicesTotalWeightLabel = new javax.swing.JLabel();
+        invoicesTotalWeightValue = new javax.swing.JLabel();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "${CODE}", "${DATE}", "${CUSTOMER}", "${PERIOD}", "${TOTAL}", ""
+                "${CODE}", "${DATE}", "${CUSTOMER}", "${PERIOD}", "${TOTAL_AMOUNT}", "", ""
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -286,6 +300,7 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(3).setResizable(false);
             table.getColumnModel().getColumn(4).setResizable(false);
             table.getColumnModel().getColumn(5).setResizable(false);
+            table.getColumnModel().getColumn(6).setResizable(false);
         }
 
         farmerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -321,9 +336,9 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
         supplierInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        invoicesTotalLabel.setText("${TOTAL}:");
+        invoicesTotalAmountLabel.setText("${TOTAL_AMOUNT}:");
 
-        invoicesTotalValue.setText("0€");
+        invoicesTotalAmountValue.setText("0€");
 
         companyCommissionLabel.setText("${COMPANY_COMMISSION}:");
 
@@ -333,54 +348,60 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
         individualCommissionLabel.setText("${INDIVIDUAL_COMMISSION}:");
 
+        invoicesTotalWeightLabel.setText("${TOTAL_WEIGHT}:");
+
+        invoicesTotalWeightValue.setText("0€");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(isSelectedFarmer)
+                    .addComponent(isSelectedSupplier))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(supplierLabel)
+                    .addComponent(farmerLabel))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(supplierInput, javax.swing.GroupLayout.Alignment.TRAILING, 0, 245, Short.MAX_VALUE)
+                    .addComponent(farmerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(startDateLabel)
+                    .addComponent(endDateLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(startDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                    .addComponent(endDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(listDeliveryNotesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(isSelectedFarmer)
-                            .addComponent(isSelectedSupplier))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(supplierLabel)
-                            .addComponent(farmerLabel))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(supplierInput, javax.swing.GroupLayout.Alignment.TRAILING, 0, 245, Short.MAX_VALUE)
-                            .addComponent(farmerInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(51, 51, 51)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(startDateLabel)
-                            .addComponent(endDateLabel))
+                        .addComponent(invoicesTotalAmountLabel)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(startDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                            .addComponent(endDateInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(listDeliveryNotesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(invoicesTotalLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(invoicesTotalValue))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(individualCommissionLabel)
-                                    .addComponent(companyCommissionLabel))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(individualCommissionValue)
-                                    .addComponent(companyCommissionValue))))
-                        .addGap(139, 139, 139))
+                        .addComponent(invoicesTotalAmountValue))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scrollPane)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(individualCommissionLabel)
+                            .addComponent(companyCommissionLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(invoicesTotalWeightLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(invoicesTotalWeightValue)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(individualCommissionValue)
+                            .addComponent(companyCommissionValue))))
+                .addGap(145, 145, 145))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,8 +416,8 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
                     .addComponent(isSelectedFarmer, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(listDeliveryNotesButton)
-                        .addComponent(invoicesTotalLabel)
-                        .addComponent(invoicesTotalValue)))
+                        .addComponent(invoicesTotalAmountLabel)
+                        .addComponent(invoicesTotalAmountValue)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -414,8 +435,12 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(individualCommissionValue)
                     .addComponent(individualCommissionLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(invoicesTotalWeightLabel)
+                    .addComponent(invoicesTotalWeightValue))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -435,7 +460,7 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         Date endDate = endDateInput.getDate();
 
         ArrayList<Invoice> invoices = this.getInvoices(farmer, supplier, startDate, endDate);
-        this.setTotalAndCommissionsFor(invoices);
+        this.setTotalsAndCommissionsFor(invoices);
 
         ListInvoicesTableModel tableModel = (ListInvoicesTableModel) table.getModel();
         tableModel.setInvoices(invoices);
@@ -459,8 +484,10 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
     private javax.swing.JLabel farmerLabel;
     private javax.swing.JLabel individualCommissionLabel;
     private javax.swing.JLabel individualCommissionValue;
-    private javax.swing.JLabel invoicesTotalLabel;
-    private javax.swing.JLabel invoicesTotalValue;
+    private javax.swing.JLabel invoicesTotalAmountLabel;
+    private javax.swing.JLabel invoicesTotalAmountValue;
+    private javax.swing.JLabel invoicesTotalWeightLabel;
+    private javax.swing.JLabel invoicesTotalWeightValue;
     private javax.swing.JCheckBox isSelectedFarmer;
     private javax.swing.JCheckBox isSelectedSupplier;
     private javax.swing.JButton listDeliveryNotesButton;

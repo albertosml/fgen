@@ -6,7 +6,6 @@ import invoice.application.utils.InvoiceValidationState;
 import invoice.application.utils.InvoiceValidator;
 import invoice.persistence.InvoiceRepository;
 import java.util.Map;
-import shared.application.Pair;
 import shared.application.utils.CodeAutoGenerator;
 
 /**

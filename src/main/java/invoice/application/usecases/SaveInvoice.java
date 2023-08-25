@@ -2,7 +2,6 @@ package invoice.application.usecases;
 
 import invoice.application.Invoice;
 import invoice.persistence.InvoiceRepository;
-import java.io.File;
 
 /**
  * Save invoice use case.

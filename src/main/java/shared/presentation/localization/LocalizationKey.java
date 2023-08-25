@@ -673,6 +673,17 @@ public enum LocalizationKey {
      * Message shown when password has not been introduced correctly after all
      * the retries.
      */
-    NON_INTRODUCED_PASSWORD_MESSAGE;
-;
+    NON_INTRODUCED_PASSWORD_MESSAGE,
+    /**
+     * Invoice total weight.
+     */
+    INVOICE_TOTAL_WEIGHT,
+    /**
+     * Total weight.
+     */
+    TOTAL_WEIGHT,
+    /**
+     * Total amount.
+     */
+    TOTAL_AMOUNT;
 }

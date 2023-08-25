@@ -91,7 +91,8 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         document.append("endPeriod", invoice.getEndPeriod());
         document.append("customer", customer.getCode());
         document.append("file", invoiceFileAttributes);
-        document.append("total", invoice.getTotal());
+        document.append("totalAmount", invoice.getTotal());
+        document.append("totalWeight", invoice.getTotalWeight());
         document.append("isClosed", invoice.isClosed());
         document.append("isDeleted", invoice.isDeleted());
 
@@ -129,7 +130,8 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
         attributes.put(InvoiceAttribute.END_PERIOD, document.get("endPeriod"));
         attributes.put(InvoiceAttribute.CUSTOMER, customer);
         attributes.put(InvoiceAttribute.FILE, file);
-        attributes.put(InvoiceAttribute.TOTAL, document.get("total"));
+        attributes.put(InvoiceAttribute.TOTAL_AMOUNT, document.get("totalAmount"));
+        attributes.put(InvoiceAttribute.TOTAL_WEIGHT, document.get("totalWeight"));
         attributes.put(InvoiceAttribute.IS_CLOSED, document.get("isClosed"));
         attributes.put(InvoiceAttribute.IS_DELETED, document.get("isDeleted"));
 
