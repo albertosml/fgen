@@ -56,15 +56,21 @@ import variable.persistence.mongo.MongoVariableRepository;
 public class InvoiceGenerator {
 
     /**
-     * Store the current invoice total.
+     * Store the current invoice total. Store the current invoice total amount.
      */
-    private float total;
+    private float totalAmount;
+
+    /**
+     * Store the current invoice total weight.
+     */
+    private int totalWeight;
 
     /**
      * Constructor.
      */
     public InvoiceGenerator() {
-        this.total = 0;
+        this.totalAmount = 0;
+        this.totalWeight = 0;
     }
 
     /**
@@ -166,14 +172,14 @@ public class InvoiceGenerator {
                 Date date = invoice.getDate();
                 return df.format(date);
             case INVOICE_TOTAL:
-                return total;
+                return totalAmount;
             case SUBTOTAL:
-                float value = subtotal.calculate(total);
+                float value = subtotal.calculate(totalAmount);
                 value = (float) (Math.round(value * 100.0) / 100.0);
 
                 // Update total
-                total += value;
-                total = (float) (Math.round(total * 100.0) / 100.0);
+                totalAmount += value;
+                totalAmount = (float) (Math.round(totalAmount * 100.0) / 100.0);
 
                 return value;
             case INVOICE_SUBTOTAL:
@@ -181,7 +187,7 @@ public class InvoiceGenerator {
                 invoiceTotal = (float) (Math.round(invoiceTotal * 100.0) / 100.0);
 
                 // First total will be the invoice total.
-                this.total = invoiceTotal;
+                this.totalAmount = invoiceTotal;
 
                 return invoiceTotal;
             case PERIOD:
@@ -195,6 +201,13 @@ public class InvoiceGenerator {
                 String formattedEndDate = dateFormat.format(end);
 
                 return String.format("%s - %s", formattedStartDate, formattedEndDate);
+            case INVOICE_TOTAL_WEIGHT:
+                int totalWeight = invoice.calculateTotalWeight();
+
+                // Set the current total weight.
+                this.totalWeight = totalWeight;
+                
+                return totalWeight;
         }
 
         return null;
@@ -390,7 +403,8 @@ public class InvoiceGenerator {
 
         invoice.setFile(invoiceFile);
 
-        invoice.setTotal(this.total);
+        invoice.setTotal(this.totalAmount);
+        invoice.setTotalWeight(this.totalWeight);
 
         // Call to use case.
         try {

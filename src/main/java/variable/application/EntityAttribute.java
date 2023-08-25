@@ -138,7 +138,11 @@ public enum EntityAttribute {
     /**
      * Invoice generation date time.
      */
-    INVOICE_GENERATION_DATETIME;
+    INVOICE_GENERATION_DATETIME,
+    /**
+     * Invoice total weight.
+     */
+    INVOICE_TOTAL_WEIGHT;
 
     /**
      * Gets the text to show for the corresponding enumeration value.

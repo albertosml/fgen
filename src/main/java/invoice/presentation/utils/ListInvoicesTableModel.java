@@ -194,9 +194,14 @@ public class ListInvoicesTableModel extends DefaultTableModel {
 
     @Override
     public Class getColumnClass(int columnIndex) {
-        // Total column.
+        // Total amount column.
         if (columnIndex == 4) {
             return Float.class;
+        }
+
+        // Total weight column.
+        if (columnIndex == 5) {
+            return Integer.class;
         }
 
         return Object.class;
@@ -205,7 +210,7 @@ public class ListInvoicesTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // Only edit the chosen action column.
-        return column == 5;
+        return column == 6;
     }
 
     /**
@@ -244,12 +249,15 @@ public class ListInvoicesTableModel extends DefaultTableModel {
 
             String period = String.format("%s - %s", formattedStartDate, formattedEndDate);
 
-            // Column 5: Invoice total.
-            double invoiceTotal = invoice.getTotal();
+            // Column 5: Invoice total amount.
+            double invoiceTotalAmount = invoice.getTotal();
+
+            // Column 6: Invoice total weight.
+            int invoiceTotalWeight = invoice.getTotalWeight();
 
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.
-            this.addRow(new Object[]{invoiceCode, formattedDate, customer, period, invoiceTotal, null});
+            this.addRow(new Object[]{invoiceCode, formattedDate, customer, period, invoiceTotalAmount, invoiceTotalWeight, null});
         }
     }
 
@@ -273,11 +281,11 @@ public class ListInvoicesTableModel extends DefaultTableModel {
 
         super.setValueAt(newValue, row, column);
 
-        if (column == 5) {
+        if (column == 6) {
             int invoiceCode = invoices.get(row).getCode();
             Invoice invoice = this.findInvoiceBy(invoiceCode);
             if (invoice != null) {
-                String chosenAction = (String) super.getValueAt(row, 5);
+                String chosenAction = (String) super.getValueAt(row, 6);
                 if (chosenAction == null) {
                     return;
                 }

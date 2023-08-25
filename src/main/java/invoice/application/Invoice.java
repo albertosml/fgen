@@ -49,9 +49,14 @@ public class Invoice {
     private File file;
 
     /**
-     * The invoice total.
+     * The invoice total amount.
      */
-    private double total;
+    private double totalAmount;
+
+    /**
+     * The invoice total weight.
+     */
+    private int totalWeight;
 
     /**
      * Whether the invoice is closed or not.
@@ -77,7 +82,7 @@ public class Invoice {
      * @param isClosed Whether the invoice is closed or not.
      * @param isDeleted Whether the invoice is deleted or not.
      */
-    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, File file, double total, boolean isClosed, boolean isDeleted) {
+    private Invoice(int code, Date date, ArrayList<DeliveryNoteData> deliveryNotes, Date startPeriod, Date endPeriod, Customer customer, File file, double totalAmount, int totalWeight, boolean isClosed, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.deliveryNotes = deliveryNotes;
@@ -85,18 +90,19 @@ public class Invoice {
         this.endPeriod = endPeriod;
         this.customer = customer;
         this.file = file;
-        this.total = total;
+        this.totalAmount = totalAmount;
+        this.totalWeight = totalWeight;
         this.isClosed = isClosed;
         this.isDeleted = isDeleted;
     }
 
     /**
-     * Calculate the invoice total.
+     * Calculate the invoice total amount.
      *
      * The total will be equal to the sum of the product of the price and net
      * weight for each delivery note.
      *
-     * @return The invoice total.
+     * @return The invoice total amount.
      */
     public float calculateTotal() {
         float total = 0;
@@ -107,6 +113,24 @@ public class Invoice {
         }
 
         return total;
+    }
+
+    /**
+     * Calculate the invoice total weight.
+     *
+     * The total will be equal to the sum of the net weight of each delivery
+     * note.
+     *
+     * @return The invoice total weight.
+     */
+    public int calculateTotalWeight() {
+        int totalWeight = 0;
+
+        for (DeliveryNoteData deliveryNote : this.deliveryNotes) {
+            totalWeight += deliveryNote.getNetWeight();
+        }
+
+        return totalWeight;
     }
 
     /**
@@ -173,12 +197,21 @@ public class Invoice {
     }
 
     /**
-     * Retrieve the invoice total.
+     * Retrieve the invoice total amount.
      *
-     * @return The invoice total.
+     * @return The invoice total amount.
      */
     public double getTotal() {
-        return this.total;
+        return this.totalAmount;
+    }
+
+    /**
+     * Retrieve the invoice total weight.
+     *
+     * @return The invoice total weight.
+     */
+    public int getTotalWeight() {
+        return this.totalWeight;
     }
 
     /**
@@ -209,12 +242,21 @@ public class Invoice {
     }
 
     /**
-     * Update the invoice total.
+     * Update the invoice total amount.
      *
-     * @param total The invoice total.
+     * @param totalAmount The invoice total amount.
      */
-    public void setTotal(float total) {
-        this.total = total;
+    public void setTotal(float totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    /**
+     * Update the invoice total weight.
+     *
+     * @param totalWeight The invoice total weight.
+     */
+    public void setTotalWeight(int totalWeight) {
+        this.totalWeight = totalWeight;
     }
 
     /**
@@ -249,11 +291,12 @@ public class Invoice {
         Date endPeriod = (Date) attributes.get(InvoiceAttribute.END_PERIOD);
         Customer customer = (Customer) attributes.get(InvoiceAttribute.CUSTOMER);
         File file = (File) attributes.get(InvoiceAttribute.FILE);
-        double total = (double) attributes.getOrDefault(InvoiceAttribute.TOTAL, 0.0);
+        double totalAmount = (double) attributes.getOrDefault(InvoiceAttribute.TOTAL_AMOUNT, 0.0);
+        int totalWeight = (int) attributes.getOrDefault(InvoiceAttribute.TOTAL_WEIGHT, 0);
         boolean isClosed = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_CLOSED, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(InvoiceAttribute.IS_DELETED, false);
 
-        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, file, total, isClosed, isDeleted);
+        return new Invoice(code, date, deliveryNotes, startPeriod, endPeriod, customer, file, totalAmount, totalWeight, isClosed, isDeleted);
     }
 
 }

@@ -180,6 +180,9 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.CORRECT_PASSWORD_MESSAGE, "La contraseña introducida es correcta");
         super.setTranslation(LocalizationKey.INCORRECT_PASSWORD_MESSAGE, "Contraseña incorrecta. Inténtelo otra vez.");
         super.setTranslation(LocalizationKey.NON_INTRODUCED_PASSWORD_MESSAGE, "Contraseña no introducida correctamente después de los intentos. Saliendo de la aplicación. Contacte con el administrador si quiere restaurar la contraseña.");
+        super.setTranslation(LocalizationKey.INVOICE_TOTAL_WEIGHT, "Peso total de la factura");
+        super.setTranslation(LocalizationKey.TOTAL_WEIGHT, "Peso total (en kilos)");
+        super.setTranslation(LocalizationKey.TOTAL_AMOUNT, "Cantidad total (en euros)");
     }
 
 }
