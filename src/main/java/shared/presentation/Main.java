@@ -125,7 +125,7 @@ public class Main {
         MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.64.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "1.0.0");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE, 4.0);
