@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.64.0] - 2023-09-03
+
+### Added
+
+- Establish pagination for invoices.
+
 ## [0.63.0] - 2023-08-25
 
 ### Added

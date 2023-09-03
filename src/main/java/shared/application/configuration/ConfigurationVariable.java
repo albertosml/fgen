@@ -35,5 +35,10 @@ public enum ConfigurationVariable {
     /**
      * Number of retries to introduce the password.
      */
-    NUM_PASSWORD_RETRIES
+    NUM_PASSWORD_RETRIES,
+    /**
+     * The maximum number of invoice items (delivery notes) that we can set on a
+     * single invoice page.
+     */
+    INVOICE_ITEMS_PER_PAGE
 }

@@ -116,6 +116,7 @@ public class Main {
         String dbName = args[3];
         String username = args[4];
         String salt = args[5];
+        String invoiceItemsPerPage = args[6];
 
         // Set the localization for the Spanish language.
         Localization.load(new SpanishDictionary());
@@ -124,7 +125,7 @@ public class Main {
         MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.63.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "0.64.0");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE, 4.0);
@@ -132,6 +133,7 @@ public class Main {
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.USERNAME, username);
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PASSWORD_SALT, salt);
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NUM_PASSWORD_RETRIES, 3);
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.INVOICE_ITEMS_PER_PAGE, Integer.valueOf(invoiceItemsPerPage));
 
         // Authentication.
         boolean isAuthenticated = Main.authenticate();
