@@ -22,15 +22,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import shared.application.configuration.ApplicationConfiguration;
+import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import subtotal.application.Subtotal;
 import template.application.Template;
@@ -56,7 +60,7 @@ import variable.persistence.mongo.MongoVariableRepository;
 public class InvoiceGenerator {
 
     /**
-     * Store the current invoice total. Store the current invoice total amount.
+     * Store the current invoice total amount.
      */
     private float totalAmount;
 
@@ -66,11 +70,24 @@ public class InvoiceGenerator {
     private int totalWeight;
 
     /**
+     * Entity attributes which represents totals, so they are only included on
+     * the last page.
+     */
+    private ArrayList<EntityAttribute> entityAttributes;
+
+    /**
      * Constructor.
      */
     public InvoiceGenerator() {
         this.totalAmount = 0;
         this.totalWeight = 0;
+
+        // Those entities can be only inserted on the last invoice page.
+        this.entityAttributes = new ArrayList<>();
+        this.entityAttributes.add(EntityAttribute.SUBTOTAL);
+        this.entityAttributes.add(EntityAttribute.INVOICE_TOTAL);
+        this.entityAttributes.add(EntityAttribute.INVOICE_SUBTOTAL);
+        this.entityAttributes.add(EntityAttribute.INVOICE_TOTAL_WEIGHT);
     }
 
     /**
@@ -94,26 +111,50 @@ public class InvoiceGenerator {
     }
 
     /**
-     * Convert excel file to PDF.
+     * Get the timestamp from the current instant.
+     *
+     * @return A string indicating the current timestamp.
+     */
+    private String getTimestamp() {
+        Date now = Date.from(Instant.now());
+        return Long.toString(now.getTime());
+    }
+
+    /**
+     * Convert excel file to HTML.
      *
      * @param workbook The excel file to convert.
-     * @param date Date to set on the filename.
      * @throws java.io.IOException if the file is not found.
-     * @throws java.lang.InterruptedException if the conversion is interrupted.
      */
-    private File convertToPdf(ExcelFile workbook, Date date) throws IOException, InterruptedException {
-        String timestamp = Long.toString(date.getTime());
+    private File convertToHtml(ExcelFile workbook) throws IOException {
+        String timestamp = this.getTimestamp();
 
         File tmpHtmlFile = File.createTempFile(timestamp, ".html");
         tmpHtmlFile.deleteOnExit();
         OutputStream htmlStream = new FileOutputStream(tmpHtmlFile);
         workbook.save(htmlStream, new HtmlSaveOptions());
 
+        return tmpHtmlFile;
+    }
+
+    /**
+     * Combine the set of HTML files on one PDF file.
+     *
+     * @param htmlFiles The list of HTML files to convert.
+     * @param date Date to set on the filename.
+     * @throws java.io.IOException if the file is not found.
+     * @throws java.lang.InterruptedException if the conversion is interrupted.
+     */
+    private File convertToPdf(ArrayList<File> htmlFiles) throws IOException, InterruptedException {
         String executable = WrapperConfig.findExecutable();
         Pdf pdf = new Pdf(new WrapperConfig(executable));
         pdf.addParam(new Param("--page-size", "A4"));
-        pdf.addPageFromFile(tmpHtmlFile.getAbsolutePath());
 
+        for (File htmlFile : htmlFiles) {
+            pdf.addPageFromFile(htmlFile.getAbsolutePath());
+        }
+
+        String timestamp = this.getTimestamp();
         File tmpPdfFile = File.createTempFile(timestamp, ".pdf");
         tmpPdfFile.deleteOnExit();
         return pdf.saveAs(tmpPdfFile.getAbsolutePath());
@@ -172,7 +213,7 @@ public class InvoiceGenerator {
                 Date date = invoice.getDate();
                 return df.format(date);
             case INVOICE_TOTAL:
-                return totalAmount;
+                return String.format("%.2f €", totalAmount);
             case SUBTOTAL:
                 float value = subtotal.calculate(totalAmount);
                 value = (float) (Math.round(value * 100.0) / 100.0);
@@ -181,7 +222,7 @@ public class InvoiceGenerator {
                 totalAmount += value;
                 totalAmount = (float) (Math.round(totalAmount * 100.0) / 100.0);
 
-                return value;
+                return String.format("%.2f €", value);
             case INVOICE_SUBTOTAL:
                 float invoiceTotal = invoice.calculateTotal();
                 invoiceTotal = (float) (Math.round(invoiceTotal * 100.0) / 100.0);
@@ -189,7 +230,7 @@ public class InvoiceGenerator {
                 // First total will be the invoice total.
                 this.totalAmount = invoiceTotal;
 
-                return invoiceTotal;
+                return String.format("%.2f €", invoiceTotal);
             case PERIOD:
                 Date start = invoice.getStartPeriod();
                 Date end = invoice.getEndPeriod();
@@ -207,7 +248,7 @@ public class InvoiceGenerator {
                 // Set the current total weight.
                 this.totalWeight = totalWeight;
                 
-                return totalWeight;
+                return String.format("%d KGS", totalWeight);
         }
 
         return null;
@@ -255,14 +296,14 @@ public class InvoiceGenerator {
     }
 
     /**
-     * Write invoice items into the spreadsheet cells.
+     * Write delivery notes into the spreadsheet cells.
      *
      * @param position Start position.
-     * @param invoice The invoice.
+     * @param deliveryNotes The delivery notes.
      * @param worksheet The worksheet where we are going to write the delivery
      * note data.
      */
-    private void writeInvoiceItems(String position, Invoice invoice, ExcelWorksheet worksheet) {
+    private void writeDeliveryNotes(String position, List<DeliveryNoteData> deliveryNotes, ExcelWorksheet worksheet) {
         ExcelCell cell = worksheet.getCell(position);
         int rowIndex = cell.getRow().getIndex();
         int columnIndex = cell.getColumn().getIndex();
@@ -271,7 +312,7 @@ public class InvoiceGenerator {
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
 
         ExcelCell cellToWrite;
-        for (DeliveryNoteData deliveryNoteData : invoice.getDeliveryNotes()) {
+        for (DeliveryNoteData deliveryNoteData : deliveryNotes) {
             String formattedDate = dateFormat.format(deliveryNoteData.getDate());
 
             float price = deliveryNoteData.getPrice();
@@ -308,8 +349,9 @@ public class InvoiceGenerator {
      * @param invoice The invoice.
      * @param variables Variables list.
      * @param worksheet Worksheet to write the variable.
+     * @param isLastPage Whether we are on the last invoice page or not.
      */
-    private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, Variable> variables, ExcelWorksheet worksheet) {
+    private void writeVariable(String position, String expression, Pattern pattern, Invoice invoice, Map<String, Variable> variables, ExcelWorksheet worksheet, boolean isLastPage) {
         Matcher matcher = pattern.matcher(expression);
         String cellText = expression;
         while (matcher.find()) {
@@ -320,7 +362,10 @@ public class InvoiceGenerator {
             EntityAttribute entityAttribute = variable.getAttribute();
 
             Object variableValue;
-            if (entityAttribute == EntityAttribute.SUBTOTAL) {
+            if (!isLastPage && this.entityAttributes.contains(entityAttribute)) {
+                // This entity attribute is only inserted on last page.
+                variableValue = "";
+            } else if (entityAttribute == EntityAttribute.SUBTOTAL) {
                 SubtotalVariable subtotalVariable = (SubtotalVariable) variable;
                 variableValue = this.getValue(entityAttribute, invoice, subtotalVariable.getSubtotal());
             } else {
@@ -351,33 +396,52 @@ public class InvoiceGenerator {
             return null;
         }
 
-        ExcelFile workbook = this.loadTemplate(template);
-        ExcelWorksheet worksheet = workbook.getWorksheet(0);
+        ArrayList<File> htmlFiles = new ArrayList<>();
+        ArrayList<DeliveryNoteData> deliveryNotes = invoice.getDeliveryNotes();
 
-        Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, Variable> variables = this.getVariables();
-        SortedMap<String, String> templateFields = template.getFields();
-        for (SortedMap.Entry<String, String> field : templateFields.entrySet()) {
-            String position = field.getKey();
-            String expression = field.getValue();
+        int chunkSize = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.INVOICE_ITEMS_PER_PAGE);
+        for (int i = 0; i < deliveryNotes.size(); i += chunkSize) {
+            int chunkEnd = i + chunkSize;
+            List<DeliveryNoteData> deliveryNotesChunk;
 
-            // Specific processing for the invoice items.
-            String expressionVariableName = expression.substring(2, expression.length() - 1);
-            Variable variable = variables.get(expressionVariableName);
-
-            if (variable != null) {
-                EntityAttribute expressionEntityAttribute = variable.getAttribute();
-                boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
-                if (shouldWriteInvoiceItems) {
-                    this.writeInvoiceItems(position, invoice, worksheet);
-                    continue;
-                }
+            if (chunkEnd > deliveryNotes.size()) {
+                deliveryNotesChunk = deliveryNotes.subList(i, deliveryNotes.size());
+            } else {
+                deliveryNotesChunk = deliveryNotes.subList(i, chunkEnd);
             }
 
-            this.writeVariable(position, expression, variablesPattern, invoice, variables, worksheet);
+            ExcelFile workbook = this.loadTemplate(template);
+            ExcelWorksheet worksheet = workbook.getWorksheet(0);
+
+            Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
+            Map<String, Variable> variables = this.getVariables();
+            SortedMap<String, String> templateFields = template.getFields();
+            for (SortedMap.Entry<String, String> field : templateFields.entrySet()) {
+                String position = field.getKey();
+                String expression = field.getValue();
+
+                // Specific processing for the invoice items.
+                String expressionVariableName = expression.substring(2, expression.length() - 1);
+                Variable variable = variables.get(expressionVariableName);
+
+                if (variable != null) {
+                    EntityAttribute expressionEntityAttribute = variable.getAttribute();
+                    boolean shouldWriteInvoiceItems = expressionEntityAttribute == EntityAttribute.INVOICE_ITEMS;
+                    if (shouldWriteInvoiceItems) {
+                        this.writeDeliveryNotes(position, deliveryNotesChunk, worksheet);
+                        continue;
+                    }
+                }
+
+                boolean isLastPage = chunkEnd >= deliveryNotes.size();
+                this.writeVariable(position, expression, variablesPattern, invoice, variables, worksheet, isLastPage);
+            }
+
+            File htmlFile = this.convertToHtml(workbook);
+            htmlFiles.add(htmlFile);
         }
 
-        return this.convertToPdf(workbook, invoice.getDate());
+        return this.convertToPdf(htmlFiles);
     }
 
     /**
