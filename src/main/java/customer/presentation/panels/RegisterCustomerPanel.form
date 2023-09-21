@@ -26,7 +26,7 @@
                   <Component id="provinceLabel" alignment="1" max="32767" attributes="0"/>
                   <Component id="zipcodeLabel" alignment="1" max="32767" attributes="0"/>
                   <Component id="ibanLabel" alignment="1" max="32767" attributes="0"/>
-                  <Component id="isSupplierLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="isFarmerLabel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -36,7 +36,7 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="nameInput" pref="246" max="32767" attributes="0"/>
+                          <Component id="nameInput" pref="251" max="32767" attributes="0"/>
                           <Component id="tinInput" max="32767" attributes="0"/>
                           <Component id="addressInput" max="32767" attributes="0"/>
                           <Component id="cityInput" max="32767" attributes="0"/>
@@ -47,7 +47,7 @@
                       <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="isSupplierInput" min="-2" max="-2" attributes="0"/>
+                      <Component id="isFarmerInput" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -94,8 +94,8 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="isSupplierLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="isSupplierInput" min="-2" max="-2" attributes="0"/>
+                  <Component id="isFarmerLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="isFarmerInput" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="registerButton" min="-2" max="-2" attributes="0"/>
@@ -162,12 +162,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="isSupplierLabel">
+    <Component class="javax.swing.JLabel" name="isFarmerLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${IS_SUPPLIER}:"/>
+        <Property name="text" type="java.lang.String" value="${IS_FARMER}:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="isSupplierInput">
+    <Component class="javax.swing.JCheckBox" name="isFarmerInput">
     </Component>
   </SubComponents>
 </Form>

@@ -32,9 +32,9 @@ public class DeliveryNote {
     private Customer farmer;
 
     /**
-     * The supplier customer.
+     * The trader customer.
      */
-    private Customer supplier;
+    private Customer trader;
 
     /**
      * The product.
@@ -68,18 +68,18 @@ public class DeliveryNote {
      * @param date The delivery note date. If it is null, it will be set to the
      * current date time.
      * @param farmer The delivery note farmer customer.
-     * @param supplier The delivery note farmer supplier.
+     * @param trader The delivery note farmer trader.
      * @param product The delivery note product.
      * @param template The delivery note template.
      * @param pallet The delivery note pallet.
      * @param numPallets The delivery note total pallets.
      * @param weighings The delivery note weighings.
      */
-    private DeliveryNote(int code, Date date, Customer farmer, Customer supplier, Product product, Template template, Pallet pallet, int numPallets, ArrayList<Weighing> weighings) {
+    private DeliveryNote(int code, Date date, Customer farmer, Customer trader, Product product, Template template, Pallet pallet, int numPallets, ArrayList<Weighing> weighings) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.farmer = farmer;
-        this.supplier = supplier;
+        this.trader = trader;
         this.product = product;
         this.template = template;
         this.pallet = pallet;
@@ -174,12 +174,12 @@ public class DeliveryNote {
     }
 
     /**
-     * Retrieve the delivery note supplier customer.
+     * Retrieve the delivery note trader customer.
      *
-     * @return The delivery note supplier customer.
+     * @return The delivery note trader customer.
      */
-    public Customer getSupplier() {
-        return this.supplier;
+    public Customer getTrader() {
+        return this.trader;
     }
 
     /**
@@ -238,14 +238,14 @@ public class DeliveryNote {
         int code = (int) attributes.get(DeliveryNoteAttribute.CODE);
         Date date = (Date) attributes.getOrDefault(DeliveryNoteAttribute.DATE, null);
         Customer farmer = (Customer) attributes.get(DeliveryNoteAttribute.FARMER);
-        Customer supplier = (Customer) attributes.get(DeliveryNoteAttribute.SUPPLIER);
+        Customer trader = (Customer) attributes.get(DeliveryNoteAttribute.TRADER);
         Product product = (Product) attributes.get(DeliveryNoteAttribute.PRODUCT);
         Template template = (Template) attributes.get(DeliveryNoteAttribute.TEMPLATE);
         Pallet pallet = (Pallet) attributes.get(DeliveryNoteAttribute.PALLET);
         int numPallets = (int) attributes.getOrDefault(DeliveryNoteAttribute.NUM_PALLETS, 0);
         ArrayList<Weighing> weighings = (ArrayList<Weighing>) attributes.get(DeliveryNoteAttribute.WEIGHINGS);
 
-        return new DeliveryNote(code, date, farmer, supplier, product, template, pallet, numPallets, weighings);
+        return new DeliveryNote(code, date, farmer, trader, product, template, pallet, numPallets, weighings);
     }
 
 }

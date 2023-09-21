@@ -26,11 +26,11 @@ public class ObtainCustomers {
     /**
      * Obtain all customers.
      *
-     * @param getSuppliers Whether we should get the supplier customers or not.
+     * @param getFarmers Whether we should get the farmer customers or not.
      * @return A list with all obtained customers.
      */
-    public ArrayList<Customer> execute(boolean getSuppliers) {
-        return customerRepository.obtain(getSuppliers);
+    public ArrayList<Customer> execute(boolean getFarmers) {
+        return customerRepository.obtain(getFarmers);
     }
 
 }

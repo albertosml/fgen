@@ -29,13 +29,13 @@ public class ListInvoices {
      * List all invoices.
      *
      * @param farmer The farmer customer to get the invoices.
-     * @param supplier The supplier customer to get the invoices.
+     * @param trader The trader customer to get the invoices.
      * @param start The start date to get the invoices.
      * @param end The end date to get the invoices.
      * @return A list with all invoices.
      */
-    public ArrayList<Invoice> execute(Customer farmer, Customer supplier, Date start, Date end) {
-        return invoiceRepository.get(farmer, supplier, start, end);
+    public ArrayList<Invoice> execute(Customer farmer, Customer trader, Date start, Date end) {
+        return invoiceRepository.get(farmer, trader, start, end);
     }
 
 }

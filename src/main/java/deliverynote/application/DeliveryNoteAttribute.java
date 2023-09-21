@@ -7,7 +7,7 @@ public enum DeliveryNoteAttribute {
     CODE,
     DATE,
     FARMER,
-    SUPPLIER,
+    TRADER,
     PRODUCT,
     TEMPLATE,
     PALLET,

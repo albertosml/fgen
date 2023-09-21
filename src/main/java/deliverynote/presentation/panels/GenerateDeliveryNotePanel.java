@@ -65,15 +65,15 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     /**
      * Obtain all the customers data by executing the use case.
      *
-     * @param getSuppliers Whether we must get the suppliers or not.
+     * @param getFarmers Whether we must get the farmers or not.
      * @return A list with all the customers on the system based on the given
      * filter.
      */
-    private ArrayList<Customer> obtainCustomers(boolean getSuppliers) {
+    private ArrayList<Customer> obtainCustomers(boolean getFarmers) {
         try {
             MongoCustomerRepository customerRepository = new MongoCustomerRepository();
             ObtainCustomers obtainCustomers = new ObtainCustomers(customerRepository);
-            return obtainCustomers.execute(getSuppliers);
+            return obtainCustomers.execute(getFarmers);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = GenerateDeliveryNotePanel.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Customers cannot be shown because the database has not been found", ex);
@@ -167,7 +167,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private void initializeFormLabels() {
         this.setLabelText(farmerLabel, LocalizationKey.FARMER);
         this.setLabelText(productLabel, LocalizationKey.PRODUCT);
-        this.setLabelText(supplierLabel, LocalizationKey.SUPPLIER);
+        this.setLabelText(traderLabel, LocalizationKey.TRADER);
         this.setLabelText(palletLabel, LocalizationKey.PALLET);
         this.setLabelText(numPalletsLabel, LocalizationKey.NUM_PALLETS);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
@@ -178,14 +178,14 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
      */
     private void initializeInputs() {
         // Farmers input.
-        Vector<Customer> farmers = new Vector<>(this.obtainCustomers(false));
+        Vector<Customer> farmers = new Vector<>(this.obtainCustomers(true));
         farmerInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Customer>(farmers));
         AutoCompleteDecorator.decorate(farmerInput);
 
-        // Suppliers input.
-        Vector<Customer> suppliers = new Vector<>(this.obtainCustomers(true));
-        supplierInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Customer>(suppliers));
-        AutoCompleteDecorator.decorate(supplierInput);
+        // Traders input.
+        Vector<Customer> traders = new Vector<>(this.obtainCustomers(false));
+        traderInput.setModel((ComboBoxModel) new DefaultComboBoxModel<Customer>(traders));
+        AutoCompleteDecorator.decorate(traderInput);
 
         // Product input.
         Vector<Product> products = new Vector<>(this.getProducts());
@@ -211,7 +211,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         Map<DeliveryNoteValidationState, LocalizationKey> localizationKeysByState = new HashMap<>();
         localizationKeysByState.put(DeliveryNoteValidationState.VALID, LocalizationKey.GENERATED_DELIVERY_NOTE_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_FARMER, LocalizationKey.INVALID_FARMER_CUSTOMER_MESSAGE);
-        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_SUPPLIER, LocalizationKey.INVALID_SUPPLIER_CUSTOMER_MESSAGE);
+        localizationKeysByState.put(DeliveryNoteValidationState.INVALID_TRADER, LocalizationKey.INVALID_TRADER_CUSTOMER_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PRODUCT, LocalizationKey.INVALID_PRODUCT_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_PALLET, LocalizationKey.INVALID_PALLET_MESSAGE);
         localizationKeysByState.put(DeliveryNoteValidationState.INVALID_NUM_PALLETS, LocalizationKey.INVALID_NUM_PALLETS_MESSAGE);
@@ -229,7 +229,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private void clearForm() {
         this.farmerInput.setSelectedItem(null);
         this.productInput.setSelectedItem(null);
-        this.supplierInput.setSelectedItem(null);
+        this.traderInput.setSelectedItem(null);
         this.palletInput.setSelectedItem(null);
         this.numPalletsInput.setValue(0);
         this.weighingsPanel.clear();
@@ -263,8 +263,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         farmerInput = new javax.swing.JComboBox<>();
         productLabel = new javax.swing.JLabel();
         productInput = new javax.swing.JComboBox<>();
-        supplierLabel = new javax.swing.JLabel();
-        supplierInput = new javax.swing.JComboBox<>();
+        traderLabel = new javax.swing.JLabel();
+        traderInput = new javax.swing.JComboBox<>();
         palletLabel = new javax.swing.JLabel();
         bookedPanel = new javax.swing.JPanel();
         registerButton = new javax.swing.JButton();
@@ -280,9 +280,9 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         productInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        supplierLabel.setText("${SUPPLIER}:");
+        traderLabel.setText("${TRADER}:");
 
-        supplierInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        traderInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         palletLabel.setText("${PALLET}:");
 
@@ -332,7 +332,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(palletLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(productLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(supplierLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(traderLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(farmerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -341,7 +341,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                         .addGap(20, 20, 20)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(productInput, 0, 269, Short.MAX_VALUE)
-                    .addComponent(supplierInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(traderInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(palletInput, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(farmerInput, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(numPalletsInput))
@@ -356,8 +356,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                     .addComponent(farmerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(supplierLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(supplierInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(traderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(traderInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(productLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,7 +381,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         Map<DeliveryNoteAttribute, Object> newDeliveryNoteAttributes = new HashMap<>();
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.FARMER, farmerInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.SUPPLIER, supplierInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TRADER, traderInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, this.getTemplate(1));
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PALLET, palletInput.getSelectedItem());
@@ -424,7 +424,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> productInput;
     private javax.swing.JLabel productLabel;
     private javax.swing.JButton registerButton;
-    private javax.swing.JComboBox<String> supplierInput;
-    private javax.swing.JLabel supplierLabel;
+    private javax.swing.JComboBox<String> traderInput;
+    private javax.swing.JLabel traderLabel;
     // End of variables declaration//GEN-END:variables
 }

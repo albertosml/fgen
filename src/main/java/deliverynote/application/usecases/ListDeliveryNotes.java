@@ -30,14 +30,14 @@ public class ListDeliveryNotes {
      * List all delivery notes.
      *
      * @param farmer The farmer customer to get the delivery notes.
-     * @param supplier The supplier customer to get the delivery notes.
+     * @param trader The trader customer to get the delivery notes.
      * @param product The product to get the delivery notes.
      * @param start The start date to get the delivery notes.
      * @param end The end date to get the delivery notes.
      * @return A list with all delivery notes.
      */
-    public ArrayList<DeliveryNoteData> execute(Customer farmer, Customer supplier, Product product, Date start, Date end) {
-        return deliveryNoteRepository.get(farmer, supplier, product, start, end);
+    public ArrayList<DeliveryNoteData> execute(Customer farmer, Customer trader, Product product, Date start, Date end) {
+        return deliveryNoteRepository.get(farmer, trader, product, start, end);
     }
 
 }

@@ -39,7 +39,7 @@ public class Invoice {
     private Date endPeriod;
 
     /**
-     * The customer, which can be either a farmer or a supplier.
+     * The customer, which can be either a farmer or a trader.
      */
     private Customer customer;
 

@@ -186,7 +186,7 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
      * {@inheritDoc}
      */
     @Override
-    public ArrayList<Invoice> get(Customer farmer, Customer supplier, Date from, Date to) {
+    public ArrayList<Invoice> get(Customer farmer, Customer trader, Date from, Date to) {
         Bson isNotDeletedFilter = Filters.eq("isDeleted", false);
         Bson isNotClosedFilter = this.isNotClosedFilter();
         Bson fromDate = Filters.gte("date", from);
@@ -199,9 +199,9 @@ public class MongoInvoiceRepository extends MongoRepository implements InvoiceRe
             filters = Filters.and(filters, farmerFilter);
         }
 
-        if (supplier != null) {
-            Bson supplierFilter = Filters.eq("customer", supplier.getCode());
-            filters = Filters.and(filters, supplierFilter);
+        if (trader != null) {
+            Bson traderFilter = Filters.eq("customer", trader.getCode());
+            filters = Filters.and(filters, traderFilter);
         }
 
         ArrayList<Document> foundDocuments = super.find(filters);

@@ -197,37 +197,37 @@ public enum LocalizationKey {
      */
     FARMER_CUSTOMER_IBAN,
     /**
-     * Supplier customer code.
+     * Trader customer code.
      */
-    SUPPLIER_CUSTOMER_CODE,
+    TRADER_CUSTOMER_CODE,
     /**
-     * Supplier customer name.
+     * Trader customer name.
      */
-    SUPPLIER_CUSTOMER_NAME,
+    TRADER_CUSTOMER_NAME,
     /**
-     * Supplier customer TIN.
+     * Trader customer TIN.
      */
-    SUPPLIER_CUSTOMER_TIN,
+    TRADER_CUSTOMER_TIN,
     /**
-     * Supplier customer address.
+     * Trader customer address.
      */
-    SUPPLIER_CUSTOMER_ADDRESS,
+    TRADER_CUSTOMER_ADDRESS,
     /**
-     * Supplier customer city.
+     * Trader customer city.
      */
-    SUPPLIER_CUSTOMER_CITY,
+    TRADER_CUSTOMER_CITY,
     /**
-     * Supplier customer province.
+     * Trader customer province.
      */
-    SUPPLIER_CUSTOMER_PROVINCE,
+    TRADER_CUSTOMER_PROVINCE,
     /**
-     * Supplier customer ZIP code.
+     * Trader customer ZIP code.
      */
-    SUPPLIER_CUSTOMER_ZIPCODE,
+    TRADER_CUSTOMER_ZIPCODE,
     /**
-     * Supplier customer IBAN.
+     * Trader customer IBAN.
      */
-    SUPPLIER_CUSTOMER_IBAN,
+    TRADER_CUSTOMER_IBAN,
     /**
      * Product code.
      */
@@ -430,9 +430,9 @@ public enum LocalizationKey {
      */
     INVALID_FARMER_CUSTOMER_MESSAGE,
     /**
-     * Invalid supplier customer message.
+     * Invalid trader customer message.
      */
-    INVALID_SUPPLIER_CUSTOMER_MESSAGE,
+    INVALID_TRADER_CUSTOMER_MESSAGE,
     /**
      * Invalid product message.
      */
@@ -502,9 +502,9 @@ public enum LocalizationKey {
      */
     DELIVERY_NOTE_TOTAL_WEIGHT_PER_BOX,
     /**
-     * Whether the customer is supplier.
+     * Whether the customer is a farmer.
      */
-    IS_SUPPLIER,
+    IS_FARMER,
     /**
      * Date.
      */
@@ -566,9 +566,9 @@ public enum LocalizationKey {
      */
     FARMER,
     /**
-     * Supplier.
+     * Trader.
      */
-    SUPPLIER,
+    TRADER,
     /**
      * Bill (verb).
      */
