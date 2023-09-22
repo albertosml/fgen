@@ -28,9 +28,9 @@ public class DeliveryNoteValidator {
             return DeliveryNoteValidationState.INVALID_FARMER;
         }
 
-        Customer supplier = deliveryNote.getSupplier();
-        if (supplier == null) {
-            return DeliveryNoteValidationState.INVALID_SUPPLIER;
+        Customer trader = deliveryNote.getTrader();
+        if (trader == null) {
+            return DeliveryNoteValidationState.INVALID_TRADER;
         }
 
 

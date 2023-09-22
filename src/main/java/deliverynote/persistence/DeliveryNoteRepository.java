@@ -33,17 +33,17 @@ public interface DeliveryNoteRepository extends Repository {
     /**
      * List all the delivery notes.
      *
-     * Note that if the farmer, the supplier or the product are null, they will
+     * Note that if the farmer, the trader or the product are null, they will
      * not be included on the filters.
      *
      * @param farmer The farmer customer to get the delivery notes.
-     * @param supplier The supplier customer to get the delivery notes.
+     * @param trader The trader customer to get the delivery notes.
      * @param product The product to get the delivery notes.
      * @param from The start date to get the delivery notes.
      * @param to The end date to get the delivery notes.
      * @return A list with all delivery notes.
      */
-    public ArrayList<DeliveryNoteData> get(Customer farmer, Customer supplier, Product product, Date from, Date to);
+    public ArrayList<DeliveryNoteData> get(Customer farmer, Customer trader, Product product, Date from, Date to);
 
     /**
      * Update the given delivery note with its associated data.

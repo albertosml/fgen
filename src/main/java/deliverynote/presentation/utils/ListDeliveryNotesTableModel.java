@@ -195,8 +195,8 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             // Column 2: Delivery note data farmer.
             String farmerCustomerCode = deliveryNoteData.getFarmer().toString();
 
-            // Column 3: Delivery note data supplier.
-            String supplierCustomerCode = deliveryNoteData.getSupplier().toString();
+            // Column 3: Delivery note data trader.
+            String traderCustomerCode = deliveryNoteData.getTrader().toString();
 
             // Column 4: Delivery note data product.
             String productCode = deliveryNoteData.getProduct().toString();
@@ -209,7 +209,7 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
 
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.
-            this.addRow(new Object[]{formattedDate, farmerCustomerCode, supplierCustomerCode, productCode, numBoxes, netWeight, 0, null});
+            this.addRow(new Object[]{formattedDate, farmerCustomerCode, traderCustomerCode, productCode, numBoxes, netWeight, 0, null});
         }
     }
 

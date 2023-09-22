@@ -36,9 +36,9 @@ public class DeliveryNoteData {
     private Customer farmer;
 
     /**
-     * The supplier customer.
+     * The trader customer.
      */
-    private Customer supplier;
+    private Customer trader;
 
     /**
      * The product.
@@ -87,7 +87,7 @@ public class DeliveryNoteData {
      * @param date The delivery note data date. If it is null, it will be set to
      * the current date time.
      * @param farmer The delivery note data farmer customer.
-     * @param supplier The delivery note data farmer supplier.
+     * @param trader The delivery note data farmer trader.
      * @param product The delivery note data product.
      * @param file The delivery note data file.
      * @param numPallets The delivery note data total pallets.
@@ -96,11 +96,11 @@ public class DeliveryNoteData {
      * @param isClosed Whether the delivery note is closed or not.
      * @param isDeleted Whether the delivery note is deleted or not.
      */
-    private DeliveryNoteData(int code, Date date, Customer farmer, Customer supplier, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isClosed, boolean isDeleted) {
+    private DeliveryNoteData(int code, Date date, Customer farmer, Customer trader, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isClosed, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.farmer = farmer;
-        this.supplier = supplier;
+        this.trader = trader;
         this.product = product;
         this.file = file;
         this.numPallets = numPallets;
@@ -139,12 +139,12 @@ public class DeliveryNoteData {
     }
 
     /**
-     * Retrieve the delivery note data supplier customer.
+     * Retrieve the delivery note data trader customer.
      *
-     * @return The delivery note data supplier customer.
+     * @return The delivery note data trader customer.
      */
-    public Customer getSupplier() {
-        return this.supplier;
+    public Customer getTrader() {
+        return this.trader;
     }
 
     /**
@@ -264,15 +264,15 @@ public class DeliveryNoteData {
         File file = Base64Converter.decode(fileAttributes);
         file.deleteOnExit();
 
-        Customer farmer = null, supplier = null;
+        Customer farmer = null, trader = null;
         try {
             CustomerRepository customerRepository = new MongoCustomerRepository();
 
             int farmerCode = (int) attributes.get(DeliveryNoteDataAttribute.FARMER);
             farmer = customerRepository.find(farmerCode);
 
-            int supplierCode = (int) attributes.get(DeliveryNoteDataAttribute.SUPPLIER);
-            supplier = customerRepository.find(supplierCode);
+            int traderCode = (int) attributes.get(DeliveryNoteDataAttribute.TRADER);
+            trader = customerRepository.find(traderCode);
         } catch (NotDefinedDatabaseContextException ex) {
             String className = DeliveryNoteData.class.getName();
             Logger.getLogger(className).log(Level.INFO, "Customers cannot be obtained because the database has not been found", ex);
@@ -295,7 +295,7 @@ public class DeliveryNoteData {
         boolean isClosed = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_CLOSED, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_DELETED, false);
 
-        return new DeliveryNoteData(code, date, farmer, supplier, product, file, numPallets, numBoxes, netWeight, isClosed, isDeleted);
+        return new DeliveryNoteData(code, date, farmer, trader, product, file, numPallets, numBoxes, netWeight, isClosed, isDeleted);
     }
 
 }

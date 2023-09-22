@@ -15,5 +15,5 @@ public enum CustomerAttribute {
     ZIPCODE,
     IBAN,
     ISDELETED,
-    ISSUPPLIER;
+    ISFARMER;
 }

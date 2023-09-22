@@ -187,21 +187,21 @@ public class InvoiceGenerator {
                 return invoice.getCustomer().getZipCode();
             case FARMER_CUSTOMER_IBAN:
                 return invoice.getCustomer().getIban();
-            case SUPPLIER_CUSTOMER_CODE:
+            case TRADER_CUSTOMER_CODE:
                 return invoice.getCustomer().getCode();
-            case SUPPLIER_CUSTOMER_NAME:
+            case TRADER_CUSTOMER_NAME:
                 return invoice.getCustomer().getName();
-            case SUPPLIER_CUSTOMER_TIN:
+            case TRADER_CUSTOMER_TIN:
                 return invoice.getCustomer().getTin();
-            case SUPPLIER_CUSTOMER_ADDRESS:
+            case TRADER_CUSTOMER_ADDRESS:
                 return invoice.getCustomer().getAddress();
-            case SUPPLIER_CUSTOMER_CITY:
+            case TRADER_CUSTOMER_CITY:
                 return invoice.getCustomer().getCity();
-            case SUPPLIER_CUSTOMER_PROVINCE:
+            case TRADER_CUSTOMER_PROVINCE:
                 return invoice.getCustomer().getProvince();
-            case SUPPLIER_CUSTOMER_ZIPCODE:
+            case TRADER_CUSTOMER_ZIPCODE:
                 return invoice.getCustomer().getZipCode();
-            case SUPPLIER_CUSTOMER_IBAN:
+            case TRADER_CUSTOMER_IBAN:
                 return invoice.getCustomer().getIban();
             case INVOICE_ITEMS:
                 return invoice.getDeliveryNotes();

@@ -28,19 +28,19 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="isSelectedFarmer" min="-2" max="-2" attributes="0"/>
-                                  <Component id="isSelectedSupplier" min="-2" max="-2" attributes="0"/>
+                                  <Component id="isSelectedTrader" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="supplierLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="traderLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="farmerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="productLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="supplierInput" alignment="1" pref="245" max="32767" attributes="0"/>
+                          <Component id="traderInput" alignment="1" pref="245" max="32767" attributes="0"/>
                           <Component id="productInput" alignment="1" max="32767" attributes="0"/>
                           <Component id="farmerInput" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -107,10 +107,10 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="supplierLabel" alignment="3" max="32767" attributes="0"/>
-                                      <Component id="supplierInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="traderLabel" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="traderInput" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="isSelectedSupplier" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="isSelectedTrader" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
@@ -309,20 +309,20 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedProductActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="supplierLabel">
+    <Component class="javax.swing.JLabel" name="traderLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${SUPPLIER}:"/>
+        <Property name="text" type="java.lang.String" value="${TRADER}:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="isSelectedSupplier">
+    <Component class="javax.swing.JCheckBox" name="isSelectedTrader">
       <Properties>
         <Property name="selected" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedSupplierActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="isSelectedTraderActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="supplierInput">
+    <Component class="javax.swing.JComboBox" name="traderInput">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">

@@ -27,7 +27,7 @@
                   <Component id="zipcodeLabel" alignment="1" max="32767" attributes="0"/>
                   <Component id="ibanLabel" alignment="1" max="32767" attributes="0"/>
                   <Component id="codeLabel" max="32767" attributes="0"/>
-                  <Component id="isSupplierLabel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="isFarmerLabel" alignment="0" max="32767" attributes="0"/>
                   <Component id="isDeletedLabel" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
@@ -40,7 +40,7 @@
                           <Component id="cityInput" max="32767" attributes="0"/>
                           <Component id="provinceInput" alignment="0" max="32767" attributes="0"/>
                           <Component id="zipcodeInput" max="32767" attributes="0"/>
-                          <Component id="updateButton" alignment="0" pref="229" max="32767" attributes="0"/>
+                          <Component id="updateButton" alignment="0" pref="230" max="32767" attributes="0"/>
                           <Component id="ibanInput" alignment="1" max="32767" attributes="0"/>
                           <Component id="nameInput" max="32767" attributes="0"/>
                       </Group>
@@ -48,7 +48,7 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="isSupplierCheckbox" min="-2" max="-2" attributes="0"/>
+                          <Component id="isFarmerCheckbox" min="-2" max="-2" attributes="0"/>
                           <Component id="isDeletedCheckbox" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -102,8 +102,8 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="isSupplierLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="isSupplierCheckbox" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="isFarmerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="isFarmerCheckbox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
@@ -185,12 +185,12 @@
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="isSupplierLabel">
+    <Component class="javax.swing.JLabel" name="isFarmerLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="${IS_SUPPLIER}:"/>
+        <Property name="text" type="java.lang.String" value="${IS_FARMER}:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="isSupplierCheckbox">
+    <Component class="javax.swing.JCheckBox" name="isFarmerCheckbox">
     </Component>
     <Component class="javax.swing.JLabel" name="isDeletedLabel">
       <Properties>

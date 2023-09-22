@@ -14,16 +14,16 @@ public interface InvoiceRepository extends Repository {
     /**
      * List all the invoices.
      *
-     * Note that if the farmer or the supplier are null, they will not be
+     * Note that if the farmer or the trader are null, they will not be
      * included on the filters.
      *
      * @param farmer The farmer customer to get the invoices.
-     * @param supplier The supplier customer to get the invoices.
+     * @param trader The trader customer to get the invoices.
      * @param from The start date to get the invoices.
      * @param to The end date to get the invoices.
      * @return A list with all invoices.
      */
-    public ArrayList<Invoice> get(Customer farmer, Customer supplier, Date from, Date to);
+    public ArrayList<Invoice> get(Customer farmer, Customer trader, Date from, Date to);
 
     /**
      * Save the invoice.
