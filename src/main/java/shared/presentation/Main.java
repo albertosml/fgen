@@ -1,6 +1,8 @@
 package shared.presentation;
 
 import java.io.Console;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,6 +101,36 @@ public class Main {
     }
 
     /**
+     * Creates the template mapping to indicate the association between the
+     * customer, which will be the key, and the template, which will be the
+     * value.
+     *
+     * The format to specify the mapping will be:
+     * "<customer1>:<templateCode1>;<customer2>:<templateCode2>"
+     *
+     * Note that ";" limits each mapping entry and the ":" limits the key and
+     * the value.
+     *
+     * @param mapping The template mapping on the specified format.
+     * @return A map containing the association between customers and templates.
+     */
+    private static Map<String, Integer> createTemplateMapping(String mapping) {
+        Map<String, Integer> templatesMapping = new HashMap<>();
+
+        String[] entries = mapping.split(";");
+        for (String entry : entries) {
+            String[] templateMapping = entry.split(":");
+            if (templateMapping.length == 2) {
+                String customer = templateMapping[0];
+                Integer templateCode = Integer.valueOf(templateMapping[1]);
+                templatesMapping.put(customer, templateCode);
+            }
+        }
+
+        return templatesMapping;
+    }
+
+    /**
      * Runs the application.
      *
      * @param args System arguments.
@@ -117,6 +149,8 @@ public class Main {
         String username = args[4];
         String salt = args[5];
         String invoiceItemsPerPage = args[6];
+        String deliveryNoteTemplateByCustomer = args[7];
+        String invoiceTemplateByCustomer = args[8];
 
         // Set the localization for the Spanish language.
         Localization.load(new SpanishDictionary());
@@ -125,7 +159,7 @@ public class Main {
         MongoDatabaseConnection.setInstance(dbUsername, dbPassword, dbHost, dbName);
 
         // Indicate application details.
-        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "1.1.0");
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.VERSION, "1.1.1");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NAME, "FGEN");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PROJECT_URL, "https://github.com/albertosml/fgen");
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.COMPANY_COMMISSION_PERCENTAGE, 4.0);
@@ -134,6 +168,8 @@ public class Main {
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.PASSWORD_SALT, salt);
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.NUM_PASSWORD_RETRIES, 3);
         ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.INVOICE_ITEMS_PER_PAGE, Integer.valueOf(invoiceItemsPerPage));
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.DELIVERY_NOTE_TEMPLATE_BY_CUSTOMER, Main.createTemplateMapping(deliveryNoteTemplateByCustomer));
+        ApplicationConfiguration.addConfigurationVariable(ConfigurationVariable.INVOICE_TEMPLATE_BY_CUSTOMER, Main.createTemplateMapping(invoiceTemplateByCustomer));
 
         // Authentication.
         boolean isAuthenticated = Main.authenticate();

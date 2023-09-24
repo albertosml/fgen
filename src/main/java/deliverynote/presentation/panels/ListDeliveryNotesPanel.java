@@ -36,6 +36,8 @@ import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
 import shared.application.Pair;
+import shared.application.configuration.ApplicationConfiguration;
+import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -526,19 +528,27 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         Date startPeriod = this.startDateInput.getDate();
         Date endPeriod = this.endDateInput.getDate();
 
+        Map<String, Integer> invoiceTemplateByCustomer = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.INVOICE_TEMPLATE_BY_CUSTOMER);
+
         int templateCode = 0;
         Customer customer = null;
         if (this.isSelectedFarmer.isSelected()) {
             customer = (Customer) farmerInput.getSelectedItem();
-            templateCode = 3; // Identifies farmer invoice.
+
+            if (invoiceTemplateByCustomer.containsKey(customer.getTin())) {
+                templateCode = invoiceTemplateByCustomer.get(customer.getTin());
+            } else if (invoiceTemplateByCustomer.containsKey("farmer")) {
+                templateCode = invoiceTemplateByCustomer.get("farmer");
+            }
         }
 
         if (this.isSelectedTrader.isSelected()) {
             customer = (Customer) traderInput.getSelectedItem();
-            if (customer.getCode() == 5) {
-                templateCode = 4; // Special trader invoice.
-            } else {
-                templateCode = 2; // Identifies trader invoice.
+
+            if (invoiceTemplateByCustomer.containsKey(customer.getTin())) {
+                templateCode = invoiceTemplateByCustomer.get(customer.getTin());
+            } else if (invoiceTemplateByCustomer.containsKey("trader")) {
+                templateCode = invoiceTemplateByCustomer.get("trader");
             }
         }
 
