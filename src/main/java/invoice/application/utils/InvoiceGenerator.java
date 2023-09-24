@@ -456,6 +456,10 @@ public class InvoiceGenerator {
      * @return Whether the invoices have been generated or not.
      */
     public boolean generate(Invoice invoice, int templateCode) throws IOException, InterruptedException {
+        if (templateCode < 1) {
+            return false;
+        }
+
         if (invoice == null) {
             return false;
         }

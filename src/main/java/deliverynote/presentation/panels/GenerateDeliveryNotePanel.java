@@ -31,6 +31,8 @@ import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import shared.application.Pair;
+import shared.application.configuration.ApplicationConfiguration;
+import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
@@ -379,11 +381,25 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
+        int templateCode = 0;
+
+        Map<String, Integer> deliveryNoteTemplateByCustomer = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.DELIVERY_NOTE_TEMPLATE_BY_CUSTOMER);
+        if (deliveryNoteTemplateByCustomer.containsKey("farmer")) {
+            templateCode = deliveryNoteTemplateByCustomer.get("farmer");
+        } else if (deliveryNoteTemplateByCustomer.containsKey("trader")) {
+            templateCode = deliveryNoteTemplateByCustomer.get("trader");
+        }
+
+        if (templateCode < 1) {
+            this.showInfoMessage(DeliveryNoteValidationState.INVALID);
+            return;
+        }
+
         Map<DeliveryNoteAttribute, Object> newDeliveryNoteAttributes = new HashMap<>();
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.FARMER, farmerInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TRADER, traderInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, this.getTemplate(1));
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, this.getTemplate(templateCode));
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PALLET, palletInput.getSelectedItem());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.NUM_PALLETS, numPalletsInput.getValue());
         newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHINGS, weighingsPanel.getWeighings());
