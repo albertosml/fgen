@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileSystemView;
 import product.application.Product;
 import product.application.usecases.ListProducts;
 import product.persistence.mongo.MongoProductRepository;
@@ -37,6 +38,7 @@ import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
+import shared.presentation.utils.Downloader;
 import shared.presentation.utils.Printer;
 import template.application.Template;
 import template.application.usecases.ShowTemplate;
@@ -176,6 +178,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.setLabelText(numPalletsLabel, LocalizationKey.NUM_PALLETS);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
         this.setButtonText(printButton, LocalizationKey.PRINT);
+        this.setButtonText(downloadButton, LocalizationKey.DOWNLOAD);
     }
 
     /**
@@ -327,6 +330,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         numPalletsInput = new javax.swing.JSpinner();
         palletInput = new javax.swing.JComboBox<>();
         printButton = new javax.swing.JButton();
+        downloadButton = new javax.swing.JButton();
 
         farmerLabel.setText("${FARMER}:");
 
@@ -379,6 +383,13 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
             }
         });
 
+        downloadButton.setText("${DOWNLOAD}");
+        downloadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -390,6 +401,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(printButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(downloadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(registerButton)
                         .addGap(8, 8, 8)))
@@ -443,7 +456,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registerButton)
-                    .addComponent(printButton))
+                    .addComponent(printButton)
+                    .addComponent(downloadButton))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -480,8 +494,41 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, message);
     }//GEN-LAST:event_printButtonActionPerformed
 
+    private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonActionPerformed
+        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.buildDeliveryNote(false);
+        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
+
+        if (state != DeliveryNoteValidationState.VALID) {
+            this.showInfoMessage(state);
+            String errorMessage = Localization.getLocalization(LocalizationKey.DOWNLOAD_ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, errorMessage);
+            return;
+        }
+
+        DeliveryNote deliveryNote = deliveryNotePair.getFirst();
+        File file = deliveryNote.getFile();
+
+        String documentsPath = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
+        String deliveryNoteName = Localization.getLocalization(LocalizationKey.DELIVERY_NOTE);
+        String filename = String.format("%s_%d.pdf", deliveryNoteName, deliveryNote.getCode());
+        File destFile = new File(documentsPath, filename);
+
+        boolean isDownloaded = file != null && Downloader.downloadDeliveryNote(file, destFile);
+
+        String message;
+        if (isDownloaded) {
+            String downloadedFileMessage = Localization.getLocalization(LocalizationKey.DOWNLOADED_FILE_MESSAGE);
+            message = String.format("%s: %s/%s", downloadedFileMessage, documentsPath, filename);
+        } else {
+            message = Localization.getLocalization(LocalizationKey.DOWNLOAD_ERROR_MESSAGE);
+        }
+
+        JOptionPane.showMessageDialog(this, message);
+    }//GEN-LAST:event_downloadButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookedPanel;
+    private javax.swing.JButton downloadButton;
     private javax.swing.JComboBox<String> farmerInput;
     private javax.swing.JLabel farmerLabel;
     private javax.swing.JSpinner numPalletsInput;
