@@ -58,14 +58,13 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      * It creates a Mongo document from a delivery note and the PDF file.
      *
      * @param deliveryNote The delivery note entity.
-     * @param pdfFile A PDF file containing the delivery note data.
      * @return A document with the given delivery note data if it has been
      * created, otherwise null.
      */
-    private Document createDocumentFrom(DeliveryNote deliveryNote, File pdfFile) {
+    private Document createDocumentFrom(DeliveryNote deliveryNote) {
         Document document = new Document();
 
-        Map<String, String> fileAttributes = Base64Converter.encode(pdfFile);
+        Map<String, String> fileAttributes = Base64Converter.encode(deliveryNote.getFile());
         if (fileAttributes == null) {
             return null;
         }
@@ -210,8 +209,8 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
      * {@inheritDoc}
      */
     @Override
-    public void save(DeliveryNote deliveryNote, File pdfFile) {
-        Document document = this.createDocumentFrom(deliveryNote, pdfFile);
+    public void save(DeliveryNote deliveryNote) {
+        Document document = this.createDocumentFrom(deliveryNote);
         this.insertOne(document);
     }
 

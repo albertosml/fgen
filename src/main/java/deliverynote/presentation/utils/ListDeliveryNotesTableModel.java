@@ -3,8 +3,6 @@ package deliverynote.presentation.utils;
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.RemoveDeliveryNote;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,19 +14,14 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.printing.PDFPageable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
+import shared.presentation.utils.Printer;
 
 /**
  * Table model for the list delivery notes panel.
@@ -106,27 +99,16 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
      * @param deliveryNoteData The delivery note data.
      */
     private void printDeliveryNote(DeliveryNoteData deliveryNoteData) {
-        try {
-            PDDocument pdfDocument = PDDocument.load(deliveryNoteData.getFile());
-            PDFPageable pageable = new PDFPageable(pdfDocument);
+        boolean hasBeenPrinted = Printer.printDeliveryNote(deliveryNoteData.getFile());
 
-            PrinterJob printer = PrinterJob.getPrinterJob();
-            printer.setCopies(2);
-            printer.setPageable(pageable);
-
-            PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-            attributes.add(MediaSizeName.ISO_A5);
-            attributes.add(OrientationRequested.PORTRAIT);
-
-            printer.print(attributes);
-
-            String printedFileMessage = Localization.getLocalization(LocalizationKey.PRINTED_FILE_MESSAGE);
-            JOptionPane.showMessageDialog(table, printedFileMessage);
-        } catch (IOException | PrinterException ex) {
-            Logger.getLogger(ListDeliveryNotesTableModel.class.getName()).log(Level.SEVERE, null, ex);
-            String printErrorMessage = Localization.getLocalization(LocalizationKey.PRINT_ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(table, printErrorMessage);
+        String message;
+        if (hasBeenPrinted) {
+            message = Localization.getLocalization(LocalizationKey.PRINTED_FILE_MESSAGE);
+        } else {
+            message = Localization.getLocalization(LocalizationKey.PRINT_ERROR_MESSAGE);
         }
+
+        JOptionPane.showMessageDialog(table, message);
     }
 
     /**

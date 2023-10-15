@@ -13,6 +13,7 @@ import deliverynote.application.utils.DeliveryNoteGenerator;
 import deliverynote.application.utils.DeliveryNoteValidationState;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.awt.GridLayout;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import shared.application.configuration.ConfigurationVariable;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
 import shared.presentation.localization.Localization;
 import shared.presentation.localization.LocalizationKey;
+import shared.presentation.utils.Printer;
 import template.application.Template;
 import template.application.usecases.ShowTemplate;
 import template.persistence.mongo.MongoTemplateRepository;
@@ -173,6 +175,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.setLabelText(palletLabel, LocalizationKey.PALLET);
         this.setLabelText(numPalletsLabel, LocalizationKey.NUM_PALLETS);
         this.setButtonText(registerButton, LocalizationKey.REGISTER);
+        this.setButtonText(printButton, LocalizationKey.PRINT);
     }
 
     /**
@@ -257,6 +260,56 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         return new Pair<>(null, DeliveryNoteValidationState.INVALID);
     }
 
+    /**
+     * Build the delivery note.
+     *
+     * @param register Whether the delivery note must be registered after
+     * creation or not.
+     * @return A pair indicating the delivery note and its validation state.
+     */
+    private Pair<DeliveryNote, DeliveryNoteValidationState> buildDeliveryNote(boolean register) {
+        int templateCode = 0;
+
+        Map<String, Integer> deliveryNoteTemplateByCustomer = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.DELIVERY_NOTE_TEMPLATE_BY_CUSTOMER);
+        if (deliveryNoteTemplateByCustomer.containsKey("farmer")) {
+            templateCode = deliveryNoteTemplateByCustomer.get("farmer");
+        } else if (deliveryNoteTemplateByCustomer.containsKey("trader")) {
+            templateCode = deliveryNoteTemplateByCustomer.get("trader");
+        }
+
+        if (templateCode < 1) {
+            return new Pair<>(null, DeliveryNoteValidationState.INVALID);
+        }
+
+        Map<DeliveryNoteAttribute, Object> newDeliveryNoteAttributes = new HashMap<>();
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.FARMER, farmerInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TRADER, traderInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, this.getTemplate(templateCode));
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PALLET, palletInput.getSelectedItem());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.NUM_PALLETS, numPalletsInput.getValue());
+        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHINGS, weighingsPanel.getWeighings());
+
+        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
+
+        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
+        if (state != DeliveryNoteValidationState.VALID) {
+            return new Pair<>(null, state);
+        }
+
+        DeliveryNote deliveryNote = deliveryNotePair.getFirst();
+
+        if (deliveryNote != null) {
+            try {
+                DeliveryNoteGenerator.generate(deliveryNote, register);
+            } catch (IOException | InterruptedException ex) {
+                return new Pair<>(null, DeliveryNoteValidationState.INVALID);
+            }
+        }
+
+        return new Pair<>(deliveryNote, state);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -273,6 +326,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         numPalletsLabel = new javax.swing.JLabel();
         numPalletsInput = new javax.swing.JSpinner();
         palletInput = new javax.swing.JComboBox<>();
+        printButton = new javax.swing.JButton();
 
         farmerLabel.setText("${FARMER}:");
 
@@ -318,6 +372,13 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         palletInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        printButton.setText("${PRINT}");
+        printButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -326,7 +387,12 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bookedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(printButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(registerButton)
+                        .addGap(8, 8, 8)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
@@ -374,60 +440,45 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
                     .addComponent(numPalletsInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(bookedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(registerButton)
-                .addGap(21, 21, 21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(registerButton)
+                    .addComponent(printButton))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
-        int templateCode = 0;
-
-        Map<String, Integer> deliveryNoteTemplateByCustomer = ApplicationConfiguration.getConfigurationVariable(ConfigurationVariable.DELIVERY_NOTE_TEMPLATE_BY_CUSTOMER);
-        if (deliveryNoteTemplateByCustomer.containsKey("farmer")) {
-            templateCode = deliveryNoteTemplateByCustomer.get("farmer");
-        } else if (deliveryNoteTemplateByCustomer.containsKey("trader")) {
-            templateCode = deliveryNoteTemplateByCustomer.get("trader");
-        }
-
-        if (templateCode < 1) {
-            this.showInfoMessage(DeliveryNoteValidationState.INVALID);
-            return;
-        }
-
-        Map<DeliveryNoteAttribute, Object> newDeliveryNoteAttributes = new HashMap<>();
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.FARMER, farmerInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TRADER, traderInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PRODUCT, productInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.TEMPLATE, this.getTemplate(templateCode));
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.PALLET, palletInput.getSelectedItem());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.NUM_PALLETS, numPalletsInput.getValue());
-        newDeliveryNoteAttributes.put(DeliveryNoteAttribute.WEIGHINGS, weighingsPanel.getWeighings());
-
-        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.createDeliveryNote(newDeliveryNoteAttributes);
-
+        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.buildDeliveryNote(true);
         DeliveryNoteValidationState state = deliveryNotePair.getSecond();
-        if (state != DeliveryNoteValidationState.VALID) {
-            this.showInfoMessage(state);
-            return;
-        }
-
-        DeliveryNote deliveryNote = deliveryNotePair.getFirst();
-        if (deliveryNote != null) {
-            try {
-                DeliveryNoteGenerator.generate(deliveryNote);
-            } catch (IOException | InterruptedException ex) {
-                this.showInfoMessage(DeliveryNoteValidationState.INVALID);
-                return;
-            }
-        }
-
         this.showInfoMessage(state);
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void numPalletsInputStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_numPalletsInputStateChanged
         this.weighingsPanel.setTotalWeighings((int) this.numPalletsInput.getValue());
     }//GEN-LAST:event_numPalletsInputStateChanged
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        Pair<DeliveryNote, DeliveryNoteValidationState> deliveryNotePair = this.buildDeliveryNote(false);
+        DeliveryNoteValidationState state = deliveryNotePair.getSecond();
+
+        if (state != DeliveryNoteValidationState.VALID) {
+            this.showInfoMessage(state);
+        }
+
+        DeliveryNote deliveryNote = deliveryNotePair.getFirst();
+        File file = deliveryNote.getFile();
+        boolean hasBeenPrinted = file != null && Printer.printDeliveryNote(file);
+
+        String message;
+        if (hasBeenPrinted) {
+            message = Localization.getLocalization(LocalizationKey.PRINTED_FILE_MESSAGE);
+        } else {
+            message = Localization.getLocalization(LocalizationKey.PRINT_ERROR_MESSAGE);
+        }
+
+        JOptionPane.showMessageDialog(this, message);
+    }//GEN-LAST:event_printButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookedPanel;
@@ -437,6 +488,7 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
     private javax.swing.JLabel numPalletsLabel;
     private javax.swing.JComboBox<String> palletInput;
     private javax.swing.JLabel palletLabel;
+    private javax.swing.JButton printButton;
     private javax.swing.JComboBox<String> productInput;
     private javax.swing.JLabel productLabel;
     private javax.swing.JButton registerButton;

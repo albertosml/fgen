@@ -27,9 +27,8 @@ public class SaveDeliveryNote {
      * Execute the delivery note save.
      *
      * @param deliveryNote The delivery note entity.
-     * @param pdfFile A PDF file containing the delivery note data.
      */
-    public void execute(DeliveryNote deliveryNote, File pdfFile) {
-        deliveryNoteRepository.save(deliveryNote, pdfFile);
+    public void execute(DeliveryNote deliveryNote) {
+        deliveryNoteRepository.save(deliveryNote);
     }
 }

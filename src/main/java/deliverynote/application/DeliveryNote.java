@@ -3,6 +3,7 @@ package deliverynote.application;
 import container.application.Box;
 import container.application.Pallet;
 import customer.application.Customer;
+import java.io.File;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +63,11 @@ public class DeliveryNote {
     private ArrayList<Weighing> weighings;
 
     /**
+     * The file.
+     */
+    private File file;
+
+    /**
      * Constructor.
      *
      * @param code The delivery note code.
@@ -85,6 +91,7 @@ public class DeliveryNote {
         this.pallet = pallet;
         this.numPallets = numPallets;
         this.weighings = weighings;
+        this.file = null;
     }
 
     /**
@@ -225,6 +232,24 @@ public class DeliveryNote {
      */
     public ArrayList<Weighing> getWeighings() {
         return this.weighings;
+    }
+
+    /**
+     * Retrieve the delivery note file.
+     *
+     * @return The delivery note file.
+     */
+    public File getFile() {
+        return this.file;
+    }
+
+    /**
+     * Update the delivery note file.
+     *
+     * @param file A PDF containing the delivery note file.
+     */
+    public void setFile(File file) {
+        this.file = file;
     }
 
     /**
