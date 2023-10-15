@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.3.0] - 2023-10-15
+
+### Added
+
+- Allow previewing a delivery note before generating it.
+
 ## [1.2.0] - 2023-10-15
 
 ### Added
