@@ -26,9 +26,8 @@ public interface DeliveryNoteRepository extends Repository {
      * Save the delivery note data.
      *
      * @param deliveryNote The delivery note entity.
-     * @param pdfFile A PDF file containing the delivery note data.
      */
-    public void save(DeliveryNote deliveryNote, File pdfFile);
+    public void save(DeliveryNote deliveryNote);
 
     /**
      * List all the delivery notes.

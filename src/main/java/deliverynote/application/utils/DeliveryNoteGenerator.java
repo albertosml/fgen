@@ -164,28 +164,6 @@ public class DeliveryNoteGenerator {
     }
 
     /**
-     * Save delivery note on the database.
-     *
-     * @param workbook The excel file to save.
-     * @param deliveryNote The delivery note data.
-     * @throws java.io.IOException if the file is not found.
-     * @throws java.lang.InterruptedException if the conversion is interrupted.
-     */
-    private static void save(ExcelFile workbook, DeliveryNote deliveryNote) throws IOException, InterruptedException {
-        File pdfFile = DeliveryNoteGenerator.convertToPdf(workbook, deliveryNote.getDate());
-
-        // Call to use case.
-        try {
-            MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
-            SaveDeliveryNote saveDeliveryNote = new SaveDeliveryNote(deliveryNoteRepository);
-            saveDeliveryNote.execute(deliveryNote, pdfFile);
-        } catch (NotDefinedDatabaseContextException ex) {
-            String className = DeliveryNoteGenerator.class.getName();
-            Logger.getLogger(className).log(Level.INFO, "Delivery note not saved because the database has not been found", ex);
-        }
-    }
-
-    /**
      * Write delivery note items into the spreadsheet cells.
      *
      * @param position Start position.
@@ -255,35 +233,51 @@ public class DeliveryNoteGenerator {
      * Generate the delivery note.
      *
      * @param deliveryNote The delivery note data.
+     * @param save Whether we should save the invoice or not.
      * @throws java.io.IOException if the file is not found.
      * @throws java.lang.InterruptedException if the conversion is interrupted.
      */
-    public static void generate(DeliveryNote deliveryNote) throws IOException, InterruptedException {
-        Template template = deliveryNote.getTemplate();
+    public static void generate(DeliveryNote deliveryNote, boolean save) throws IOException, InterruptedException {
+        if (deliveryNote.getFile() == null) {
+            Template template = deliveryNote.getTemplate();
 
-        ExcelFile workbook = DeliveryNoteGenerator.loadTemplate(template);
-        ExcelWorksheet worksheet = workbook.getWorksheet(0);
+            ExcelFile workbook = DeliveryNoteGenerator.loadTemplate(template);
+            ExcelWorksheet worksheet = workbook.getWorksheet(0);
 
-        Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
-        Map<String, String> templateFields = template.getFields();
-        for (Map.Entry<String, String> field : templateFields.entrySet()) {
-            String position = field.getKey();
-            String expression = field.getValue();
+            Pattern variablesPattern = Pattern.compile("\\$\\{([^}]+)\\}");
+            Map<String, EntityAttribute> variables = DeliveryNoteGenerator.getVariables();
+            Map<String, String> templateFields = template.getFields();
+            for (Map.Entry<String, String> field : templateFields.entrySet()) {
+                String position = field.getKey();
+                String expression = field.getValue();
 
-            // Specific processing for the delivery note items.
-            String expressionVariableName = expression.substring(2, expression.length() - 1);
-            EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
-            boolean shouldWriteDeliveryNoteItems = expressionEntityAttribute == EntityAttribute.DELIVERY_NOTE_ITEMS;
-            if (shouldWriteDeliveryNoteItems) {
-                DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), deliveryNote.getPallet(), worksheet);
-                continue;
+                // Specific processing for the delivery note items.
+                String expressionVariableName = expression.substring(2, expression.length() - 1);
+                EntityAttribute expressionEntityAttribute = variables.get(expressionVariableName);
+                boolean shouldWriteDeliveryNoteItems = expressionEntityAttribute == EntityAttribute.DELIVERY_NOTE_ITEMS;
+                if (shouldWriteDeliveryNoteItems) {
+                    DeliveryNoteGenerator.writeDeliveryNoteItems(position, deliveryNote.getWeighings(), deliveryNote.getPallet(), worksheet);
+                    continue;
+                }
+
+                DeliveryNoteGenerator.writeVariable(position, expression, variablesPattern, deliveryNote, variables, worksheet);
             }
 
-            DeliveryNoteGenerator.writeVariable(position, expression, variablesPattern, deliveryNote, variables, worksheet);
+            File pdfFile = DeliveryNoteGenerator.convertToPdf(workbook, deliveryNote.getDate());
+            deliveryNote.setFile(pdfFile);
         }
 
-        DeliveryNoteGenerator.save(workbook, deliveryNote);
+        if (save) {
+            // Call to use case.
+            try {
+                MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+                SaveDeliveryNote saveDeliveryNote = new SaveDeliveryNote(deliveryNoteRepository);
+                saveDeliveryNote.execute(deliveryNote);
+            } catch (NotDefinedDatabaseContextException ex) {
+                String className = DeliveryNoteGenerator.class.getName();
+                Logger.getLogger(className).log(Level.INFO, "Delivery note not saved because the database has not been found", ex);
+            }
+        }
     }
 
 }
