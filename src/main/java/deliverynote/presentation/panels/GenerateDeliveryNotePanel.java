@@ -66,6 +66,8 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         this.weighingsPanel = new WeighingsPanel();
         this.bookedPanel.setLayout(new GridLayout());
         this.bookedPanel.add(weighingsPanel);
+
+        this.weighingsPanel.setPallet((Pallet) palletInput.getSelectedItem());
     }
 
     /**
@@ -375,6 +377,11 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
         });
 
         palletInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        palletInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                palletInputActionPerformed(evt);
+            }
+        });
 
         printButton.setText("${PRINT}");
         printButton.addActionListener(new java.awt.event.ActionListener() {
@@ -525,6 +532,11 @@ public class GenerateDeliveryNotePanel extends javax.swing.JPanel {
 
         JOptionPane.showMessageDialog(this, message);
     }//GEN-LAST:event_downloadButtonActionPerformed
+
+    private void palletInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_palletInputActionPerformed
+        this.weighingsPanel.setPallet((Pallet) this.palletInput.getSelectedItem());
+        this.weighingsPanel.updateAll();
+    }//GEN-LAST:event_palletInputActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookedPanel;

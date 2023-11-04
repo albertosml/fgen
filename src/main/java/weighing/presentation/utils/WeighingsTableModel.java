@@ -1,5 +1,6 @@
 package weighing.presentation.utils;
 
+import container.application.Box;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +23,27 @@ public class WeighingsTableModel extends DefaultTableModel {
     }
 
     /**
+     * Calculate the net weight given the row data and the pallet weight. Then,
+     * update that net weight for the given row.
+     *
+     * @param row Table row.
+     * @param palletWeight The weight of the pallet.
+     */
+    public void updateNetWeight(int row, double palletWeight) {
+        double boxWeight = 0;
+        Box box = (Box) super.getValueAt(row, 0);
+        if (box != null) {
+            boxWeight = box.getWeight();
+        }
+
+        int qty = (int) super.getValueAt(row, 1);
+        int grossWeight = (int) super.getValueAt(row, 2);
+
+        int netWeight = (int) (grossWeight - (qty * boxWeight) - palletWeight);
+        super.setValueAt(netWeight, row, 3);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -31,7 +53,7 @@ public class WeighingsTableModel extends DefaultTableModel {
             return Object.class;
         }
 
-        // Quantity and gross weight columns.
+        // Quantity, gross weight and net weight columns.
         return Integer.class;
     }
 
@@ -40,7 +62,8 @@ public class WeighingsTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int column) {
-        return true;
+        // All the columns will be editable except the net weight.
+        return column < 3;
     }
 
     /**
@@ -66,7 +89,7 @@ public class WeighingsTableModel extends DefaultTableModel {
                         return;
                     }
                     break;
-                default:
+                case 2:
                     if ((int) newValue == 0) {
                         // Invalid gross weight, show message.
                         String invalidWeightMessage = Localization.getLocalization(LocalizationKey.INVALID_WEIGHT_MESSAGE);
