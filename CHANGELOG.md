@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.4.0] - 2023-11-04
+
+### Added
+
+- Show the calculated net weight per weighing when generating a delivery note.
+
 ## [1.3.0] - 2023-10-15
 
 ### Added

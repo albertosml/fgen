@@ -1,6 +1,7 @@
 package weighing.presentation.panels;
 
 import container.application.Box;
+import container.application.Pallet;
 import container.application.usecases.ListBoxes;
 import container.persistence.mongo.MongoContainerRepository;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import shared.persistence.exceptions.NotDefinedDatabaseContextException;
@@ -24,6 +27,11 @@ import weighing.presentation.utils.WeighingsTableModel;
  * Panel which shows all the delivery note items.
  */
 public class WeighingsPanel extends javax.swing.JPanel {
+
+    /**
+     * Pallet.
+     */
+    private Pallet pallet;
 
     /**
      * Constructor.
@@ -52,6 +60,7 @@ public class WeighingsPanel extends javax.swing.JPanel {
         columnNames.add(Localization.getLocalization(LocalizationKey.BOX));
         columnNames.add(Localization.getLocalization(LocalizationKey.BOXES_QTY));
         columnNames.add(Localization.getLocalization(LocalizationKey.GROSS_WEIGHT));
+        columnNames.add(Localization.getLocalization(LocalizationKey.NET_WEIGHT));
 
         return columnNames;
     }
@@ -80,12 +89,38 @@ public class WeighingsPanel extends javax.swing.JPanel {
     private void initializeTable() {
         Vector<String> columnNames = this.generateColumnNames();
 
-        table.setModel(new WeighingsTableModel(new Vector<>(), columnNames));
+        WeighingsTableModel tableModel = new WeighingsTableModel(new Vector<>(), columnNames);
+
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent event) {
+                int eventType = event.getType();
+                int column = event.getColumn();
+                if (eventType == TableModelEvent.UPDATE && column < 3) {
+                    int row = event.getFirstRow();
+
+                    if (pallet != null) {
+                        tableModel.updateNetWeight(row, pallet.getWeight());
+                    }
+                }
+            }
+        });
+
+        table.setModel(tableModel);
 
         // Set a combobox cell editor for the box column.
         TableColumn boxColumn = table.getColumn(columnNames.get(0));
         JComboBox comboBox = new JComboBox(new Vector<Box>(this.getBoxes()));
         boxColumn.setCellEditor(new DefaultCellEditor(comboBox));
+    }
+
+    /**
+     * Update the pallet value.
+     *
+     * @param pallet The pallet.
+     */
+    public void setPallet(Pallet pallet) {
+        this.pallet = pallet;
     }
 
     /**
@@ -100,13 +135,24 @@ public class WeighingsPanel extends javax.swing.JPanel {
         if (diff > 0) {
             // If we require more rows, we add them.
             for (int i = 0; i < diff; i++) {
-                tableModel.addRow(new Object[]{null, 0, 0});
+                tableModel.addRow(new Object[]{null, 0, 0, 0});
             }
         } else if (diff < 0) {
             // If we require less rows, we remove the latest.
             for (int i = 0; i < Math.abs(diff); i++) {
                 tableModel.removeRow(table.getRowCount() - 1);
             }
+        }
+    }
+
+    /**
+     * Update all net weight from all weighings.
+     */
+    public void updateAll() {
+        WeighingsTableModel tableModel = (WeighingsTableModel) table.getModel();
+
+        for (int i = 0; i < table.getRowCount(); i++) {
+            tableModel.updateNetWeight(i, this.pallet.getWeight());
         }
     }
 
@@ -155,14 +201,14 @@ public class WeighingsPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "${BOX}", "${BOXES_QTY}", "${GROSS_WEIGHT}"
+                "${BOX}", "${BOXES_QTY}", "${GROSS_WEIGHT}", "${NET_WEIGHT}}"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Float.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Float.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -179,6 +225,7 @@ public class WeighingsPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(1).setResizable(false);
             table.getColumnModel().getColumn(1).setPreferredWidth(100);
             table.getColumnModel().getColumn(2).setResizable(false);
+            table.getColumnModel().getColumn(3).setResizable(false);
         }
 
         weighings.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
