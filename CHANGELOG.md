@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.5.0] - 2023-11-12
+
+### Added
+
+- Redesign filtering by farmer, trader and product on delivery notes and invoices.
+
 ## [1.4.0] - 2023-11-04
 
 ### Added
