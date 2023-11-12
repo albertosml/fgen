@@ -55,6 +55,9 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         initializeFormLabels();
         initializeInputs();
         initializeTable();
+
+        this.traderInput.setEnabled(false);
+        this.productInput.setEnabled(false);
     }
 
     /**
@@ -257,6 +260,24 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
     }
 
+    /**
+     * Enable or disable the list delivery notes and invoice buttons depending
+     * on its state.
+     *
+     * List delivery notes button will be enabled if we have selected a farmer,
+     * a trader or a product to list.
+     *
+     * Invoices button will be only enabled if we have listed delivery notes
+     * from a farmer or a trader.
+     */
+    private void updateActionButtons() {
+        boolean canListDeliveryNotes = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected() || isSelectedProduct.isSelected();
+        this.listDeliveryNotesButton.setEnabled(canListDeliveryNotes);
+
+        boolean canGenerateInvoices = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected();
+        this.invoiceButton.setEnabled(canGenerateInvoices);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -352,7 +373,6 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             }
         });
 
-        isSelectedProduct.setSelected(true);
         isSelectedProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 isSelectedProductActionPerformed(evt);
@@ -361,7 +381,6 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
         traderLabel.setText("${TRADER}:");
 
-        isSelectedTrader.setSelected(true);
         isSelectedTrader.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 isSelectedTraderActionPerformed(evt);
@@ -505,14 +524,44 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
     private void isSelectedFarmerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedFarmerActionPerformed
         farmerInput.setEnabled(isSelectedFarmer.isSelected());
+
+        if (this.isSelectedFarmer.isSelected()) {
+            this.isSelectedTrader.setSelected(false);
+            this.traderInput.setEnabled(false);
+
+            this.isSelectedProduct.setSelected(false);
+            this.productInput.setEnabled(false);
+        }
+
+        this.updateActionButtons();
     }//GEN-LAST:event_isSelectedFarmerActionPerformed
 
     private void isSelectedProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedProductActionPerformed
         productInput.setEnabled(isSelectedProduct.isSelected());
+
+        if (this.isSelectedProduct.isSelected()) {
+            this.isSelectedFarmer.setSelected(false);
+            this.farmerInput.setEnabled(false);
+
+            this.isSelectedTrader.setSelected(false);
+            this.traderInput.setEnabled(false);
+        }
+
+        this.updateActionButtons();
     }//GEN-LAST:event_isSelectedProductActionPerformed
 
     private void isSelectedTraderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedTraderActionPerformed
         traderInput.setEnabled(isSelectedTrader.isSelected());
+
+        if (this.isSelectedTrader.isSelected()) {
+            this.isSelectedFarmer.setSelected(false);
+            this.farmerInput.setEnabled(false);
+
+            this.isSelectedProduct.setSelected(false);
+            this.productInput.setEnabled(false);
+        }
+
+        this.updateActionButtons();
     }//GEN-LAST:event_isSelectedTraderActionPerformed
 
     private void invoiceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceButtonActionPerformed

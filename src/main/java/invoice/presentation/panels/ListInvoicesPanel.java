@@ -42,6 +42,8 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         initializeFormLabels();
         initializeInputs();
         initializeTable();
+
+        this.traderInput.setEnabled(false);
     }
 
     /**
@@ -242,6 +244,17 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         this.invoicesTotalWeightValue.setText(formattedTotalWeight);
     }
 
+    /**
+     * Enable or disable the list invoices button depending on its state.
+     *
+     * List invoices button will be enabled if we have selected a farmer or a
+     * trader to list.
+     */
+    private void updateListInvoicesButtonState() {
+        boolean canListInvoices = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected();
+        this.listDeliveryNotesButton.setEnabled(canListInvoices);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -327,7 +340,6 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
         traderLabel.setText("${TRADER}:");
 
-        isSelectedTrader.setSelected(true);
         isSelectedTrader.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 isSelectedTraderActionPerformed(evt);
@@ -468,10 +480,24 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
 
     private void isSelectedFarmerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedFarmerActionPerformed
         farmerInput.setEnabled(isSelectedFarmer.isSelected());
+
+        if (this.isSelectedFarmer.isSelected()) {
+            this.isSelectedTrader.setSelected(false);
+            this.traderInput.setEnabled(false);
+        }
+
+        this.updateListInvoicesButtonState();
     }//GEN-LAST:event_isSelectedFarmerActionPerformed
 
     private void isSelectedTraderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedTraderActionPerformed
         traderInput.setEnabled(isSelectedTrader.isSelected());
+
+        if (this.isSelectedTrader.isSelected()) {
+            this.isSelectedFarmer.setSelected(false);
+            this.farmerInput.setEnabled(false);
+        }
+
+        this.updateListInvoicesButtonState();
     }//GEN-LAST:event_isSelectedTraderActionPerformed
 
 
