@@ -2,6 +2,7 @@ package deliverynote.presentation.utils;
 
 import deliverynote.application.DeliveryNoteData;
 import deliverynote.application.usecases.RemoveDeliveryNote;
+import deliverynote.application.usecases.UpdateDeliveryNote;
 import deliverynote.persistence.mongo.MongoDeliveryNoteRepository;
 import java.io.File;
 import java.text.DateFormat;
@@ -185,9 +186,12 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             // Column 6: Delivery note net weight.
             int netWeight = deliveryNoteData.getNetWeight();
 
+            // Column 7: Price.
+            float price = deliveryNoteData.getPrice();
+
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.
-            this.addRow(new Object[]{formattedDate, farmerCustomerCode, traderCustomerCode, productCode, numBoxes, netWeight, 0, null});
+            this.addRow(new Object[]{formattedDate, farmerCustomerCode, traderCustomerCode, productCode, numBoxes, netWeight, price, null});
         }
     }
 
@@ -230,6 +234,15 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
 
             DeliveryNoteData deliveryNoteData = this.deliveryNotesData.get(row);
             deliveryNoteData.setPrice(newPrice);
+
+            try {
+                MongoDeliveryNoteRepository deliveryNoteRepository = new MongoDeliveryNoteRepository();
+                UpdateDeliveryNote updateDeliveryNote = new UpdateDeliveryNote(deliveryNoteRepository);
+                updateDeliveryNote.execute(deliveryNoteData);
+            } catch (NotDefinedDatabaseContextException ex) {
+                String className = ListDeliveryNotesTableModel.class.getName();
+                Logger.getLogger(className).log(Level.INFO, "Delivery note not updated because the database has not been found", ex);
+            }
         }
     }
 

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.6.0] - 2023-11-19
+
+### Added
+
+- Sync price with delivery note.
+
 ## [1.5.1] - 2023-11-19
 
 ### Fixed
