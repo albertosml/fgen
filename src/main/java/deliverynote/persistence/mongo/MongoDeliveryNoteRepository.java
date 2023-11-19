@@ -80,6 +80,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("netWeight", deliveryNote.calculateNetWeight());
         document.append("isClosed", false);
         document.append("isDeleted", false);
+        document.append("price", 0.0);
 
         return document;
     }
@@ -110,6 +111,7 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         document.append("netWeight", deliveryNoteData.getNetWeight());
         document.append("isClosed", deliveryNoteData.isClosed());
         document.append("isDeleted", deliveryNoteData.isDeleted());
+        document.append("price", deliveryNoteData.getPrice());
 
         return document;
     }
@@ -136,6 +138,9 @@ public class MongoDeliveryNoteRepository extends MongoRepository implements Deli
         attributes.put(DeliveryNoteDataAttribute.NET_WEIGHT, document.get("netWeight"));
         attributes.put(DeliveryNoteDataAttribute.IS_CLOSED, document.get("isClosed"));
         attributes.put(DeliveryNoteDataAttribute.IS_DELETED, document.get("isDeleted"));
+
+        double price = (double) document.get("price");
+        attributes.put(DeliveryNoteDataAttribute.PRICE, (float) price);
 
         return DeliveryNoteData.from(attributes);
     }

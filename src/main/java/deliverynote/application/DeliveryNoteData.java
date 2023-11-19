@@ -93,10 +93,11 @@ public class DeliveryNoteData {
      * @param numPallets The delivery note data total pallets.
      * @param numBoxes The delivery note data total boxes.
      * @param netWeight The delivery note data net weight.
+     * @param price The delivery note data price.
      * @param isClosed Whether the delivery note is closed or not.
      * @param isDeleted Whether the delivery note is deleted or not.
      */
-    private DeliveryNoteData(int code, Date date, Customer farmer, Customer trader, Product product, File file, int numPallets, int numBoxes, int netWeight, boolean isClosed, boolean isDeleted) {
+    private DeliveryNoteData(int code, Date date, Customer farmer, Customer trader, Product product, File file, int numPallets, int numBoxes, int netWeight, float price, boolean isClosed, boolean isDeleted) {
         this.code = code;
         this.date = date == null ? Date.from(Instant.now()) : date;
         this.farmer = farmer;
@@ -106,9 +107,9 @@ public class DeliveryNoteData {
         this.numPallets = numPallets;
         this.numBoxes = numBoxes;
         this.netWeight = netWeight;
+        this.price = price;
         this.isClosed = isClosed;
         this.isDeleted = isDeleted;
-        this.price = 0;
     }
 
     /**
@@ -292,10 +293,12 @@ public class DeliveryNoteData {
         int numBoxes = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NUM_BOXES, 0);
         int netWeight = (int) attributes.getOrDefault(DeliveryNoteDataAttribute.NET_WEIGHT, 0);
 
+        float price = (float) attributes.getOrDefault(DeliveryNoteDataAttribute.PRICE, 0.0);
+
         boolean isClosed = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_CLOSED, false);
         boolean isDeleted = (boolean) attributes.getOrDefault(DeliveryNoteDataAttribute.IS_DELETED, false);
 
-        return new DeliveryNoteData(code, date, farmer, trader, product, file, numPallets, numBoxes, netWeight, isClosed, isDeleted);
+        return new DeliveryNoteData(code, date, farmer, trader, product, file, numPallets, numBoxes, netWeight, price, isClosed, isDeleted);
     }
 
 }
