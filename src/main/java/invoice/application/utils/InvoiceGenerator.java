@@ -324,7 +324,7 @@ public class InvoiceGenerator {
             valueToWriteByPosition.put(2, deliveryNoteData.getNumBoxes());
             valueToWriteByPosition.put(4, deliveryNoteData.getNetWeight());
             valueToWriteByPosition.put(6, deliveryNoteData.getProduct().getName());
-            valueToWriteByPosition.put(10, price);
+            valueToWriteByPosition.put(10, Math.round(price * 100.0) / 100.0);
             valueToWriteByPosition.put(11, String.format("%s €", total));
 
             for (Map.Entry<Integer, Object> entry : valueToWriteByPosition.entrySet()) {

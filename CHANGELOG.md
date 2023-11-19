@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.5.1] - 2023-11-19
+
+### Fixed
+
+- Price is not rounded to 2 decimal places on invoices.
+
 ## [1.5.0] - 2023-11-12
 
 ### Added
