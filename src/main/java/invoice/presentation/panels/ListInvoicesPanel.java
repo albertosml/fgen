@@ -244,17 +244,6 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
         this.invoicesTotalWeightValue.setText(formattedTotalWeight);
     }
 
-    /**
-     * Enable or disable the list invoices button depending on its state.
-     *
-     * List invoices button will be enabled if we have selected a farmer or a
-     * trader to list.
-     */
-    private void updateListInvoicesButtonState() {
-        boolean canListInvoices = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected();
-        this.listDeliveryNotesButton.setEnabled(canListInvoices);
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -485,8 +474,6 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
             this.isSelectedTrader.setSelected(false);
             this.traderInput.setEnabled(false);
         }
-
-        this.updateListInvoicesButtonState();
     }//GEN-LAST:event_isSelectedFarmerActionPerformed
 
     private void isSelectedTraderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedTraderActionPerformed
@@ -496,8 +483,6 @@ public class ListInvoicesPanel extends javax.swing.JPanel {
             this.isSelectedFarmer.setSelected(false);
             this.farmerInput.setEnabled(false);
         }
-
-        this.updateListInvoicesButtonState();
     }//GEN-LAST:event_isSelectedTraderActionPerformed
 
 
