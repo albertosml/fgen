@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.7.0] - 2023-11-26
+
+### Added
+
+- Allow filtering by anything when listing invoices and delivery notes.
+
 ## [1.6.0] - 2023-11-19
 
 ### Added

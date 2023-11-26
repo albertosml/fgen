@@ -261,19 +261,12 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Enable or disable the list delivery notes and invoice buttons depending
-     * on its state.
+     * Enable or disable the invoice buttons depending on its state.
      *
-     * List delivery notes button will be enabled if we have selected a farmer,
-     * a trader or a product to list.
-     *
-     * Invoices button will be only enabled if we have listed delivery notes
+     * That button will be only enabled if we have listed delivery notes
      * from a farmer or a trader.
      */
     private void updateActionButtons() {
-        boolean canListDeliveryNotes = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected() || isSelectedProduct.isSelected();
-        this.listDeliveryNotesButton.setEnabled(canListDeliveryNotes);
-
         boolean canGenerateInvoices = isSelectedFarmer.isSelected() || isSelectedTrader.isSelected();
         this.invoiceButton.setEnabled(canGenerateInvoices);
     }
@@ -525,41 +518,17 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private void isSelectedFarmerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedFarmerActionPerformed
         farmerInput.setEnabled(isSelectedFarmer.isSelected());
 
-        if (this.isSelectedFarmer.isSelected()) {
-            this.isSelectedTrader.setSelected(false);
-            this.traderInput.setEnabled(false);
-
-            this.isSelectedProduct.setSelected(false);
-            this.productInput.setEnabled(false);
-        }
-
         this.updateActionButtons();
     }//GEN-LAST:event_isSelectedFarmerActionPerformed
 
     private void isSelectedProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedProductActionPerformed
         productInput.setEnabled(isSelectedProduct.isSelected());
 
-        if (this.isSelectedProduct.isSelected()) {
-            this.isSelectedFarmer.setSelected(false);
-            this.farmerInput.setEnabled(false);
-
-            this.isSelectedTrader.setSelected(false);
-            this.traderInput.setEnabled(false);
-        }
-
         this.updateActionButtons();
     }//GEN-LAST:event_isSelectedProductActionPerformed
 
     private void isSelectedTraderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isSelectedTraderActionPerformed
         traderInput.setEnabled(isSelectedTrader.isSelected());
-
-        if (this.isSelectedTrader.isSelected()) {
-            this.isSelectedFarmer.setSelected(false);
-            this.farmerInput.setEnabled(false);
-
-            this.isSelectedProduct.setSelected(false);
-            this.productInput.setEnabled(false);
-        }
 
         this.updateActionButtons();
     }//GEN-LAST:event_isSelectedTraderActionPerformed
