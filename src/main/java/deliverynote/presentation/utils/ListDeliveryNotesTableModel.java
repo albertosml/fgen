@@ -139,8 +139,8 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
 
     @Override
     public Class getColumnClass(int columnIndex) {
-        // Price column.
-        if (columnIndex == 6) {
+        // Price and import columns.
+        if (columnIndex == 6 || columnIndex == 7) {
             return Float.class;
         }
 
@@ -150,7 +150,7 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         // Only edit the chosen action column and the price.
-        return column >= 6;
+        return column == 6 || column == 8;
     }
 
     /**
@@ -189,9 +189,12 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
             // Column 7: Price.
             float price = deliveryNoteData.getPrice();
 
+            // Column 8: Import.
+            float imp = price * netWeight;
+
             // The last item indicates that we have to choose the action to execute.
             // The price (next to last column) is not initialized.
-            this.addRow(new Object[]{formattedDate, farmerCustomerCode, traderCustomerCode, productCode, numBoxes, netWeight, price, null});
+            this.addRow(new Object[]{formattedDate, farmerCustomerCode, traderCustomerCode, productCode, numBoxes, netWeight, price, imp, null});
         }
     }
 
@@ -211,11 +214,11 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
     public void setValueAt(Object newValue, int row, int column) {
         super.setValueAt(newValue, row, column);
 
-        if (column == 7) {
+        if (column == 8) {
             int deliveryNoteCode = deliveryNotesData.get(row).getCode();
             DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
             if (deliveryNoteData != null) {
-                String chosenAction = (String) super.getValueAt(row, 7);
+                String chosenAction = (String) super.getValueAt(row, 8);
                 if (chosenAction == null) {
                     return;
                 }
@@ -231,6 +234,11 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
         } else if (column == 6) {
             // Price column.
             float newPrice = (float) super.getValueAt(row, column);
+
+            // Update import.
+            int netWeight = (int) super.getValueAt(row, 5);
+            float imp = newPrice * netWeight;
+            super.setValueAt(imp, row, 7);
 
             DeliveryNoteData deliveryNoteData = this.deliveryNotesData.get(row);
             deliveryNoteData.setPrice(newPrice);
