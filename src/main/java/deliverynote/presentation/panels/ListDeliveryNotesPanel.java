@@ -205,6 +205,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         columnNames.add(Localization.getLocalization(LocalizationKey.BOXES_QTY));
         columnNames.add(Localization.getLocalization(LocalizationKey.NET_WEIGHT));
         columnNames.add(Localization.getLocalization(LocalizationKey.PRICE));
+        columnNames.add(Localization.getLocalization(LocalizationKey.IMPORT));
         columnNames.add("");
 
         return columnNames;
@@ -236,7 +237,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         String[] actions = new String[]{downloadAction, printAction, removeAction};
 
         // Set a combobox cell editor for the actions column.
-        TableColumn actionsColumn = table.getColumn(columnNames.get(7));
+        TableColumn actionsColumn = table.getColumn(columnNames.get(8));
         JComboBox comboBox = new JComboBox(actions);
         actionsColumn.setCellEditor(new DefaultCellEditor(comboBox));
     }
@@ -302,14 +303,14 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "${DATE}", "${CUSTOMER}", "${PRODUCT}", "${BOXES_QTY}", "${NET_WEIGHT}", "${PRICE}", ""
+                "${DATE}", "${CUSTOMER}", "${PRODUCT}", "${BOXES_QTY}", "${NET_WEIGHT}", "${PRICE}", "${IMPORT}", ""
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -330,6 +331,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             table.getColumnModel().getColumn(4).setResizable(false);
             table.getColumnModel().getColumn(5).setResizable(false);
             table.getColumnModel().getColumn(6).setResizable(false);
+            table.getColumnModel().getColumn(7).setResizable(false);
         }
 
         farmerInput.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));

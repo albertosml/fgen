@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.8.0] - 2023-12-12
+
+### Added
+
+- Show the import when listing delivery notes.
+
 ## [1.7.0] - 2023-11-26
 
 ### Added

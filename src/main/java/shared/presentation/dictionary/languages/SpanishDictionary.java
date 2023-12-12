@@ -183,6 +183,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.INVOICE_TOTAL_WEIGHT, "Peso total de la factura");
         super.setTranslation(LocalizationKey.TOTAL_WEIGHT, "Peso total (en kilos)");
         super.setTranslation(LocalizationKey.TOTAL_AMOUNT, "Cantidad total (en euros)");
+        super.setTranslation(LocalizationKey.IMPORT, "Importe");
     }
 
 }
