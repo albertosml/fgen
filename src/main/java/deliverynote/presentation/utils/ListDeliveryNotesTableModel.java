@@ -212,13 +212,11 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
      */
     @Override
     public void setValueAt(Object newValue, int row, int column) {
-        super.setValueAt(newValue, row, column);
-
         if (column == 8) {
             int deliveryNoteCode = deliveryNotesData.get(row).getCode();
             DeliveryNoteData deliveryNoteData = this.findDeliveryNoteData(deliveryNoteCode);
             if (deliveryNoteData != null) {
-                String chosenAction = (String) super.getValueAt(row, 8);
+                String chosenAction = (String) newValue;
                 if (chosenAction == null) {
                     return;
                 }
@@ -229,11 +227,12 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
                     this.printDeliveryNote(deliveryNoteData);
                 } else {
                     this.removeDeliveryNote(deliveryNoteData, row);
+                    return; // Avoid setting the value for a removed row.
                 }
             }
         } else if (column == 6) {
             // Price column.
-            float newPrice = (float) super.getValueAt(row, column);
+            float newPrice = (float) newValue;
 
             // Update import.
             int netWeight = (int) super.getValueAt(row, 5);
@@ -252,6 +251,8 @@ public class ListDeliveryNotesTableModel extends DefaultTableModel {
                 Logger.getLogger(className).log(Level.INFO, "Delivery note not updated because the database has not been found", ex);
             }
         }
+
+        super.setValueAt(newValue, row, column);
     }
 
 }
