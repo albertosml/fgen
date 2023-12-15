@@ -60,7 +60,7 @@
                           <Component id="invoiceButton" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="totalNumBoxesLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
@@ -70,6 +70,11 @@
                               <Component id="totalNetWeightLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="totalNetWeightValue" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="totalImportLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="totalImportValue" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
@@ -118,6 +123,8 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="productLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="productInput" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="totalImportLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="totalImportValue" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -344,6 +351,16 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="invoiceButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalImportLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="${TOTAL_IMPORT} :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="totalImportValue">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

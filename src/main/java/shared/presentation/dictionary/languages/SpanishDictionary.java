@@ -184,6 +184,7 @@ public class SpanishDictionary extends Dictionary {
         super.setTranslation(LocalizationKey.TOTAL_WEIGHT, "Peso total (en kilos)");
         super.setTranslation(LocalizationKey.TOTAL_AMOUNT, "Cantidad total (en euros)");
         super.setTranslation(LocalizationKey.IMPORT, "Importe");
+        super.setTranslation(LocalizationKey.TOTAL_IMPORT, "Importe total (en euros)");
     }
 
 }

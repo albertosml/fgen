@@ -689,5 +689,9 @@ public enum LocalizationKey {
     /**
      * Import.
      */
-    IMPORT;
+    IMPORT,
+    /**
+     * Total import.
+     */
+    TOTAL_IMPORT;
 }

@@ -94,6 +94,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         this.setLabelText(endDateLabel, LocalizationKey.END_DATE);
         this.setLabelText(totalNetWeightLabel, LocalizationKey.TOTAL_NET_WEIGHT);
         this.setLabelText(totalNumBoxesLabel, LocalizationKey.TOTAL_NUM_BOXES);
+        this.setLabelText(totalImportLabel, LocalizationKey.TOTAL_IMPORT);
         this.setButtonText(listDeliveryNotesButton, LocalizationKey.LIST);
         this.setButtonText(invoiceButton, LocalizationKey.BILL);
     }
@@ -243,22 +244,28 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Based on the given data, calculate the total net weight and total boxes
-     * quantity. Then, set the value on its corresponding panel field.
+     * Based on the given data, calculate the total net weight, the total boxes
+     * quantity and the total import. Then, set the value on its corresponding
+     * panel field.
      *
      * @param deliveryNotesData The delivery notes data.
      */
     private void setTotalValues(ArrayList<DeliveryNoteData> deliveryNotesData) {
         int totalNumBoxes = 0;
         int totalNetWeight = 0;
+        float totalImport = 0;
 
         for (DeliveryNoteData deliveryNoteData : deliveryNotesData) {
             totalNumBoxes += deliveryNoteData.getNumBoxes();
             totalNetWeight += deliveryNoteData.getNetWeight();
+
+            float cost = deliveryNoteData.getNetWeight() * deliveryNoteData.getPrice();
+            totalImport += cost;
         }
 
         this.totalNetWeightValue.setText(Integer.toString(totalNetWeight));
         this.totalNumBoxesValue.setText(Integer.toString(totalNumBoxes));
+        this.totalImportValue.setText(Float.toString(totalImport));
     }
 
     /**
@@ -297,6 +304,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
         isSelectedTrader = new javax.swing.JCheckBox();
         traderInput = new javax.swing.JComboBox<>();
         invoiceButton = new javax.swing.JButton();
+        totalImportLabel = new javax.swing.JLabel();
+        totalImportValue = new javax.swing.JLabel();
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -391,6 +400,10 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
             }
         });
 
+        totalImportLabel.setText("${TOTAL_IMPORT} :");
+
+        totalImportValue.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -430,7 +443,7 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                             .addComponent(listDeliveryNotesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                             .addComponent(invoiceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(totalNumBoxesLabel)
                                 .addGap(23, 23, 23)
@@ -438,7 +451,11 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(totalNetWeightLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(totalNetWeightValue)))
+                                .addComponent(totalNetWeightValue))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(totalImportLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(totalImportValue)))
                         .addGap(36, 36, 36))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -474,7 +491,9 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
                                     .addComponent(isSelectedProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(productLabel)
-                                        .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(productInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(totalImportLabel)
+                                        .addComponent(totalImportValue))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(listDeliveryNotesButton)
@@ -619,6 +638,8 @@ public class ListDeliveryNotesPanel extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser startDateInput;
     private javax.swing.JLabel startDateLabel;
     private javax.swing.JTable table;
+    private javax.swing.JLabel totalImportLabel;
+    private javax.swing.JLabel totalImportValue;
     private javax.swing.JLabel totalNetWeightLabel;
     private javax.swing.JLabel totalNetWeightValue;
     private javax.swing.JLabel totalNumBoxesLabel;
